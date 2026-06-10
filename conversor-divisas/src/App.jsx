@@ -5,8 +5,6 @@ function App() {
   const [tasas, setTasas] = useState({});
   const [monedas, setMonedas] = useState([]);
   const [cantidad, setCantidad] = useState(1);
-  const [de, setDe] = useState('USD');
-  const [a, setA] = useState('MXN');
   const [resultado, setResultado] = useState(0);
 
   useEffect(() => {
@@ -18,9 +16,29 @@ function App() {
   }, []);
 
   const convertir = () => {
-    const res = (cantidad / tasas[de]) * tasas[a];
-    setResultado(res.toFixed(2));
+    if (tasas[de] && tasas[a]) {
+      const res = (cantidad / tasas[de].tasa) * tasas[a].tasa;
+      setResultado(res.toFixed(2));
+    }
   };
+
+  const [de, setDe] = useState(() => localStorage.getItem('de') || 'USD');
+  const [a, setA] = useState(() => localStorage.getItem('a') || 'MXN');
+
+  const swapDivisas = () => {
+    const temp = de;
+    setDe(a);
+    setA(temp);
+  };
+  
+  // Guardar en localStorage cada vez que cambien
+  useEffect(() => {
+    localStorage.setItem('de', de);
+  }, [de]);
+
+  useEffect(() => {
+    localStorage.setItem('a', a);
+  }, [a]);
 
   return (
     <div style={{
@@ -74,17 +92,41 @@ function App() {
           </div>
 
           {/* Grilla de Divisas */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '16px' }}>
+            <div style={{ flex: 1 }}>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#4B5563', marginBottom: '8px' }}>De</label>
               <select onChange={(e) => setDe(e.target.value)} value={de} style={{ width: '100%', padding: '12px', borderRadius: '16px', border: '1px solid #E5E7EB' }}>
-                {monedas.map(m => <option key={m} value={m}>{m}</option>)}
+                {Object.entries(tasas).map(([cod, info]) => (
+                  <option key={cod} value={cod}>{cod} - {info.nombre}</option>
+                ))}
               </select>
             </div>
-            <div>
+
+            {/* Botón de Intercambio */}
+            <button 
+              onClick={swapDivisas}
+              style={{
+                padding: '12px',
+                borderRadius: '50%',
+                border: '1px solid #E5E7EB',
+                backgroundColor: '#F3F4F6',
+                cursor: 'pointer',
+                fontSize: '1.2rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minWidth: '45px'
+              }}
+            >
+              ⇄
+            </button>
+
+            <div style={{ flex: 1 }}>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#4B5563', marginBottom: '8px' }}>A</label>
               <select onChange={(e) => setA(e.target.value)} value={a} style={{ width: '100%', padding: '12px', borderRadius: '16px', border: '1px solid #E5E7EB' }}>
-                {monedas.map(m => <option key={m} value={m}>{m}</option>)}
+                {Object.entries(tasas).map(([cod, info]) => (
+                  <option key={cod} value={cod}>{cod} - {info.nombre}</option>
+                ))}
               </select>
             </div>
           </div>
