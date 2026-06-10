@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Conversor de Divisas</h1>
+    
+    <input type="number" id="cantidad" placeholder="Cantidad">
+    <select id="de"></select>
+    <select id="a"></select>
+    <button onclick="convertir()">Convertir</button>
+    
+    <h2 id="resultado">Resultado: -</h2>
+
+    <script>
+        let tasas = {};
+
+        // 1. Cargar las divisas al abrir la página
+        async function cargarDivisas() {
+            const res = await fetch('/divisas');
+            const data = await res.json();
+            tasas = data.conversion_rates;
+
+            const selectDe = document.getElementById('de');
+            const selectA = document.getElementById('a');
+            
+            Object.keys(tasas).forEach(moneda => {
+                selectDe.innerHTML += `<option value="${moneda}">${moneda}</option>`;
+                selectA.innerHTML += `<option value="${moneda}">${moneda}</option>`;
+            });
+        }
+
+        // 2. Lógica de conversión
+        function convertir() {
+            const cantidad = document.getElementById('cantidad').value;
+            const de = document.getElementById('de').value;
+            const a = document.getElementById('a').value;
+
+            // Fórmula: (Cantidad / Tasa de origen) * Tasa de destino
+            const resultado = (cantidad / tasas[de]) * tasas[a];
+            document.getElementById('resultado').innerText = `Resultado: ${resultado.toFixed(2)} ${a}`;
+        }
+
+        cargarDivisas();
+    </script>
+</body>
+</html>
