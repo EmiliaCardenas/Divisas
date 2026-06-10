@@ -1,14 +1,13 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
+
+const rutas_generales = require('./routes/general.routes');
+
 app.use(express.json());
 
-// Ruta básica
-app.get('/', (req, res) => {
-  res.send('¡Hola! Tu servidor está funcionando correctamente.');
-});
+app.use('/', rutas_generales);
 
-// Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
