@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Conversor from '../components/Conversor';
 import TablaValores from '../components/TablaValores';
+import DesgloseImpuestos from '../components/DesgloseImpuestos';
 import './App.css';
 
 function App() {
@@ -45,19 +46,23 @@ function App() {
               <option value="theme-rojo">Rojo</option>
             </select>
           </div>
-        <div className="card-container">
-          <h1 style={{ textAlign: 'center' }}>Foreign Exchange</h1>
-          <Conversor {...{ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas }} />
-          
-          <div className="resultado-container">
-            <h2 style={{ textAlign: 'center', fontSize:"24px" }} className="resultado-text">
-              {parseFloat(resultado).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
-              <span className="moneda"> {a}</span>
-            </h2>
+        <div className="app-layout">
+          <div className="card-container">
+            <h1 style={{ textAlign: 'center' }}>Foreign Exchange</h1>
+            <Conversor {...{ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas }} />
+            
+            <div className="resultado-container">
+              <h2 style={{ textAlign: 'center', fontSize: "26px" }} className="resultado-text">
+                {parseFloat(resultado).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
+                <span className="moneda"> {a}</span>
+              </h2>
+            </div>
+            <TablaValores de={de} a={a} tasas={tasas} />
           </div>
-
-          <TablaValores de={de} a={a} tasas={tasas} />
-        </div>
+          <div className="card-container" style={{ maxWidth: '400px' }}>
+            <DesgloseImpuestos monedaCodigo={a} montoBase={parseFloat(resultado)} />
+          </div>
+       </div>
       </div>
     );
 }

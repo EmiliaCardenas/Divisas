@@ -23,14 +23,31 @@ select, input {
 .main-container {
   background: var(--bg-main);
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 20px;
   box-sizing: border-box;
 }
 
+.app-layout {
+  display: flex;
+  flex-direction: row; /* Fuerza la fila (izquierda-derecha) */
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto; /* Centra el conjunto de contenedores en pantalla */
+}
+
+/* Ajuste para pantallas pequeñas (móvil) */
+@media (max-width: 900px) {
+  .app-layout {
+    flex-direction: column; /* Solo en móvil los apilamos */
+    align-items: center;
+  }
+}
+
 .card-container {
+  /* Mantén tus estilos actuales, pero ajusta el ancho si es necesario */
   background-color: var(--bg-card);
   backdrop-filter: blur(10px);
   padding: 40px;
@@ -39,9 +56,8 @@ select, input {
   width: 100%;
   max-width: 530px;
   border: 2px solid white;
+  flex-shrink: 0; /* Evita que los contenedores se encojan demasiado */
 }
-
-.conversor-container { display: flex; flex-direction: column; gap: 20px; }
 
 /* --- 4. Elementos UI y Tipografía --- */
 h1, .resultado-text, label { color: var(--color-principal); }
