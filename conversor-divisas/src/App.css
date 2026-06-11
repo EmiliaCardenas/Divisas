@@ -1,4 +1,4 @@
-/* App.css */
+/* --- 1. Global y Reset --- */
 body, html {
   margin: 0;
   padding: 0;
@@ -7,85 +7,26 @@ body, html {
   font-family: 'Mukta', sans-serif;
 }
 
-/* 1. ROSA (Rosa + Azul) */
-.theme-rosa {
-  --bg-main: linear-gradient(135deg, #e0f7fa 0%, #fce4ec 100%);
-  --bg-card: rgba(255, 255, 255, 0.8);
-  --color-principal: #d81b60;
-  --border-color: #fce4ec;
-  --bg-tab: #fff9fb;
-  background: var(--bg-main);
+select, input {
+  font-family: 'Mukta', sans-serif !important;
+  color: #333 !important;
 }
 
-/* 2. AZUL (Azul + Morado tenue) */
-.theme-azul {
-  --bg-main: linear-gradient(135deg, #e3f2fd 0%, #ede7f6 100%);
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --color-principal: #0d47a1;
-  --border-color: #bbdefb;
-  --bg-tab: #f5f9ff;
-  background: var(--bg-main);
-}
+/* --- 2. Temas (Variables) --- */
+.theme-rosa { --bg-main: linear-gradient(135deg, #e0f7fa 0%, #fce4ec 100%); --bg-card: rgba(255, 255, 255, 0.8); --color-principal: #d81b60; --border-color: #fce4ec; --bg-tab: #fff9fb; background: var(--bg-main); }
+.theme-azul { --bg-main: linear-gradient(135deg, #e3f2fd 0%, #ede7f6 100%); --bg-card: rgba(255, 255, 255, 0.85); --color-principal: #0d47a1; --border-color: #bbdefb; --bg-tab: #f5f9ff; background: var(--bg-main); }
+.theme-amarillo { --bg-main: linear-gradient(135deg, #fffde7 0%, #ffe0b2 100%); --bg-card: rgba(255, 255, 255, 0.8); --color-principal: #f57f17; --border-color: #ffe082; --bg-tab: #fffef0; background: var(--bg-main); }
+.theme-morado { --bg-main: linear-gradient(135deg, #f3e5f5 0%, #e0f2f1 100%); --bg-card: rgba(255, 255, 255, 0.85); --color-principal: #6a1b9a; --border-color: #d1c4e9; --bg-tab: #fcf5fc; background: var(--bg-main); }
+.theme-rojo { --bg-main: linear-gradient(135deg, #ffebee 0%, #fff8e1 100%); --bg-card: rgba(255, 255, 255, 0.9); --color-principal: #c62828; --border-color: #ffcdd2; --bg-tab: #fff5f5; background: var(--bg-main); }
 
-/* 3. AMARILLO (Amarillo + Melocotón/Naranja) */
-.theme-amarillo {
-  --bg-main: linear-gradient(135deg, #fffde7 0%, #ffe0b2 100%);
-  --bg-card: rgba(255, 255, 255, 0.8);
-  --color-principal: #f57f17;
-  --border-color: #ffe082;
-  --bg-tab: #fffef0;
-  background: var(--bg-main);
-}
-
-/* 4. MORADO (Morado + Turquesa/Menta) */
-.theme-morado {
-  --bg-main: linear-gradient(135deg, #f3e5f5 0%, #e0f2f1 100%);
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --color-principal: #6a1b9a;
-  --border-color: #d1c4e9;
-  --bg-tab: #fcf5fc;
-  background: var(--bg-main);
-}
-
-/* 5. ROJO (Rojo + Champán/Crema) */
-.theme-rojo {
-  --bg-main: linear-gradient(135deg, #ffebee 0%, #fff8e1 100%);
-  --bg-card: rgba(255, 255, 255, 0.9);
-  --color-principal: #c62828;
-  --border-color: #ffcdd2;
-  --bg-tab: #fff5f5;
-  background: var(--bg-main);
-}
-
-/* Posicionamiento del selector de temas */
-.theme-selector-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-  width: 150px;
-}
-
-/* Para que el select del tema use los mismos estilos que tus campos */
-.theme-select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 20px;
-  border: 2px solid var(--border-color);
-  background-color: white;
-  color: var(--color-principal);
-  cursor: pointer;
-  font-family: 'Mukta';
-}
-
+/* --- 3. Contenedores --- */
 .main-container {
-    background: var(--bg-main);
+  background: var(--bg-main);
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  /* Evita el scroll si el contenido es muy grande */
   box-sizing: border-box;
 }
 
@@ -96,9 +37,14 @@ body, html {
   border-radius: 40px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.05);
   width: 100%;
-  max-width: 400px;
+  max-width: 530px;
   border: 2px solid white;
 }
+
+.conversor-container { display: flex; flex-direction: column; gap: 20px; }
+
+/* --- 4. Elementos UI y Tipografía --- */
+h1, .resultado-text, label { color: var(--color-principal); }
 
 .resultado-text {
   font-size: 2.5rem;
@@ -106,20 +52,61 @@ body, html {
   margin: 20px 0;
 }
 
-h1, .resultado-text, label {
-  color: var(--color-principal);
+.field-style, .swap-btn, .theme-select {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 16px;
 }
 
-/* Agrega esto a App.css */
 .field-style {
   width: 100%;
-  padding: 12px 16px;
   border-radius: 20px;
   border: 2px solid var(--border-color);
   background-color: #fff;
   color: var(--color-principal);
   font-family: inherit;
   font-size: 1rem;
+}
+
+select.field-style, input.field-style {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+select.field-style {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  cursor: pointer;
+  padding-right: 40px !important;
+}
+
+select.field-style option {
+  background-color: white;
+  color: #333;
+  padding: 10px;
+  font-family: 'Mukta', sans-serif;
+}
+
+/* --- 5. Inputs y Tablas --- */
+.select-group { display: flex; align-items: center; gap: 10px; }
+.select-group > div { flex: 1; }
+.select-wrapper { position: relative; flex: 1; }
+
+.swap-btn {
+  flex: 0 0 auto;
+  border-radius: 20px;
+  border: 2px solid var(--border-color);
+  background-color: white;
+  color: var(--color-principal);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
 }
 
 .tabla-container {
@@ -130,23 +117,9 @@ h1, .resultado-text, label {
   border: 2px dashed var(--border-color);
 }
 
-.tabla-container table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 10px;
-}
-
-.tabla-container td {
-  padding: 10px;
-  color: #333; /* Color fijo para el texto que no cambia */
-}
-
-/* Centrar el título de la tabla */
-.tabla-container h3 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 15px;
-}
+.tabla-container table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+.tabla-container td { padding: 10px; color: #333; }
+.tabla-container h3 { text-align: center; color: #333; margin-bottom: 15px; }
 
 .resultado-celda {
   text-align: right;
@@ -154,48 +127,25 @@ h1, .resultado-text, label {
   color: var(--color-principal);
 }
 
-.select-group {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-}
-.select-group > div {
-  flex: 1;
-}
-
-.swap-btn {
-  padding: 12px;
-  border-radius: 35%;
-  border: 2px solid var(--border-color);
-  background-color: var(--bg-card);
-  color: var(--color-principal) !important;
-  cursor: pointer;
-  font-family: inherit;
+/* --- 6. Selector de Temas --- */
+.theme-selector-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 150px;
+  z-index: 10;
 }
 
-select, input {
-  font-family: 'Mukta', sans-serif !important;
-  color: #333 !important;
+.theme-selector-wrapper .field-style {
+  min-height: 40px;
+  padding: 5px 12px;
+  font-size: 0.9rem;
 }
 
-.conversor-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Ajustes para móviles */
+/* --- 7. Responsive --- */
 @media (max-width: 480px) {
-  .card-container {
-    padding: 20px;
-    border-radius: 30px;
-  }
-  
-  .resultado-text {
-    font-size: 1.8rem; /* Texto más pequeño en móvil */
-  }
-
-  .main-container {
-    padding: 10px; /* Menos padding en móviles para ganar espacio */
-  }
+  .theme-selector-wrapper { top: 10px; right: 10px; width: 120px; }
+  .card-container { padding: 20px; border-radius: 30px; }
+  .resultado-text { font-size: 1.8rem; }
+  .main-container { padding: 10px; }
 }

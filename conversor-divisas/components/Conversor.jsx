@@ -16,7 +16,6 @@ const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tas
   return (
     <div className="conversor-container">
       <div>
-        <label>Cantidad</label>
         <input 
           type="number" 
           value={cantidad} 
@@ -26,20 +25,28 @@ const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tas
       </div>
 
       <div className="select-group">
-        <div>
-          <select onChange={(e) => setDe(e.target.value)} value={de} className="field-style">
-            {Object.entries(tasas).map(([cod]) => <option key={cod} value={cod}>{cod}</option>)}
-          </select>
+        <div className="select-wrapper">
+            <select onChange={(e) => setDe(e.target.value)} value={de} className="field-style">
+            {Object.entries(tasas).map(([cod, info]) => (
+                <option key={cod} value={cod}>
+                {cod} - {info.nombre}
+                </option>
+            ))}
+            </select>
         </div>
 
         <button onClick={swapDivisas} className="swap-btn">Switch</button>
 
-        <div>
-          <select onChange={(e) => setA(e.target.value)} value={a} className="field-style">
-            {Object.entries(tasas).map(([cod]) => <option key={cod} value={cod}>{cod}</option>)}
-          </select>
+        <div className="select-wrapper">
+            <select onChange={(e) => setA(e.target.value)} value={a} className="field-style">
+            {Object.entries(tasas).map(([cod, info]) => (
+                <option key={cod} value={cod}>
+                {cod} - {info.nombre}
+                </option>
+            ))}
+            </select>
         </div>
-      </div>
+        </div>
     </div>
   );
 };

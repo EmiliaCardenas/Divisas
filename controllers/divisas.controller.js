@@ -7,13 +7,13 @@ let cache = {
 };
 
 const nombresMonedas = {
-    "USD": "Dólar estadounidense",
-    "CAD": "Dólar canadiense",
+    "AUD": "Australian Dollar",
+    "CAD": "Canadian Dollar",
     "EUR": "Euro",
-    "JPY": "Yen japonés",
-    "KRW": "Won surcoreano",
-    "MXN": "Peso mexicano",
-    "AUD": "Dólar australiano"
+    "JPY": "Japanese Yen",
+    "KRW": "South Korean Won",
+    "MXN": "Mexican Peso",
+    "USD": "US Dollar"
 };
 
 const get_datos = async (req, res) => {
