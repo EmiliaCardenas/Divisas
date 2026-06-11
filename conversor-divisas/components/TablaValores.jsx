@@ -1,19 +1,22 @@
 import React from 'react';
 
 const TablaValores = ({ de, a, tasas }) => {
-  const valores = [1,10, 100, 1000, 10000];
+  const valores = [1, 10, 100, 1000, 10000];
   
-  if (!tasas[de] || !tasas[a]) return null;
+  // VALIDACIÓN: Si no hay tasas o los datos necesarios no existen, no renderices la tabla
+  if (!tasas || !tasas[de] || !tasas[a]) {
+    return null; // O puedes retornar un mensaje como <div>Cargando...</div>
+  }
 
   return (
-    <div style={{ marginTop: '32px' }}>
-      <h3 style={{ fontSize: '1rem', color: '#374151', marginBottom: '16px' }}>Conversiones rápidas ({de} a {a})</h3>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <div className="tabla-container">
+      <h3>Conversiones comunes</h3>
+      <table>
         <tbody>
           {valores.map(val => (
-            <tr key={val} style={{ borderBottom: '1px solid #F3F4F6' }}>
-              <td style={{ padding: '12px 0', color: '#6B7280' }}>{val} {de}</td>
-              <td style={{ padding: '12px 0', textAlign: 'right', fontWeight: '600' }}>
+            <tr key={val}>
+              <td>{val} {de}</td>
+              <td className="resultado-celda">
                 {((val / tasas[de].tasa) * tasas[a].tasa).toFixed(2)} {a}
               </td>
             </tr>

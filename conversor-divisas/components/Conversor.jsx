@@ -1,30 +1,42 @@
 import React from 'react';
 
-const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas, resultado }) => {
+const fieldStyle = {
+  width: '100%',
+  padding: '12px 16px',
+  borderRadius: '20px',
+  border: '2px solid #fce4ec', 
+  backgroundColor: '#fff',
+  fontFamily: 'inherit',
+  fontSize: '1rem',
+  outline: 'none',
+  color: '#d81b60'
+};
+
+const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas }) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div className="conversor-container">
       <div>
-        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#4B5563', marginBottom: '8px' }}>Cantidad</label>
+        <label>Cantidad</label>
         <input 
-          type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)}
-          style={{ width: '100%', padding: '12px 16px', borderRadius: '16px', border: '1px solid #E5E7EB', outline: 'none' }}
+          type="number" 
+          value={cantidad} 
+          onChange={(e) => setCantidad(e.target.value)} 
+          className="field-style" 
         />
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '16px' }}>
-        <div style={{ flex: 1 }}>
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#4B5563', marginBottom: '8px' }}>De</label>
-          <select onChange={(e) => setDe(e.target.value)} value={de} style={{ width: '100%', padding: '12px', borderRadius: '16px', border: '1px solid #E5E7EB' }}>
-            {Object.entries(tasas).map(([cod, info]) => <option key={cod} value={cod}>{cod} - {info.nombre}</option>)}
+      <div className="select-group">
+        <div>
+          <select onChange={(e) => setDe(e.target.value)} value={de} className="field-style">
+            {Object.entries(tasas).map(([cod]) => <option key={cod} value={cod}>{cod}</option>)}
           </select>
         </div>
 
-        <button onClick={swapDivisas} style={{ padding: '12px', borderRadius: '50%', border: '1px solid #E5E7EB', backgroundColor: '#F3F4F6', cursor: 'pointer', minWidth: '45px' }}>⇄</button>
+        <button onClick={swapDivisas} className="swap-btn">Switch</button>
 
-        <div style={{ flex: 1 }}>
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#4B5563', marginBottom: '8px' }}>A</label>
-          <select onChange={(e) => setA(e.target.value)} value={a} style={{ width: '100%', padding: '12px', borderRadius: '16px', border: '1px solid #E5E7EB' }}>
-            {Object.entries(tasas).map(([cod, info]) => <option key={cod} value={cod}>{cod} - {info.nombre}</option>)}
+        <div>
+          <select onChange={(e) => setA(e.target.value)} value={a} className="field-style">
+            {Object.entries(tasas).map(([cod]) => <option key={cod} value={cod}>{cod}</option>)}
           </select>
         </div>
       </div>
