@@ -21,10 +21,12 @@ function App() {
     idioma: 'es'
   });
 
+  // Configuración de idioma y temas
   useEffect(() => {
     localStorage.setItem('config', JSON.stringify(config));
   }, [config]);
 
+  // Llamada al back
   useEffect(() => {
     const fetchTasas = async () => {
       try {
@@ -37,13 +39,17 @@ function App() {
     fetchTasas();
   }, []);
 
+  // Cambio de idioma
   const t = i18n[config.idioma];
+
+  // Resultados
   const resultado = (tasas[de] && tasas[a]) 
     ? ((cantidad / tasas[de].tasa) * tasas[a].tasa).toFixed(2) 
     : 0;
 
   const swapDivisas = () => { setDe(a); setA(de); };
 
+  // Guardar notas
   const handleSaveNote = (data) => {
     const notas = JSON.parse(localStorage.getItem('mis_notas')) || [];
     localStorage.setItem('mis_notas', JSON.stringify([...notas, { ...data, id: Date.now() }]));
@@ -73,7 +79,7 @@ function App() {
         </div>
       )}
       
-      {/* 2. Navegación */}
+      {/* Navegación */}
       <nav className="nav-menu">
         <button className={vistaActual === 'conversor' ? 'active' : ''} onClick={() => setVistaActual('conversor')}>{t.nav.conv}</button>
         <button className={vistaActual === 'finanzas' ? 'active' : ''} onClick={() => setVistaActual('finanzas')}>{t.nav.fin}</button>
@@ -82,7 +88,7 @@ function App() {
         <button onClick={() => setModalTemaOpen(true)}>{t.nav.cfg}</button>
       </nav>
 
-      {/* 3. Contenido Principal */}
+      {/* Contenido Principal */}
       <div className="app-layout">
         {vistaActual === 'conversor' && (
           <>

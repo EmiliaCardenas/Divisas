@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ReactDOM from 'react-dom'; // 1. Importa ReactDOM
+import ReactDOM from 'react-dom';
 
 const NotaModal = ({ isOpen, onClose, onSave, datoBase, t = {}, tema }) => {
   const [nombre, setNombre] = useState(datoBase.nombre || '');
@@ -8,6 +8,7 @@ const NotaModal = ({ isOpen, onClose, onSave, datoBase, t = {}, tema }) => {
 
   if (!isOpen) return null;
 
+  // Constante para guardar
   const handleSave = () => {
     if (!nombre.trim()) {
       setError(true);
@@ -28,7 +29,6 @@ const NotaModal = ({ isOpen, onClose, onSave, datoBase, t = {}, tema }) => {
     onClose();
   };
 
-  // 2. Usamos createPortal para inyectar el modal en el body
   return ReactDOM.createPortal(
     <div className={`modal-overlay ${tema}`} onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()} style={{ borderRadius: '30px' }}>
@@ -78,7 +78,7 @@ const NotaModal = ({ isOpen, onClose, onSave, datoBase, t = {}, tema }) => {
         </div>
       </div>
     </div>,
-    document.body // Aquí le decimos que el modal "vive" en el body
+    document.body
   );
 };
 

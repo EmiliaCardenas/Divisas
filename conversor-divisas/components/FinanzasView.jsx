@@ -7,16 +7,15 @@ const FinanzasView = ({ t, tema, tasas }) => {
   const [montoInput, setMontoInput] = useState('');
   const [monedaSeleccionada, setMonedaSeleccionada] = useState('MXN');
   const [monedaVista, setMonedaVista] = useState('MXN');
-  
   const [modalOpen, setModalOpen] = useState(false);
   const [accionPendiente, setAccionPendiente] = useState(null);
-
   const notasOrdenadas = [...notas].sort((a, b) => Number(b.esFavorito) - Number(a.esFavorito));
 
   useEffect(() => {
     localStorage.setItem('finanzas', JSON.stringify(saldos));
   }, [saldos]);
 
+  // Calcular saldo total
   const calcularSaldoTotalVista = () => {
     if (!tasas || Object.keys(tasas).length === 0) return 0;
     return Object.entries(saldos).reduce((total, [moneda, cantidad]) => {
@@ -26,6 +25,7 @@ const FinanzasView = ({ t, tema, tasas }) => {
     }, 0);
   };
 
+  // Guardar notas de los ingresos y gastos
   const guardarNotaFinanciera = (data) => {
     const valor = parseFloat(data.cantidad);
     setSaldos(prev => ({ ...prev, [data.moneda]: (prev[data.moneda] || 0) + valor }));
@@ -37,6 +37,7 @@ const FinanzasView = ({ t, tema, tasas }) => {
     setModalOpen(false);
   };
 
+  // Saldo por notas
   const ajustarSaldoDesdeNota = (nota, esSuma) => {
     const factor = esSuma ? 1 : -1;
     setSaldos(prev => ({ 
@@ -60,7 +61,7 @@ const FinanzasView = ({ t, tema, tasas }) => {
             {t.fin.titulo}: {calcularSaldoTotalVista().toFixed(2)} {monedaVista}
         </h2>
         
-        {/* Divisor añadido después del selector de vista */}
+        {/* Divisor */}
         <div className="select-wrapper" style={{ marginBottom: '20px' }}>
             <label>{t.fin.vista} </label>
             <select onChange={(e) => setMonedaVista(e.target.value)} value={monedaVista} className="field-style">
@@ -70,7 +71,6 @@ const FinanzasView = ({ t, tema, tasas }) => {
         
         <hr style={{ border: '0', borderTop: '1px solid var(--border-color)', margin: '15px 0' }} />
 
-        {/* Input y select agrupados */}
         <div className="select-group">
             <input 
                 type="text" 
@@ -87,7 +87,7 @@ const FinanzasView = ({ t, tema, tasas }) => {
             </select>
         </div>
 
-        {/* Botones centrados */}
+        {/* Botones */}
         <div className="select-group" style={{ marginTop: '15px', justifyContent: 'center' }}>
             <button className="swap-btn" onClick={() => prepararAccion(true)}>{t.fin.anyadir}</button>
             <button className="swap-btn" onClick={() => prepararAccion(false)} style={{ marginLeft: '10px' }}>{t.fin.restar}</button>

@@ -1,18 +1,16 @@
 import { useState } from 'react';
 
 const NotasView = ({ t }) => {
+
   const [notas, setNotas] = useState(() => {
       const notasGuardadas = JSON.parse(localStorage.getItem('mis_notas')) || [];
       const seisMesesEnMs = 6 * 30 * 24 * 60 * 60 * 1000;
       const ahora = Date.now();
-
       const notasFiltradas = notasGuardadas.filter(n => {
-        // Si la nota no tiene fechaCreacion, la conservamos (o puedes borrarlas)
         if (!n.fechaCreacion) return true;
         return (ahora - n.fechaCreacion) < seisMesesEnMs;
       });
 
-      // Si hubo notas eliminadas por antigüedad, actualizamos el localStorage
       if (notasFiltradas.length !== notasGuardadas.length) {
         localStorage.setItem('mis_notas', JSON.stringify(notasFiltradas));
       }
@@ -20,6 +18,7 @@ const NotasView = ({ t }) => {
       return notasFiltradas;
   });
 
+  // Poner si es favorito
   const toggleFavorito = (id) => {
     const nuevasNotas = notas.map(n => 
       n.id === id ? { ...n, esFavorito: !n.esFavorito } : n
@@ -28,6 +27,7 @@ const NotasView = ({ t }) => {
     localStorage.setItem('mis_notas', JSON.stringify(nuevasNotas));
   };
 
+  // Eliminar la nota
   const eliminarNota = (id) => {
     const nuevasNotas = notas.filter(n => n.id !== id);
     setNotas(nuevasNotas);
@@ -37,7 +37,6 @@ const NotasView = ({ t }) => {
   const notasOrdenadas = [...notas].sort((a, b) => Number(b.esFavorito) - Number(a.esFavorito));
 
   return (
-    // CAMBIO: usamos notas-wrapper en lugar de tabla-container
     <div className="notas-wrapper">
       <h2 style={{ textAlign: 'center', color: 'var(--color-principal)' }}>{t.titulo}</h2>
       {notas.length === 0 && <p style={{textAlign: 'center'}}>{t.vacio}</p>}
@@ -53,7 +52,6 @@ const NotasView = ({ t }) => {
                     {n.nombre}
                 </strong>
                 <div>
-                    {/* Estrella más grande y con mejor área de clic */}
                     <button 
                     onClick={() => toggleFavorito(n.id)} 
                     style={{ 
@@ -67,8 +65,6 @@ const NotasView = ({ t }) => {
                     >
                     {n.esFavorito ? '★' : '☆'}
                     </button>
-                    
-                    {/* Botón de eliminar también un poco más grande para coherencia */}
                     <button 
                     onClick={() => eliminarNota(n.id)} 
                     style={{ 
@@ -90,12 +86,10 @@ const NotasView = ({ t }) => {
             <div style={{ marginTop: '2px' }}>
                 <div style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>
                     {n.valorInicial && n.monedaInicial ? (
-                    // Caso: Conversión (muestra origen y destino)
                     <>
                         {n.valorInicial} {n.monedaInicial} ⮕ {new Intl.NumberFormat('es-MX', { style: 'decimal' }).format(n.cantidad)} {n.moneda}
                     </>
                     ) : (
-                    // Caso: Ingreso o Gasto (muestra solo el monto)
                     <>
                         {new Intl.NumberFormat('es-MX', { style: 'decimal' }).format(n.cantidad)} {n.moneda}
                     </>

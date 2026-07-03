@@ -4,12 +4,14 @@ import NotaModal from './NotaModal';
 const Conversor = ({ t, tema, cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas, resultado }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
+  // Guardar la conversión en notas
   const guardarConversion = (data) => {
     const notas = JSON.parse(localStorage.getItem('mis_notas')) || [];
     const nuevaNota = { ...data, id: Date.now(), fecha: new Date().toLocaleDateString() };
     localStorage.setItem('mis_notas', JSON.stringify([...notas, nuevaNota]));
   };
 
+  // Hacer swap en conversión
   const handleSwap = () => {
     swapDivisas();
     const nuevoValor = parseFloat(resultado).toFixed(2);

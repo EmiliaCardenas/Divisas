@@ -2,9 +2,7 @@ import { useState } from 'react';
 import NotaModal from './NotaModal';
 
 const CalculadoraView = ({ t, tema, tasas}) => {
-  // Definimos la rama específica para no perder las traducciones
   const tc = t.calc;
-
   const [valor, setValor] = useState('');
   const [total, setTotal] = useState(0);
   const [moneda, setMoneda] = useState('MXN');
@@ -13,6 +11,7 @@ const CalculadoraView = ({ t, tema, tasas}) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [historial, setHistorial] = useState([]);
 
+  // Operaciones de suma y resta
   const operar = (tipo) => {
     const num = parseFloat(valor) || 0;
     if (num === 0) return;
@@ -25,6 +24,7 @@ const CalculadoraView = ({ t, tema, tasas}) => {
     setValor('');
   };
 
+  // Limpiar valor total
   const limpiar = () => {
     setTotal(0);
     setDivisaBloqueada(false);
@@ -59,7 +59,7 @@ const CalculadoraView = ({ t, tema, tasas}) => {
         {Object.keys(tasas).map(c => <option key={c} value={c}>{c}</option>)}
       </select>
       
-      {/* Botones centrados */}
+      {/* Botones */}
       <div style={{ display: 'flex', gap: '10px', margin: '10px 0', justifyContent: 'center' }}>
         <button className="swap-btn" onClick={() => operar('suma')}>{tc.suma}</button>
         <button className="swap-btn" onClick={() => operar('resta')}>{tc.resta}</button>
@@ -76,7 +76,7 @@ const CalculadoraView = ({ t, tema, tasas}) => {
         <button className="swap-btn" onClick={limpiar}>{tc.limpiar}</button>
       </div>
 
-      {/* Resultado Convertido con selector a la derecha */}
+      {/* Resultado Convertido */}
       <div style={{ margin: '14px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h2 style={{ margin: 0 }}>
             {tc.total}: {totalConvertido.toFixed(2)} {monedaDestino}

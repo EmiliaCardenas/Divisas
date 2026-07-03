@@ -69,8 +69,6 @@ select, input {
   background: var(--bg-main); 
 }
 
-/* --- 2. Temas (Variables) Adicionales --- */
-
 .theme-verde { 
   --bg-main: linear-gradient(135deg, #e8f5e9 0%, #dcedc8 100%); 
   --bg-card: rgba(255, 255, 255, 0.85); 
@@ -207,19 +205,16 @@ select.field-style {
 .tabla-container td { padding: 10px; color: #333; }
 .resultado-celda { text-align: right; font-weight: bold; color: var(--color-principal); }
 
-/* --- 6. Selector de Temas (Reemplazado) --- */
-/* Elimina o comenta tu antiguo .theme-selector-wrapper si quieres que desaparezca */
+/* --- 6. Selector de Temas --- */
 .theme-selector-wrapper { display: none; } 
 
-/* Aseguramos que los botones dentro del modal sean consistentes */
 .modal-content button {
   width: 100%;
   margin-bottom: 5px;
   cursor: pointer;
 }
 
-/* --- 8. Modal Corregido --- */
-/* Asegura que el modal esté por encima de TODO */
+/* --- 8. Modal  --- */
 .modal-overlay {
   position: fixed !important;
   top: 0 !important;
@@ -229,19 +224,15 @@ select.field-style {
   width: 100vw !important;
   height: 100vh !important;
   background: rgba(0, 0, 0, 0.6) !important;
-  
-  /* Flexbox para centrar contenido */
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  
-  z-index: 9999999 !important; /* Aumentado a 7 nueves */
+  z-index: 9999999 !important;
   backdrop-filter: blur(5px);
   margin: 0 !important;
   padding: 0 !important;
 }
 
-/* El contenido del modal no debe tener posición relativa si no es necesario */
 .modal-content {
   background: white !important;
   padding: 30px !important;
@@ -249,11 +240,9 @@ select.field-style {
   width: 90% !important;
   max-width: 350px !important;
   box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
-  
-  /* Reset de posicionamiento */
   position: relative !important;
   margin: 0 !important;
-  z-index: 10000000 !important; /* Mayor que el overlay */
+  z-index: 10000000 !important; 
 }
 
 /* --- 9. Notas --- */
@@ -267,25 +256,20 @@ select.field-style {
   box-sizing: border-box;
 }
 
-/* 1. Definición Base: Para pantallas grandes (Escritorio) */
 .notas-grid {
   display: grid;
-  /* Esto asegura 6 columnas en pantallas grandes */
   grid-template-columns: repeat(6, 1fr); 
   gap: 20px;
 }
 
-/* 2. Ajuste para pantallas medianas (Tablets/Laptops pequeñas) */
 @media (max-width: 1100px) {
   .notas-grid {
-    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* 3. Ajuste para móviles (Celulares) */
 @media (max-width: 480px) {
   .notas-grid {
-    /* Forzamos 2 columnas exactas */
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
   }
@@ -326,7 +310,7 @@ select.field-style {
 
 .finanzas-full-width {
   width: 100%;
-  max-width: 1000px; /* O el ancho que prefieras */
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -337,7 +321,7 @@ select.field-style {
   border: 2px solid white;
   box-shadow: 0 10px 25px rgba(0,0,0,0.05);
   box-sizing: border-box;
-  min-width: 0; /* NECESARIO: evita que el contenido aplaste al contenedor */
+  min-width: 0; 
 }
 
 .historial-scroll-container {
@@ -348,16 +332,14 @@ select.field-style {
   -webkit-overflow-scrolling: touch;
 }
 
-/* En PC: Layout de dos columnas definido */
 @media (min-width: 1100px) {
   .finanzas-wrapper {
-    grid-template-columns: 400px 1fr; /* Panel fijo 400px, Historial toma el 1fr restante */
+    grid-template-columns: 400px 1fr;
     align-items: start;
   }
   
 }
 
-/* En Móvil: Layout de una columna */
 @media (max-width: 1099px) {
   .finanzas-wrapper {
     grid-template-columns: 1fr;
@@ -383,7 +365,7 @@ select.field-style {
   }
 
   .historial-scroll-container {
-    height: 350px; /* Altura más cómoda para tablets/celulares */
+    height: 350px; 
   }
 }
 
@@ -429,7 +411,7 @@ select.field-style {
 
 @media (max-width: 480px) {
   .nav-menu {
-    flex-wrap: wrap; /* Permite que los botones pasen a la siguiente línea */
+    flex-wrap: wrap;
     justify-content: center;
     gap: 8px;
     margin-bottom: 20px;
@@ -437,19 +419,18 @@ select.field-style {
   }
 
   .nav-menu button {
-    flex: 1 1 calc(33.33% - 10px); /* Intenta poner 3 por fila (33%) */
+    flex: 1 1 calc(33.33% - 10px); 
     padding: 8px 5px;
     font-size: 0.8rem;
     border-radius: 12px;
     text-align: center;
-    white-space: nowrap; /* Evita que el texto se corte raro */
+    white-space: nowrap;
   }
 }
 
-/* Ajustes para pantallas pequeñas (móviles) */
 @media (max-width: 480px) {
   body {
-    font-size: 14px; /* Reduce el tamaño base de todo el sitio */
+    font-size: 14px; 
   }
 
   h1 {
@@ -464,7 +445,6 @@ select.field-style {
     font-size: 1.1rem;
   }
 
-  /* Reducir el tamaño de los inputs y selects */
   .field-style, 
   .nav-menu button,
   .swap-btn {
@@ -472,12 +452,10 @@ select.field-style {
     padding: 8px 12px;
   }
 
-  /* Ajustar el resultado principal que mencionaste en el código */
   .resultado-text {
     font-size: 20px !important;
   }
 
-  /* Ajustar el texto dentro de la tabla de impuestos */
   .tabla-container span {
     font-size: 0.85rem;
   }

@@ -11,8 +11,6 @@ const DesgloseImpuestos = ({ t, monedaCodigo, montoBase }) => {
       {config.paises.map((pais) => {
         const valorNeto = montoBase / (1 + pais.iva / 100);
         const montoIva = montoBase - valorNeto;
-        
-        // Obtenemos el nombre traducido del diccionario 't.paises' usando el 'id' del país
         const nombrePaisTraducido = t.paises[pais.id] || pais.id;
 
         return (
