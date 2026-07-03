@@ -16,6 +16,7 @@ function App() {
 
   const [tema, setTema] = useState(() => localStorage.getItem('tema') || 'theme-rosa');
   const [vistaActual, setVistaActual] = useState('conversor');
+  const [modalTemaOpen, setModalTemaOpen] = useState(false);
 
   useEffect(() => {
     axios.get('http://localhost:3000/divisas')
@@ -42,20 +43,55 @@ function App() {
           value={tema} 
           onChange={(e) => setTema(e.target.value)}
         >
-          <option value="theme-rosa">Rosa</option>
-          <option value="theme-azul">Azul</option>
           <option value="theme-amarillo">Amarillo</option>
+          <option value="theme-azul">Azul</option>
+          <option value="theme-blanco">Blanco</option>
           <option value="theme-morado">Morado</option>
+          <option value="theme-naranja">Naranja</option>
           <option value="theme-rojo">Rojo</option>
+          <option value="theme-rosa">Rosa</option>
+          <option value="theme-verde">Verde</option>
         </select>
       </div>
 
       {/* Menú de Navegación (Corregido: usamos setVistaActual) */}
       <nav className="nav-menu">
-        <button onClick={() => setVistaActual('conversor')}>Conversor</button>
-        <button onClick={() => setVistaActual('finanzas')}>Finanzas</button>
-        <button onClick={() => setVistaActual('notas')}>Notas</button>
+        <button 
+          className={vistaActual === 'conversor' ? 'active' : ''} 
+          onClick={() => setVistaActual('conversor')}
+        >
+          Conversor
+        </button>
+        <button 
+          className={vistaActual === 'finanzas' ? 'active' : ''} 
+          onClick={() => setVistaActual('finanzas')}
+        >
+          Finanzas
+        </button>
+        <button 
+          className={vistaActual === 'notas' ? 'active' : ''} 
+          onClick={() => setVistaActual('notas')}
+        >
+          Notas
+        </button>
+        <button onClick={() => setModalTemaOpen(true)}>Temas</button>
       </nav>
+
+      {modalTemaOpen && (
+        <div className="modal-overlay" onClick={() => setModalTemaOpen(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3 style={{ color: 'var(--color-principal)', textAlign: 'center' }}>Seleccionar Tema</h3>
+            <div style={{ display: 'grid', gap: '10px' }}>
+              {['theme-amarillo', 'theme-azul', 'theme-blanco', 'theme-morado', 
+              'theme-naranja', 'theme-rojo', 'theme-rosa', 'theme-verde'].map(t => (
+                <button key={t} className="swap-btn" onClick={() => { setTema(t); setModalTemaOpen(false); }}>
+                  {t.replace('theme-', '').toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Contenido Dinámico según vista (Corregido: usamos vistaActual) */}
       <div className="app-layout">

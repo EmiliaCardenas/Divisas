@@ -4,7 +4,7 @@ import NotaModal from './NotaModal';
 const FinanzasView = ({ tasas }) => {
   const [saldos, setSaldos] = useState(() => JSON.parse(localStorage.getItem('finanzas')) || { MXN: 0, USD: 0 });
   const [notas, setNotas] = useState(() => JSON.parse(localStorage.getItem('mis_notas')) || []);
-  const [montoInput, setMontoInput] = useState(0);
+  const [montoInput, setMontoInput] = useState('');
   const [monedaSeleccionada, setMonedaSeleccionada] = useState('MXN');
   const [monedaVista, setMonedaVista] = useState('MXN');
   
@@ -49,41 +49,54 @@ const FinanzasView = ({ tasas }) => {
   };
 
   return (
-    // ENVOLVEMOS TODO EN card-container PARA QUE SE VEA COMO LOS DEMÁS
-    <div className="card-container">
-      <div className="finanzas-container">
-        <h2 style={{ color: 'var(--color-principal)', textAlign: 'center' }}>
-          Saldo Total: {calcularSaldoTotalVista().toFixed(2)} {monedaVista}
-        </h2>
+    <div className="finanzas-full-width">
+      {/* Usamos las clases de tu CSS para que todo sea responsivo */}
+      <div className="finanzas-wrapper">
         
-        <div className="select-wrapper" style={{ marginBottom: '20px' }}>
-          <label>Ver saldo total en: </label>
-          <select onChange={(e) => setMonedaVista(e.target.value)} value={monedaVista} className="field-style">
-            {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
-          </select>
+        {/* Panel de Control */}
+        <div className="finanzas-control">
+          <h2 style={{ color: 'var(--color-principal)', textAlign: 'center', marginTop: 0 }}>
+            Saldo: {calcularSaldoTotalVista().toFixed(2)} {monedaVista}
+          </h2>
+          
+          <div className="select-wrapper" style={{ marginBottom: '20px' }}>
+            <label>Vista en: </label>
+            <select onChange={(e) => setMonedaVista(e.target.value)} value={monedaVista} className="field-style">
+              {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
+            </select>
+          </div>
+
+          <div className="select-group">
+            <input 
+                type="text" 
+                className="field-style" 
+                value={montoInput}
+                onChange={(e) => {
+                    const valor = e.target.value.replace(',', '.');
+                    if (/^[0-9]*\.?[0-9]*$/.test(valor)) setMontoInput(valor);
+                }} 
+                placeholder="Monto" 
+            />
+            <select onChange={(e) => setMonedaSeleccionada(e.target.value)} value={monedaSeleccionada} className="field-style">
+              {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
+            </select>
+          </div>
+
+          <div className="select-group" style={{ marginTop: '15px' }}>
+            <button className="swap-btn" onClick={() => prepararAccion(true)}>Añadir</button>
+            <button className="swap-btn" onClick={() => prepararAccion(false)}>Restar</button>
+          </div>
         </div>
 
-        <div className="select-group">
-          <input type="number" className="field-style" onChange={(e) => setMontoInput(e.target.value)} placeholder="Monto" />
-          <select onChange={(e) => setMonedaSeleccionada(e.target.value)} value={monedaSeleccionada} className="field-style">
-            {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
-          </select>
-        </div>
-
-        <div className="select-group" style={{ marginTop: '10px' }}>
-          <button className="swap-btn" onClick={() => prepararAccion(true)} style={{ flex: 1 }}>Añadir</button>
-          <button className="swap-btn" onClick={() => prepararAccion(false)} style={{ flex: 1 }}>Restar</button>
-        </div>
-
-        {/* Mantenemos tu tabla, que ahora heredará el estilo del card-container */}
-        <div className="tabla-container">
-          <h3>Historial de Notas</h3>
-          <table style={{ width: '100%' }}>
+        {/* Historial */}
+        <div className="historial-scroll-container">
+          <h3 style={{ marginTop: 0, textAlign: 'center' }}>Historial</h3>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <tbody>
               {notas.map(n => (
                 <tr key={n.id} style={{ borderBottom: '1px dashed var(--border-color)' }}>
-                  <td style={{ fontWeight: n.esFavorito ? 'bold' : 'normal', padding: '10px 0' }}>{n.nombre}</td>
-                  <td className="resultado-celda">{n.cantidad} {n.moneda}</td>
+                  <td style={{ padding: '10px 0' }}>{n.nombre}</td>
+                  <td className="resultado-celda">{new Intl.NumberFormat('es-MX').format(n.cantidad)} {n.moneda}</td>
                   <td style={{ textAlign: 'right' }}>
                     <button onClick={() => ajustarSaldoDesdeNota(n, true)} className="swap-btn" style={{ minHeight: '30px', padding: '0 10px' }}>+</button>
                     <button onClick={() => ajustarSaldoDesdeNota(n, false)} className="swap-btn" style={{ minHeight: '30px', padding: '0 10px', marginLeft: '5px' }}>-</button>
@@ -93,19 +106,19 @@ const FinanzasView = ({ tasas }) => {
             </tbody>
           </table>
         </div>
-
-        <NotaModal 
-          isOpen={modalOpen} 
-          onClose={() => setModalOpen(false)} 
-          onSave={guardarNotaFinanciera}
-          datoBase={{ 
-            nombre: '', 
-            cantidad: accionPendiente === 'Gasto' ? -Math.abs(montoInput) : Math.abs(montoInput), 
-            moneda: monedaSeleccionada,
-            resumenTexto: `${accionPendiente} de ${montoInput} ${monedaSeleccionada}`
-          }} 
-        />
       </div>
+
+      <NotaModal 
+        isOpen={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+        onSave={guardarNotaFinanciera}
+        datoBase={{ 
+          nombre: '', 
+          cantidad: accionPendiente === 'Gasto' ? -Math.abs(parseFloat(montoInput) || 0) : Math.abs(parseFloat(montoInput) || 0), 
+          moneda: monedaSeleccionada,
+          resumenTexto: `${accionPendiente} de ${montoInput} ${monedaSeleccionada}`
+        }} 
+      />
     </div>
   );
 };

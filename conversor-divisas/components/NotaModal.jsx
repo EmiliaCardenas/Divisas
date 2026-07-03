@@ -22,12 +22,14 @@ const NotaModal = ({ isOpen, onClose, onSave, datoBase }) => {
           onChange={e => setNombre(e.target.value)} 
           className="field-style"
           style={{ marginBottom: '10px' }}
+          maxLength={25}
         />
         <input 
           placeholder="Descripción (opcional)" 
           value={desc} 
           onChange={e => setDesc(e.target.value)} 
           className="field-style"
+          maxLength={50}
         />
         
         <div className="select-group" style={{ marginTop: '20px' }}>

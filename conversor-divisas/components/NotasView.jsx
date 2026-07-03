@@ -48,7 +48,7 @@ const NotasView = () => {
             {n.desc && <p style={{ fontStyle: 'italic', fontSize: '0.8rem', margin: '5px 0' }}>{n.desc}</p>}
             
             <div style={{ marginTop: 'auto', paddingTop: '10px' }}>
-              <div style={{ fontWeight: 'semibold', fontSize: '0.8rem' }}>
+              <div style={{ fontWeight: 'bold', fontSize: '0.8rem' }}>
                 {n.valorInicial} {n.monedaInicial} - {new Intl.NumberFormat('es-MX', { style: 'decimal' }).format(n.cantidad)} {n.moneda}
                 </div>
                 <small style={{ color: '#555', fontSize: '0.7rem' }}>{n.fecha}</small>

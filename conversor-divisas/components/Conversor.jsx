@@ -10,13 +10,8 @@ const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tas
     localStorage.setItem('mis_notas', JSON.stringify([...notas, nuevaNota]));
   };
 
-  // Función interna para manejar el intercambio completo
   const handleSwap = () => {
-    // 1. Ejecutamos el swap de divisas original
     swapDivisas();
-    
-    // 2. Pasamos el resultado actual al input (convertido a string para el input)
-    // Usamos parseFloat y toFixed para asegurar un formato limpio
     const nuevoValor = parseFloat(resultado).toFixed(2);
     setCantidad(nuevoValor);
   };
@@ -24,10 +19,17 @@ const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tas
   return (
     <div className="conversor-container">
       <input 
-        type="number" 
+        type="text"
         value={cantidad} 
-        onChange={(e) => setCantidad(e.target.value)} 
-        className="field-style" 
+        onChange={(e) => {
+          const valor = e.target.value;
+          if (/^[0-9]*[.]?[0-9]*$/.test(valor)) {
+            setCantidad(valor);
+          }
+        }} 
+        className="field-style"
+        placeholder="0.00"
+        maxLength={15} 
       />
       
       <div className="select-group" style={{ marginTop: '15px' }}>

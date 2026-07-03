@@ -5,6 +5,7 @@ body, html {
   width: 100%;
   height: 100%;
   font-family: 'Mukta', sans-serif;
+  overflow-x: hidden;
 }
 
 select, input {
@@ -68,6 +69,41 @@ select, input {
   background: var(--bg-main); 
 }
 
+/* --- 2. Temas (Variables) Adicionales --- */
+
+.theme-verde { 
+  --bg-main: linear-gradient(135deg, #e8f5e9 0%, #dcedc8 100%); 
+  --bg-card: rgba(255, 255, 255, 0.85); 
+  --color-principal: #2e7d32; 
+  --border-color: #c8e6c9; 
+  --bg-tab: #f1f8e9; 
+  --bg-note: #e8f5e9; 
+  --bg-note-fav: #c8e6c9; 
+  background: var(--bg-main); 
+}
+
+.theme-blanco { 
+  --bg-main: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%); 
+  --bg-card: rgba(255, 255, 255, 0.9); 
+  --color-principal: #424242; 
+  --border-color: #bdbdbd; 
+  --bg-tab: #fafafa; 
+  --bg-note: #eeeeee; 
+  --bg-note-fav: #e0e0e0; 
+  background: var(--bg-main); 
+}
+
+.theme-naranja { 
+  --bg-main: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); 
+  --bg-card: rgba(255, 255, 255, 0.85); 
+  --color-principal: #ef6c00; 
+  --border-color: #ffe0b2; 
+  --bg-tab: #fffaf5; 
+  --bg-note: #fff3e0; 
+  --bg-note-fav: #ffe0b2; 
+  background: var(--bg-main); 
+}
+
 /* --- 3. Contenedores --- */
 .main-container {
   background: var(--bg-main);
@@ -78,25 +114,16 @@ select, input {
 
 .app-layout {
   display: flex;
-  flex-direction: row; /* Fuerza la fila (izquierda-derecha) */
+  flex-direction: row;
   justify-content: center;
   align-items: flex-start;
   gap: 20px;
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto; /* Centra el conjunto de contenedores en pantalla */
-}
-
-/* Ajuste para pantallas pequeñas (móvil) */
-@media (max-width: 900px) {
-  .app-layout {
-    flex-direction: column; /* Solo en móvil los apilamos */
-    align-items: center;
-  }
+  margin: 0 auto;
 }
 
 .card-container {
-  /* Mantén tus estilos actuales, pero ajusta el ancho si es necesario */
   background-color: var(--bg-card);
   backdrop-filter: blur(10px);
   padding: 40px;
@@ -105,7 +132,8 @@ select, input {
   width: 100%;
   max-width: 530px;
   border: 2px solid white;
-  flex-shrink: 0; /* Evita que los contenedores se encojan demasiado */
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 /* --- 4. Elementos UI y Tipografía --- */
@@ -151,13 +179,6 @@ select.field-style {
   padding-right: 40px !important;
 }
 
-select.field-style option {
-  background-color: white;
-  color: #333;
-  padding: 10px;
-  font-family: 'Mukta', sans-serif;
-}
-
 /* --- 5. Inputs y Tablas --- */
 .select-group { display: flex; align-items: center; gap: 10px; }
 .select-group > div { flex: 1; }
@@ -184,52 +205,48 @@ select.field-style option {
 
 .tabla-container table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
 .tabla-container td { padding: 10px; color: #333; }
-.tabla-container h3 { text-align: center; color: #333; margin-bottom: 15px; }
+.resultado-celda { text-align: right; font-weight: bold; color: var(--color-principal); }
 
-.resultado-celda {
-  text-align: right;
-  font-weight: bold;
-  color: var(--color-principal);
+/* --- 6. Selector de Temas (Reemplazado) --- */
+/* Elimina o comenta tu antiguo .theme-selector-wrapper si quieres que desaparezca */
+.theme-selector-wrapper { display: none; } 
+
+/* Aseguramos que los botones dentro del modal sean consistentes */
+.modal-content button {
+  width: 100%;
+  margin-bottom: 5px;
+  cursor: pointer;
 }
 
-/* --- 6. Selector de Temas --- */
-.theme-selector-wrapper {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 150px;
-  z-index: 10;
-}
-
-.theme-selector-wrapper .field-style {
-  min-height: 40px;
-  padding: 5px 12px;
-  font-size: 0.9rem;
-}
-
-/* --- 7. Responsive --- */
-@media (max-width: 480px) {
-  .theme-selector-wrapper { top: 10px; right: 10px; width: 120px; }
-  .card-container { padding: 20px; border-radius: 30px; }
-  .resultado-text { font-size: 1.8rem; }
-  .main-container { padding: 10px; }
-}
-
-/* --- 8. Modal --- */
+/* --- 8. Modal Corregido --- */
 .modal-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0;
   background: rgba(0,0,0,0.5);
-  display: flex; justify-content: center; align-items: center;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  z-index: 9999; /* Asegura que esté por encima de todo */
+  backdrop-filter: blur(4px); /* Opcional: efecto difuminado al fondo */
 }
-.modal-content {
-  background: white; padding: 20px; border-radius: 15px;
-  width: 90%; max-width: 400px;
+
+.modal-content { 
+  background: white; 
+  padding: 30px; 
+  border-radius: 25px; 
+  width: 90%; 
+  max-width: 300px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  z-index: 10000; /* Siempre un paso adelante del overlay */
 }
 
 /* --- 9. Notas --- */
 .notas-wrapper {
   margin-top: 32px;
-  padding: 30px; /* Más espacio interno */
+  padding: 20px;
   background-color: var(--bg-tab);
   border-radius: 30px;
   border: 2px dashed var(--border-color);
@@ -239,29 +256,141 @@ select.field-style option {
 
 .notas-grid {
   display: grid !important;
-  /* Forzamos un grid robusto */
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
-  gap: 30px !important; /* Separación real entre elementos */
-  width: 100% !important;
-  /* Evitamos cualquier herencia de tabla */
-  border-collapse: separate !important;
-  border-spacing: 0 !important;
+  gap: 20px !important;
 }
 
 .sticky-note {
   background-color: var(--bg-note);
-  padding: 20px;
+  padding: 10px;
   border-radius: 12px;
   box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
   min-height: 160px;
-  width: 100% !important; /* Asegura que no colapse */
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s;
-  box-sizing: border-box; /* Importante para que el padding no afecte el tamaño */
 }
 
-.sticky-note.es-favorito {
-  background-color: var(--bg-note-fav);
-  border: 2px solid var(--color-principal);
+/* --- 10. Finanzas --- */
+.finanzas-wrapper {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.finanzas-full-width {
+  width: 100%;
+  max-width: 1000px; /* O el ancho que prefieras */
+  margin: 0 auto;
+}
+
+.finanzas-control, .historial-scroll-container {
+  background: var(--bg-card);
+  padding: 30px;
+  border-radius: 40px;
+  border: 2px solid white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+  min-width: 0; /* NECESARIO: evita que el contenido aplaste al contenedor */
+}
+
+.historial-scroll-container {
+  background: var(--bg-tab);
+  border: 2px dashed var(--border-color);
+  height: 500px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* En PC: Layout de dos columnas definido */
+@media (min-width: 1100px) {
+  .finanzas-wrapper {
+    grid-template-columns: 400px 1fr; /* Panel fijo 400px, Historial toma el 1fr restante */
+    align-items: start;
+  }
+}
+
+/* En Móvil: Layout de una columna */
+@media (max-width: 1099px) {
+  .finanzas-wrapper {
+    grid-template-columns: 1fr;
+  }
+  
+  .historial-scroll-container {
+    height: 350px;
+  }
+}
+
+/* --- 11. RESTRICCIONES RESPONSIVE (Optimizadas para 1100px y menor) --- */
+@media (max-width: 1100px) {
+  .app-layout, .finanzas-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .card-container, .finanzas-control, .historial-scroll-container, .notas-wrapper {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .historial-scroll-container {
+    height: 350px; /* Altura más cómoda para tablets/celulares */
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-selector-wrapper { top: 10px; right: 10px; width: 120px; }
+  .resultado-text { font-size: 1.8rem; }
+  .main-container { padding: 10px; }
+}
+
+/* --- 12. Menú de Navegación --- */
+.nav-menu {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.nav-menu button {
+  padding: 10px 25px;
+  border-radius: 20px;
+  border: 2px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--color-principal);
+  font-family: 'Mukta', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.nav-menu button:hover {
+  background-color: var(--color-principal);
+  color: white;
+  border-color: var(--color-principal);
+}
+
+.nav-menu button.active {
+  background-color: var(--color-principal);
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 480px) {
+  .nav-menu {
+    gap: 8px; /* Menos espacio entre botones */
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
+
+  .nav-menu button {
+    padding: 8px 12px; /* Botones más compactos */
+    font-size: 0.85rem; /* Texto ligeramente más pequeño */
+    border-radius: 15px; /* Bordes un poco menos redondeados para ahorrar espacio */
+  }
 }
