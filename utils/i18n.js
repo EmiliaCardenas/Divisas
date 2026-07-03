@@ -1,6 +1,10 @@
 export const i18n = {
   es: {
-    nav: { conv: 'Conversor', fin: 'Finanzas', not: 'Notas', cfg: 'Configuración' },
+    nav: { conv: 'Conversor', fin: 'Finanzas', not: 'Notas', cfg: 'Configuración' ,calc: 'Calculadora' },
+    calc: { 
+        titulo: 'Calculadora', suma: 'Sumar', resta: 'Restar', total: 'Total', 
+        guardar: 'Guardar Resultado', limpiar: 'Limpiar', convertir: 'Convertir a:', 
+    },
     conv: { 
       titulo: 'Cambio de divisas', 
       guardar: 'Guardar Conversión', 
@@ -26,7 +30,11 @@ export const i18n = {
     config: { titulo: 'Configuración', tema: 'Tema:', lang: 'Idioma / Language:' }
   },
   en: {
-    nav: { conv: 'Converter', fin: 'Finance', not: 'Notes', cfg: 'Settings' },
+    nav: { conv: 'Converter', fin: 'Finance', not: 'Notes', cfg: 'Settings' , calc: 'Calculator' },
+    calc: { 
+        titulo: 'Calculator', suma: 'Add', resta: 'Subtract', total: 'Total', 
+        guardar: 'Save Result', limpiar: 'Clear', convertir: 'Convert to:', 
+    },
     conv: { 
       titulo: 'Exchange Rate', 
       guardar: 'Save Conversion', 

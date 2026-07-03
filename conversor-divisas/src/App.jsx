@@ -6,6 +6,7 @@ import TablaValores from '../components/TablaValores';
 import DesgloseImpuestos from '../components/DesgloseImpuestos';
 import FinanzasView from '../components/FinanzasView';
 import NotasView from '../components/NotasView';
+import CalculadoraView from '../components/CalculadoraView';
 import './App.css';
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
         <button className={vistaActual === 'conversor' ? 'active' : ''} onClick={() => setVistaActual('conversor')}>{t.nav.conv}</button>
         <button className={vistaActual === 'finanzas' ? 'active' : ''} onClick={() => setVistaActual('finanzas')}>{t.nav.fin}</button>
         <button className={vistaActual === 'notas' ? 'active' : ''} onClick={() => setVistaActual('notas')}>{t.nav.not}</button>
+        <button className={vistaActual === 'calc' ? 'active' : ''} onClick={() => setVistaActual('calc')}>{t.nav.calc}</button>
         <button onClick={() => setModalTemaOpen(true)}>{t.nav.cfg}</button>
       </nav>
 
@@ -139,6 +141,18 @@ function App() {
 
         {vistaActual === 'finanzas' && <FinanzasView t={t} tasas={tasas} />}
         {vistaActual === 'notas' && <NotasView t={t.notas}/>}
+        {vistaActual === 'calc' && (
+          <CalculadoraView 
+            t={t.calc} 
+            tasas={tasas} 
+            onSaveNote={(data) => {
+              // Reutilizas tu lógica de guardar nota aquí
+              const notas = JSON.parse(localStorage.getItem('mis_notas')) || [];
+              localStorage.setItem('mis_notas', JSON.stringify([...notas, { ...data, id: Date.now() }]));
+              alert("¡Guardado!");
+            }} 
+          />
+        )}
       </div>
     </div>
   );
