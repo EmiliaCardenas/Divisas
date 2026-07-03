@@ -254,10 +254,37 @@ select.field-style {
   box-sizing: border-box;
 }
 
+/* 1. Definición Base: Para pantallas grandes (Escritorio) */
 .notas-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
-  gap: 20px !important;
+  display: grid;
+  /* Esto asegura 6 columnas en pantallas grandes */
+  grid-template-columns: repeat(6, 1fr); 
+  gap: 20px;
+}
+
+/* 2. Ajuste para pantallas medianas (Tablets/Laptops pequeñas) */
+@media (max-width: 1100px) {
+  .notas-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+  }
+}
+
+/* 3. Ajuste para móviles (Celulares) */
+@media (max-width: 480px) {
+  .notas-grid {
+    /* Forzamos 2 columnas exactas */
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .sticky-note {
+    min-height: 120px !important;
+    padding: 8px !important;
+  }
+  
+  .sticky-note strong {
+    font-size: 0.75rem !important;
+  }
 }
 
 .sticky-note {
@@ -314,6 +341,7 @@ select.field-style {
     grid-template-columns: 400px 1fr; /* Panel fijo 400px, Historial toma el 1fr restante */
     align-items: start;
   }
+  
 }
 
 /* En Móvil: Layout de una columna */
@@ -388,15 +416,20 @@ select.field-style {
 
 @media (max-width: 480px) {
   .nav-menu {
-    gap: 8px; /* Menos espacio entre botones */
+    flex-wrap: wrap; /* Permite que los botones pasen a la siguiente línea */
+    justify-content: center;
+    gap: 8px;
     margin-bottom: 20px;
-    padding: 0 10px;
+    padding: 10 10px;
   }
 
   .nav-menu button {
-    padding: 8px 12px; /* Botones más compactos */
-    font-size: 0.85rem; /* Texto ligeramente más pequeño */
-    border-radius: 15px; /* Bordes un poco menos redondeados para ahorrar espacio */
+    flex: 1 1 calc(33.33% - 10px); /* Intenta poner 3 por fila (33%) */
+    padding: 8px 5px;
+    font-size: 0.8rem;
+    border-radius: 12px;
+    text-align: center;
+    white-space: nowrap; /* Evita que el texto se corte raro */
   }
 }
 
