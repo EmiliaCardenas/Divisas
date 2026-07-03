@@ -3,11 +3,11 @@ import { impuestosData } from '../../utils/impuestosData';
 
 const DesgloseImpuestos = ({ monedaCodigo, montoBase }) => {
   const config = impuestosData[monedaCodigo];
-  if (!config) return <p>No tax data for {monedaCodigo}</p>;
+  if (!config) return <p>No hay datos de impuestos de {monedaCodigo}</p>;
 
   return (
     <div className="tabla-container">
-      <h3 style={{ marginTop: 0 }}>Tax Breakdown</h3>
+      <h3 style={{ marginTop: 0 }}>Detalle de impuestos</h3>
       {config.paises.map((pais) => {
         const valorNeto = montoBase / (1 + pais.iva / 100);
         const montoIva = montoBase - valorNeto;

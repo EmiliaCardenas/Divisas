@@ -270,6 +270,11 @@ select.field-style {
   flex-direction: column;
 }
 
+.sticky-note.es-favorito {
+  background-color: var(--bg-note-fav);
+  border: 1px solid var(--color-principal);
+}
+
 /* --- 10. Finanzas --- */
 .finanzas-wrapper {
   display: grid;

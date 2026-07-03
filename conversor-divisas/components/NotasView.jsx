@@ -33,17 +33,41 @@ const NotasView = () => {
             >
             <div className="nota-header" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
                 <strong style={{ color: 'var(--color-principal)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {n.nombre}
+                    {n.nombre}
                 </strong>
-              <div>
-                <button onClick={() => toggleFavorito(n.id)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                  {n.esFavorito ? '★' : '☆'}
-                </button>
-                <button onClick={() => eliminarNota(n.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: '5px' }}>
-                  ✕
-                </button>
-              </div>
-            </div>
+                <div>
+                    {/* Estrella más grande y con mejor área de clic */}
+                    <button 
+                    onClick={() => toggleFavorito(n.id)} 
+                    style={{ 
+                        background: 'none', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        fontSize: '1.4rem', 
+                        padding: '0 5px',
+                        lineHeight: '1'
+                    }}
+                    >
+                    {n.esFavorito ? '★' : '☆'}
+                    </button>
+                    
+                    {/* Botón de eliminar también un poco más grande para coherencia */}
+                    <button 
+                    onClick={() => eliminarNota(n.id)} 
+                    style={{ 
+                        background: 'none', 
+                        border: 'none', 
+                        cursor: 'pointer', 
+                        marginLeft: '5px',
+                        fontSize: '1.2rem',
+                        padding: '0 5px',
+                        lineHeight: '1'
+                    }}
+                    >
+                    ✕
+                    </button>
+                </div>
+                </div>
             
             {n.desc && <p style={{ fontStyle: 'italic', fontSize: '0.8rem', margin: '0 0 8px 0' }}>{n.desc}</p>}
             <div style={{ marginTop: '2px' }}>

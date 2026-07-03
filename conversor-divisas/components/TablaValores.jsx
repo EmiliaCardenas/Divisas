@@ -9,7 +9,7 @@ const TablaValores = ({ de, a, tasas }) => {
 
   return (
     <div className="tabla-container">
-      <h3>Common conversions</h3>
+      <h3>Conversiones comunes</h3>
       <table>
         <tbody>
           {valores.map(val => (

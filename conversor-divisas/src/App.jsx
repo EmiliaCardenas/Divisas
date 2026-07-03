@@ -98,7 +98,7 @@ function App() {
         {vistaActual === 'conversor' && (
           <>
             <div className="card-container">
-              <h1 style={{ textAlign: 'center' }}>Foreign Exchange</h1>
+              <h1 style={{ textAlign: 'center' }}>Cambio de divisas</h1>
               <Conversor {...{ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas, resultado }} />
               
               <div className="resultado-container">

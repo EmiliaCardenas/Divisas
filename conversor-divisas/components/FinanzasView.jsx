@@ -11,6 +11,8 @@ const FinanzasView = ({ tasas }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [accionPendiente, setAccionPendiente] = useState(null);
 
+  const notasOrdenadas = [...notas].sort((a, b) => Number(b.esFavorito) - Number(a.esFavorito));
+
   useEffect(() => {
     localStorage.setItem('finanzas', JSON.stringify(saldos));
   }, [saldos]);
@@ -93,10 +95,17 @@ const FinanzasView = ({ tasas }) => {
           <h3 style={{ marginTop: 0, textAlign: 'center' }}>Historial</h3>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <tbody>
-              {notas.map(n => (
+              {/* CAMBIO: Usamos notasOrdenadas en lugar de notas */}
+              {notasOrdenadas.map(n => (
                 <tr key={n.id} style={{ borderBottom: '1px dashed var(--border-color)' }}>
-                  <td style={{ padding: '10px 0' }}>{n.nombre}</td>
-                  <td className="resultado-celda">{new Intl.NumberFormat('es-MX').format(n.cantidad)} {n.moneda}</td>
+                  <td style={{ padding: '10px 0' }}>
+                    {/* Opcional: mostrar la estrella para identificar el favorito */}
+                    {n.esFavorito && <span style={{ marginRight: '5px' }}>★</span>}
+                    {n.nombre}
+                  </td>
+                  <td className="resultado-celda">
+                    {new Intl.NumberFormat('es-MX').format(n.cantidad)} {n.moneda}
+                  </td>
                   <td style={{ textAlign: 'right' }}>
                     <button onClick={() => ajustarSaldoDesdeNota(n, true)} className="swap-btn" style={{ minHeight: '30px', padding: '0 10px' }}>+</button>
                     <button onClick={() => ajustarSaldoDesdeNota(n, false)} className="swap-btn" style={{ minHeight: '30px', padding: '0 10px', marginLeft: '5px' }}>-</button>
