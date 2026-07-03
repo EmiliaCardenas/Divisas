@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TablaValores = ({ de, a, tasas }) => {
+const TablaValores = ({ de, a, tasas, t }) => {
   const valores = [1, 10, 100, 1000, 10000];
 
   if (!tasas || !tasas[de] || !tasas[a]) {
@@ -9,7 +9,7 @@ const TablaValores = ({ de, a, tasas }) => {
 
   return (
     <div className="tabla-container">
-      <h3>Conversiones comunes</h3>
+      <h3>{t.tituloTabla || "Common conversions"}</h3>
       <table>
         <tbody>
           {valores.map(val => (

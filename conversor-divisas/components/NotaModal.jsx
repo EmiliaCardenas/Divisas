@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const NotaModal = ({ isOpen, onClose, onSave, datoBase }) => {
+const NotaModal = ({ isOpen, onClose, onSave, datoBase, t = {}}) => {
   const [nombre, setNombre] = useState(datoBase.nombre || '');
   const [desc, setDesc] = useState('');
 
@@ -9,15 +9,15 @@ const NotaModal = ({ isOpen, onClose, onSave, datoBase }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content" style={{ borderRadius: '30px' }}>
-        <h3 style={{ marginTop: '0' }}>Guardar Nota</h3>
+        <h3 style={{ marginTop: '0' }}>{t.tituloModal || "Save Note"}</h3>
         
         <div className="tabla-container" style={{ marginBottom: '15px' }}>
-          <p><strong>Detalle:</strong> {datoBase.resumenTexto || `${datoBase.cantidad} ${datoBase.moneda}`}</p>
-          <p><strong>Fecha:</strong> {new Date().toLocaleDateString()}</p>
+          <p><strong>{t.detalle || "Detail"}:</strong> {datoBase.resumenTexto || `${datoBase.cantidad} ${datoBase.moneda}`}</p>
+          <p><strong>{t.fecha|| "Date"}:</strong> {new Date().toLocaleDateString()}</p>
         </div>
 
         <input 
-          placeholder="Nombre (ej. Comida)" 
+          placeholder={t.placeholderNombre || "Name"}
           value={nombre} 
           onChange={e => setNombre(e.target.value)} 
           className="field-style"
@@ -25,7 +25,7 @@ const NotaModal = ({ isOpen, onClose, onSave, datoBase }) => {
           maxLength={25}
         />
         <input 
-          placeholder="Descripción (opcional)" 
+          placeholder={t.placeholderDesc || "Description"}
           value={desc} 
           onChange={e => setDesc(e.target.value)} 
           className="field-style"
@@ -33,9 +33,9 @@ const NotaModal = ({ isOpen, onClose, onSave, datoBase }) => {
         />
         
         <div className="select-group" style={{ marginTop: '20px' }}>
-          <button onClick={onClose} className="swap-btn" style={{ flex: 1 }}>Cancelar</button>
+          <button onClick={onClose} className="swap-btn" style={{ flex: 1 }}>{t.cancelar || "Cancel"}</button>
           <button onClick={() => { onSave({ ...datoBase, nombre, desc }); onClose(); }} className="swap-btn" style={{ flex: 1, backgroundColor: 'var(--color-principal)', color: 'white' }}>
-            Guardar
+            {t.guardar || "Save"}
           </button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NotaModal from './NotaModal';
 
-const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas, resultado }) => {
+const Conversor = ({ t, cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas, resultado }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const guardarConversion = (data) => {
@@ -49,10 +49,11 @@ const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tas
       </div>
 
       <button onClick={() => setModalOpen(true)} className="field-style" style={{ marginTop: '20px', cursor: 'pointer', fontWeight: 'bold' }}>
-        Guardar Conversión
+        {t.conv.guardar}
       </button>
       
       <NotaModal 
+        t={t.notas}
         isOpen={modalOpen} 
         onClose={() => setModalOpen(false)} 
         onSave={guardarConversion}

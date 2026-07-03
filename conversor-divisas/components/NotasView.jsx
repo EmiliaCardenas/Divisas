@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const NotasView = () => {
+const NotasView = ({ t }) => {
   const [notas, setNotas] = useState(() => JSON.parse(localStorage.getItem('mis_notas')) || []);
 
   const toggleFavorito = (id) => {
@@ -22,8 +22,8 @@ const NotasView = () => {
   return (
     // CAMBIO: usamos notas-wrapper en lugar de tabla-container
     <div className="notas-wrapper">
-      <h2 style={{ textAlign: 'center', color: 'var(--color-principal)' }}>Mis Notas</h2>
-      {notas.length === 0 && <p style={{textAlign: 'center'}}>No hay notas aún.</p>}
+      <h2 style={{ textAlign: 'center', color: 'var(--color-principal)' }}>{t.titulo}</h2>
+      {notas.length === 0 && <p style={{textAlign: 'center'}}>{t.vacio}</p>}
       
       <div className="notas-grid">
         {notasOrdenadas.map(n => (

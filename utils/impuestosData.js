@@ -1,27 +1,22 @@
 export const impuestosData = {
   "EUR": {
-    nombre: "European Union",
     paises: [
-      { nombre: "Germany", iva: 19 },
-      { nombre: "France", iva: 20 },
-      { nombre: "Spain", iva: 21 },
-      { nombre: "Italy", iva: 22 }
+      { id: "germany", iva: 19 },
+      { id: "france", iva: 20 },
+      { id: "spain", iva: 21 },
+      { id: "italy", iva: 22 }
     ]
   },
   "KRW": {
-    nombre: "South Korea",
-    paises: [{ nombre: "South Korea", iva: 10 }]
+    paises: [{ id: "south_korea", iva: 10 }]
   },
   "JPY": {
-    nombre: "Japan",
-    paises: [{ nombre: "Japan", iva: 10 }]
+    paises: [{ id: "japan", iva: 10 }]
   },
   "AUD": {
-    nombre: "Australia",
-    paises: [{ nombre: "Australia", iva: 10 }]
+    paises: [{ id: "australia", iva: 10 }]
   },
   "MXN": {
-    nombre: "Mexico",
-    paises: [{ nombre: "Mexico (IVA)", iva: 16 }]
+    paises: [{ id: "mexico", iva: 16 }]
   }
 };

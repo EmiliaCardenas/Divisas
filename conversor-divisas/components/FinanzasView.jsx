@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NotaModal from './NotaModal';
 
-const FinanzasView = ({ tasas }) => {
+const FinanzasView = ({ t, tasas }) => {
   const [saldos, setSaldos] = useState(() => JSON.parse(localStorage.getItem('finanzas')) || { MXN: 0, USD: 0 });
   const [notas, setNotas] = useState(() => JSON.parse(localStorage.getItem('mis_notas')) || []);
   const [montoInput, setMontoInput] = useState('');
@@ -52,17 +52,16 @@ const FinanzasView = ({ tasas }) => {
 
   return (
     <div className="finanzas-full-width">
-      {/* Usamos las clases de tu CSS para que todo sea responsivo */}
       <div className="finanzas-wrapper">
         
         {/* Panel de Control */}
         <div className="finanzas-control">
           <h2 style={{ color: 'var(--color-principal)', textAlign: 'center', marginTop: 0 }}>
-            Saldo: {calcularSaldoTotalVista().toFixed(2)} {monedaVista}
+            {t.fin.titulo}: {calcularSaldoTotalVista().toFixed(2)} {monedaVista}
           </h2>
           
           <div className="select-wrapper" style={{ marginBottom: '20px' }}>
-            <label>Vista en: </label>
+            <label>{t.fin.vista} </label>
             <select onChange={(e) => setMonedaVista(e.target.value)} value={monedaVista} className="field-style">
               {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
             </select>
@@ -73,11 +72,11 @@ const FinanzasView = ({ tasas }) => {
                 type="text" 
                 className="field-style" 
                 value={montoInput}
+                placeholder={t.conv.placeholder} 
                 onChange={(e) => {
                     const valor = e.target.value.replace(',', '.');
                     if (/^[0-9]*\.?[0-9]*$/.test(valor)) setMontoInput(valor);
                 }} 
-                placeholder="Monto" 
             />
             <select onChange={(e) => setMonedaSeleccionada(e.target.value)} value={monedaSeleccionada} className="field-style">
               {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
@@ -85,21 +84,19 @@ const FinanzasView = ({ tasas }) => {
           </div>
 
           <div className="select-group" style={{ marginTop: '15px' }}>
-            <button className="swap-btn" onClick={() => prepararAccion(true)}>Añadir</button>
-            <button className="swap-btn" onClick={() => prepararAccion(false)}>Restar</button>
+            <button className="swap-btn" onClick={() => prepararAccion(true)}>{t.fin.anyadir}</button>
+            <button className="swap-btn" onClick={() => prepararAccion(false)}>{t.fin.restar}</button>
           </div>
         </div>
 
         {/* Historial */}
         <div className="historial-scroll-container">
-          <h3 style={{ marginTop: 0, textAlign: 'center' }}>Historial</h3>
+          <h3 style={{ marginTop: 0, textAlign: 'center' }}>{t.fin.hist}</h3>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <tbody>
-              {/* CAMBIO: Usamos notasOrdenadas en lugar de notas */}
               {notasOrdenadas.map(n => (
                 <tr key={n.id} style={{ borderBottom: '1px dashed var(--border-color)' }}>
                   <td style={{ padding: '10px 0' }}>
-                    {/* Opcional: mostrar la estrella para identificar el favorito */}
                     {n.esFavorito && <span style={{ marginRight: '5px' }}>★</span>}
                     {n.nombre}
                   </td>
@@ -118,6 +115,7 @@ const FinanzasView = ({ tasas }) => {
       </div>
 
       <NotaModal 
+        t={t.notas}
         isOpen={modalOpen} 
         onClose={() => setModalOpen(false)} 
         onSave={guardarNotaFinanciera}
