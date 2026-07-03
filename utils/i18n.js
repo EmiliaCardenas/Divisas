@@ -18,9 +18,10 @@ export const i18n = {
     },
     fin: { titulo: 'Saldo', vista: 'Vista en:', hist: 'Historial', anyadir: 'Añadir', restar: 'Restar' },
     notas: { 
-      titulo: 'Mis Notas', vacio: 'No hay notas aún.', tituloModal: 'Guardar Nota',
-      detalle: 'Detalle', fecha: 'Fecha', placeholderNombre: 'Nombre (ej. Comida)',
-      placeholderDesc: 'Descripción (opcional)', cancelar: 'Cancelar', guardar: 'Guardar'
+      titulo: 'Mis notas', vacio: 'No hay notas aún.', tituloModal: 'Guardar Nota',
+      detalle: 'Detalle', fecha: 'Fecha', placeholderNombre: 'Nombre',
+      placeholderDesc: 'Descripción (opcional)', cancelar: 'Cancelar', guardar: 'Guardar',
+      errorNombre: 'El nombre es obligatorio'
     },
     config: { titulo: 'Configuración', tema: 'Tema:', lang: 'Idioma / Language:' }
   },
@@ -43,9 +44,10 @@ export const i18n = {
     },
     fin: { titulo: 'Balance', vista: 'View in:', hist: 'History', anyadir: 'Add', restar: 'Subtract' },
     notas: { 
-      titulo: 'My Notes', vacio: 'No notes yet.', tituloModal: 'Save Note',
-      detalle: 'Detail', fecha: 'Date', placeholderNombre: 'Name (e.g. Food)',
-      placeholderDesc: 'Description (optional)', cancelar: 'Cancel', guardar: 'Save'
+      titulo: 'My notes', vacio: 'No notes yet.', tituloModal: 'Save Note',
+      detalle: 'Detail', fecha: 'Date', placeholderNombre: 'Name',
+      placeholderDesc: 'Description (optional)', cancelar: 'Cancel', guardar: 'Save',
+      errorNombre: 'Name is required'
     },
     config: { titulo: 'Settings', tema: 'Theme:', lang: 'Idioma / Language:' }
   }

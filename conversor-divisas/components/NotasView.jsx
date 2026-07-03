@@ -72,7 +72,17 @@ const NotasView = ({ t }) => {
             {n.desc && <p style={{ fontStyle: 'italic', fontSize: '0.8rem', margin: '0 0 8px 0' }}>{n.desc}</p>}
             <div style={{ marginTop: '2px' }}>
                 <div style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>
-                {n.valorInicial} {n.monedaInicial} ⮕ {new Intl.NumberFormat('es-MX', { style: 'decimal' }).format(n.cantidad)} {n.moneda}
+                    {n.valorInicial && n.monedaInicial ? (
+                    // Caso: Conversión (muestra origen y destino)
+                    <>
+                        {n.valorInicial} {n.monedaInicial} ⮕ {new Intl.NumberFormat('es-MX', { style: 'decimal' }).format(n.cantidad)} {n.moneda}
+                    </>
+                    ) : (
+                    // Caso: Ingreso o Gasto (muestra solo el monto)
+                    <>
+                        {new Intl.NumberFormat('es-MX', { style: 'decimal' }).format(n.cantidad)} {n.moneda}
+                    </>
+                    )}
                 </div>
                 <small style={{ color: '#555', fontSize: '0.7rem', display: 'block', marginTop: '2px' }}>{n.fecha}</small>
             </div>

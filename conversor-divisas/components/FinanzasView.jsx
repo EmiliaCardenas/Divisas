@@ -56,18 +56,22 @@ const FinanzasView = ({ t, tasas }) => {
         
         {/* Panel de Control */}
         <div className="finanzas-control">
-          <h2 style={{ color: 'var(--color-principal)', textAlign: 'center', marginTop: 0 }}>
+        <h2 style={{ color: 'var(--color-principal)', textAlign: 'center', marginTop: 0 }}>
             {t.fin.titulo}: {calcularSaldoTotalVista().toFixed(2)} {monedaVista}
-          </h2>
-          
-          <div className="select-wrapper" style={{ marginBottom: '20px' }}>
+        </h2>
+        
+        {/* Divisor añadido después del selector de vista */}
+        <div className="select-wrapper" style={{ marginBottom: '20px' }}>
             <label>{t.fin.vista} </label>
             <select onChange={(e) => setMonedaVista(e.target.value)} value={monedaVista} className="field-style">
-              {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
+            {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
             </select>
-          </div>
+        </div>
+        
+        <hr style={{ border: '0', borderTop: '1px solid var(--border-color)', margin: '15px 0' }} />
 
-          <div className="select-group">
+        {/* Input y select agrupados */}
+        <div className="select-group">
             <input 
                 type="text" 
                 className="field-style" 
@@ -79,14 +83,15 @@ const FinanzasView = ({ t, tasas }) => {
                 }} 
             />
             <select onChange={(e) => setMonedaSeleccionada(e.target.value)} value={monedaSeleccionada} className="field-style">
-              {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
+            {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
             </select>
-          </div>
+        </div>
 
-          <div className="select-group" style={{ marginTop: '15px' }}>
+        {/* Botones centrados */}
+        <div className="select-group" style={{ marginTop: '15px', justifyContent: 'center' }}>
             <button className="swap-btn" onClick={() => prepararAccion(true)}>{t.fin.anyadir}</button>
-            <button className="swap-btn" onClick={() => prepararAccion(false)}>{t.fin.restar}</button>
-          </div>
+            <button className="swap-btn" onClick={() => prepararAccion(false)} style={{ marginLeft: '10px' }}>{t.fin.restar}</button>
+        </div>
         </div>
 
         {/* Historial */}
