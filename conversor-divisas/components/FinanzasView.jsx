@@ -35,7 +35,6 @@ const FinanzasView = ({ tasas }) => {
     setModalOpen(false);
   };
 
-  // NUEVA FUNCIÓN: Interactuar con el saldo a partir de una nota existente
   const ajustarSaldoDesdeNota = (nota, esSuma) => {
     const factor = esSuma ? 1 : -1;
     setSaldos(prev => ({ 
@@ -50,50 +49,63 @@ const FinanzasView = ({ tasas }) => {
   };
 
   return (
-    <div className="finanzas-container">
-      <h2>Saldo Total: {calcularSaldoTotalVista().toFixed(2)} {monedaVista}</h2>
-      
-      <div className="selector-vista" style={{marginBottom: '20px'}}>
-        <label>Ver saldo total en: </label>
-        <select onChange={(e) => setMonedaVista(e.target.value)} value={monedaVista}>
-          {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
-        </select>
-      </div>
-
-      <div className="controls">
-        <input type="number" onChange={(e) => setMontoInput(e.target.value)} placeholder="Monto" />
-        <select onChange={(e) => setMonedaSeleccionada(e.target.value)} value={monedaSeleccionada}>
-          {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
-        </select>
+    // ENVOLVEMOS TODO EN card-container PARA QUE SE VEA COMO LOS DEMÁS
+    <div className="card-container">
+      <div className="finanzas-container">
+        <h2 style={{ color: 'var(--color-principal)', textAlign: 'center' }}>
+          Saldo Total: {calcularSaldoTotalVista().toFixed(2)} {monedaVista}
+        </h2>
         
-        <button onClick={() => prepararAccion(true)}>Añadir</button>
-        <button onClick={() => prepararAccion(false)}>Restar</button>
+        <div className="select-wrapper" style={{ marginBottom: '20px' }}>
+          <label>Ver saldo total en: </label>
+          <select onChange={(e) => setMonedaVista(e.target.value)} value={monedaVista} className="field-style">
+            {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
+          </select>
+        </div>
+
+        <div className="select-group">
+          <input type="number" className="field-style" onChange={(e) => setMontoInput(e.target.value)} placeholder="Monto" />
+          <select onChange={(e) => setMonedaSeleccionada(e.target.value)} value={monedaSeleccionada} className="field-style">
+            {Object.keys(tasas || {}).map(cod => <option key={cod} value={cod}>{cod}</option>)}
+          </select>
+        </div>
+
+        <div className="select-group" style={{ marginTop: '10px' }}>
+          <button className="swap-btn" onClick={() => prepararAccion(true)} style={{ flex: 1 }}>Añadir</button>
+          <button className="swap-btn" onClick={() => prepararAccion(false)} style={{ flex: 1 }}>Restar</button>
+        </div>
+
+        {/* Mantenemos tu tabla, que ahora heredará el estilo del card-container */}
+        <div className="tabla-container">
+          <h3>Historial de Notas</h3>
+          <table style={{ width: '100%' }}>
+            <tbody>
+              {notas.map(n => (
+                <tr key={n.id} style={{ borderBottom: '1px dashed var(--border-color)' }}>
+                  <td style={{ fontWeight: n.esFavorito ? 'bold' : 'normal', padding: '10px 0' }}>{n.nombre}</td>
+                  <td className="resultado-celda">{n.cantidad} {n.moneda}</td>
+                  <td style={{ textAlign: 'right' }}>
+                    <button onClick={() => ajustarSaldoDesdeNota(n, true)} className="swap-btn" style={{ minHeight: '30px', padding: '0 10px' }}>+</button>
+                    <button onClick={() => ajustarSaldoDesdeNota(n, false)} className="swap-btn" style={{ minHeight: '30px', padding: '0 10px', marginLeft: '5px' }}>-</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <NotaModal 
+          isOpen={modalOpen} 
+          onClose={() => setModalOpen(false)} 
+          onSave={guardarNotaFinanciera}
+          datoBase={{ 
+            nombre: '', 
+            cantidad: accionPendiente === 'Gasto' ? -Math.abs(montoInput) : Math.abs(montoInput), 
+            moneda: monedaSeleccionada,
+            resumenTexto: `${accionPendiente} de ${montoInput} ${monedaSeleccionada}`
+          }} 
+        />
       </div>
-
-      <NotaModal 
-        isOpen={modalOpen} 
-        onClose={() => setModalOpen(false)} 
-        onSave={guardarNotaFinanciera}
-        datoBase={{ 
-          nombre: '', 
-          cantidad: accionPendiente === 'Gasto' ? -Math.abs(montoInput) : Math.abs(montoInput), 
-          moneda: monedaSeleccionada,
-          resumenTexto: `${accionPendiente} de ${montoInput} ${monedaSeleccionada}`
-        }} 
-      />
-
-      <h3>Historial de Notas</h3>
-      <ul>
-        {notas
-            .sort((a, b) => (b.esFavorito - a.esFavorito)) // Ordena favoritos al inicio
-            .map(n => (
-                <li key={n.id} style={{ fontWeight: n.esFavorito ? 'bold' : 'normal' }}>
-                {n.fecha} - {n.nombre}: {n.cantidad} {n.moneda}
-                <button onClick={() => ajustarSaldoDesdeNota(n, true)}>+</button>
-                <button onClick={() => ajustarSaldoDesdeNota(n, false)}>-</button>
-                </li>
-            ))}
-      </ul>
     </div>
   );
 };

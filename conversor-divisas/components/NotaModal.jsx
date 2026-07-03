@@ -8,25 +8,37 @@ const NotaModal = ({ isOpen, onClose, onSave, datoBase }) => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-        <h3>Guardar Nota</h3>
+      <div className="modal-content" style={{ borderRadius: '30px' }}>
+        <h3 style={{ marginTop: '0' }}>Guardar Nota</h3>
         
-        {/* Resumen detallado */}
-        <div className="resumen-box" style={{ background: '#f8f8f8', padding: '10px', borderRadius: '8px', marginBottom: '10px' }}>
-          {/* Si existe resumenTexto lo muestra, si no, muestra el formato básico */}
+        <div className="tabla-container" style={{ marginBottom: '15px' }}>
           <p><strong>Detalle:</strong> {datoBase.resumenTexto || `${datoBase.cantidad} ${datoBase.moneda}`}</p>
           <p><strong>Fecha:</strong> {new Date().toLocaleDateString()}</p>
         </div>
 
-        <input placeholder="Nombre (ej. Comida)" value={nombre} onChange={e => setNombre(e.target.value)} />
-        <input placeholder="Descripción (opcional)" value={desc} onChange={e => setDesc(e.target.value)} />
+        <input 
+          placeholder="Nombre (ej. Comida)" 
+          value={nombre} 
+          onChange={e => setNombre(e.target.value)} 
+          className="field-style"
+          style={{ marginBottom: '10px' }}
+        />
+        <input 
+          placeholder="Descripción (opcional)" 
+          value={desc} 
+          onChange={e => setDesc(e.target.value)} 
+          className="field-style"
+        />
         
-        <div className="modal-actions">
-          <button onClick={onClose}>Cancelar</button>
-          <button onClick={() => { onSave({ ...datoBase, nombre, desc }); onClose(); }}>Guardar</button>
+        <div className="select-group" style={{ marginTop: '20px' }}>
+          <button onClick={onClose} className="swap-btn" style={{ flex: 1 }}>Cancelar</button>
+          <button onClick={() => { onSave({ ...datoBase, nombre, desc }); onClose(); }} className="swap-btn" style={{ flex: 1, backgroundColor: 'var(--color-principal)', color: 'white' }}>
+            Guardar
+          </button>
         </div>
       </div>
     </div>
   );
 };
+
 export default NotaModal;

@@ -30,7 +30,7 @@ const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tas
         className="field-style" 
       />
       
-      <div className="select-group">
+      <div className="select-group" style={{ marginTop: '15px' }}>
         <select onChange={(e) => setDe(e.target.value)} value={de} className="field-style">
           {Object.entries(tasas).map(([cod, info]) => (
             <option key={cod} value={cod}>{cod} - {info.nombre}</option>
@@ -46,7 +46,7 @@ const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tas
         </select>
       </div>
 
-      <button onClick={() => setModalOpen(true)} className="save-note-btn">
+      <button onClick={() => setModalOpen(true)} className="field-style" style={{ marginTop: '20px', cursor: 'pointer', fontWeight: 'bold' }}>
         Guardar Conversión
       </button>
       
@@ -55,11 +55,13 @@ const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tas
         onClose={() => setModalOpen(false)} 
         onSave={guardarConversion}
         datoBase={{ 
-          nombre: ``, 
+          nombre: "", 
+          valorInicial: cantidad,
+          monedaInicial: de,
           cantidad: resultado, 
           moneda: a,
-          resumenTexto: `de ${cantidad} ${de} a ${resultado} ${a}`
-        }} 
+          resumenTexto: `${cantidad} ${de} → ${resultado} ${a}`
+        }}
       />
     </div>
   );
