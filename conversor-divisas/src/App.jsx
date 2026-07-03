@@ -79,7 +79,7 @@ function App() {
           </>
         )}
 
-        {vistaActual === 'finanzas' && <FinanzasView />}
+        {vistaActual === 'finanzas' && <FinanzasView tasas={tasas} />}
         {vistaActual === 'notas' && <NotasView />}
       </div>
     </div>
