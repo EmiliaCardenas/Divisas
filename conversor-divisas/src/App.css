@@ -394,3 +394,40 @@ select.field-style {
     border-radius: 15px; /* Bordes un poco menos redondeados para ahorrar espacio */
   }
 }
+
+/* Ajustes para pantallas pequeñas (móviles) */
+@media (max-width: 480px) {
+  body {
+    font-size: 14px; /* Reduce el tamaño base de todo el sitio */
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  /* Reducir el tamaño de los inputs y selects */
+  .field-style, 
+  .nav-menu button,
+  .swap-btn {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  /* Ajustar el resultado principal que mencionaste en el código */
+  .resultado-text {
+    font-size: 20px !important;
+  }
+
+  /* Ajustar el texto dentro de la tabla de impuestos */
+  .tabla-container span {
+    font-size: 0.85rem;
+  }
+}
