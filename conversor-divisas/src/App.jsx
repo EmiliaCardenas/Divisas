@@ -63,7 +63,7 @@ function App() {
           <>
             <div className="card-container">
               <h1 style={{ textAlign: 'center' }}>Foreign Exchange</h1>
-              <Conversor {...{ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas }} />
+              <Conversor {...{ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas, resultado }} />
               
               <div className="resultado-container">
                 <h2 style={{ textAlign: 'center', fontSize: "26px" }} className="resultado-text">

@@ -1,54 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
+import NotaModal from './NotaModal';
 
-const fieldStyle = {
-  width: '100%',
-  padding: '12px 16px',
-  borderRadius: '20px',
-  border: '2px solid #fce4ec', 
-  backgroundColor: '#fff',
-  fontFamily: 'inherit',
-  fontSize: '1rem',
-  outline: 'none',
-  color: '#d81b60'
-};
+const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas, resultado }) => {
+  const [modalOpen, setModalOpen] = useState(false);
 
-const Conversor = ({ cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas }) => {
+  const guardarConversion = (data) => {
+    const notas = JSON.parse(localStorage.getItem('mis_notas')) || [];
+    const nuevaNota = { ...data, id: Date.now(), fecha: new Date().toLocaleDateString() };
+    localStorage.setItem('mis_notas', JSON.stringify([...notas, nuevaNota]));
+  };
+
   return (
     <div className="conversor-container">
-      <div>
-        <input 
-          type="number" 
-          value={cantidad} 
-          onChange={(e) => setCantidad(e.target.value)} 
-          className="field-style" 
-        />
+      <input type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)} className="field-style" />
+      <div className="select-group">
+        <select onChange={(e) => setDe(e.target.value)} value={de} className="field-style">
+          {Object.entries(tasas).map(([cod, info]) => <option key={cod} value={cod}>{cod} - {info.nombre}</option>)}
+        </select>
+        <button onClick={swapDivisas} className="swap-btn">⇅</button>
+        <select onChange={(e) => setA(e.target.value)} value={a} className="field-style">
+          {Object.entries(tasas).map(([cod, info]) => <option key={cod} value={cod}>{cod} - {info.nombre}</option>)}
+        </select>
       </div>
 
-      <div className="select-group">
-        <div className="select-wrapper">
-            <select onChange={(e) => setDe(e.target.value)} value={de} className="field-style">
-            {Object.entries(tasas).map(([cod, info]) => (
-                <option key={cod} value={cod}>
-                {cod} - {info.nombre}
-                </option>
-            ))}
-            </select>
-        </div>
-
-        <button onClick={swapDivisas} className="swap-btn">Switch</button>
-
-        <div className="select-wrapper">
-            <select onChange={(e) => setA(e.target.value)} value={a} className="field-style">
-            {Object.entries(tasas).map(([cod, info]) => (
-                <option key={cod} value={cod}>
-                {cod} - {info.nombre}
-                </option>
-            ))}
-            </select>
-        </div>
-        </div>
+      <button onClick={() => setModalOpen(true)} className="save-note-btn">Guardar Conversión</button>
+      
+      <NotaModal 
+        isOpen={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+        onSave={guardarConversion}
+        datoBase={{ 
+          nombre: ``, 
+          cantidad: resultado, 
+          moneda: a ,
+          resumenTexto: `de ${cantidad} ${de} a ${resultado} ${a}`
+        }} 
+      />
     </div>
   );
 };
-
 export default Conversor;
