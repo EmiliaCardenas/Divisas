@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import NotaModal from './NotaModal';
 
 const CalculadoraView = ({ t, tasas, onSaveNote }) => {
+  // Definimos la rama específica para no perder las traducciones
+  const tc = t.calc;
+
   const [valor, setValor] = useState('');
   const [total, setTotal] = useState(0);
   const [moneda, setMoneda] = useState('MXN');
@@ -35,7 +38,7 @@ const CalculadoraView = ({ t, tasas, onSaveNote }) => {
 
   return (
     <div className="card-container">
-      <h3>{t.titulo}</h3>
+      <h3>{tc.titulo}</h3>
       
       <input 
         type="number" 
@@ -43,7 +46,6 @@ const CalculadoraView = ({ t, tasas, onSaveNote }) => {
         onChange={(e) => setValor(e.target.value)} 
         className="field-style" 
         placeholder="0.00"
-        // Espacio aplicado aquí para separar del select inferior
         style={{ marginBottom: '15px' }} 
       />
       
@@ -58,8 +60,8 @@ const CalculadoraView = ({ t, tasas, onSaveNote }) => {
       
       {/* Botones centrados */}
       <div style={{ display: 'flex', gap: '10px', margin: '10px 0', justifyContent: 'center' }}>
-        <button className="swap-btn" onClick={() => operar('suma')}>{t.suma}</button>
-        <button className="swap-btn" onClick={() => operar('resta')}>{t.resta}</button>
+        <button className="swap-btn" onClick={() => operar('suma')}>{tc.suma}</button>
+        <button className="swap-btn" onClick={() => operar('resta')}>{tc.resta}</button>
       </div>
 
       {/* Historial */}
@@ -70,17 +72,17 @@ const CalculadoraView = ({ t, tasas, onSaveNote }) => {
       {/* Total en moneda origen */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '15px 0' }}>
         <h3 style={{ margin: 0 }}>{total.toFixed(2)} {moneda}</h3>
-        <button className="swap-btn" onClick={limpiar}>{t.limpiar}</button>
+        <button className="swap-btn" onClick={limpiar}>{tc.limpiar}</button>
       </div>
 
       {/* Resultado Convertido con selector a la derecha */}
       <div style={{ margin: '14px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h2 style={{ margin: 0 }}>
-            {t.total}: {totalConvertido.toFixed(2)} {monedaDestino}
+            {tc.total}: {totalConvertido.toFixed(2)} {monedaDestino}
         </h2>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '0.9rem' }}>{t.convertir}</span>
+            <span style={{ fontSize: '0.9rem' }}>{tc.convertir}</span>
             <select 
             onChange={(e) => setMonedaDestino(e.target.value)} 
             value={monedaDestino} 
@@ -92,10 +94,10 @@ const CalculadoraView = ({ t, tasas, onSaveNote }) => {
         </div>
       </div>
       
-      <button onClick={() => setModalOpen(true)} className="field-style">{t.guardar}</button>
+      <button onClick={() => setModalOpen(true)} className="field-style">{tc.guardar}</button>
       
       <NotaModal 
-        t={t} 
+        t={t.notas} 
         isOpen={modalOpen} 
         onClose={() => setModalOpen(false)} 
         onSave={(data) => {
@@ -104,7 +106,7 @@ const CalculadoraView = ({ t, tasas, onSaveNote }) => {
             setModalOpen(false);
         }}
         datoBase={{ 
-          resumenTexto: `Calculadora: ${total.toFixed(2)} ${moneda} = ${totalConvertido.toFixed(2)} ${monedaDestino}` 
+          resumenTexto: `${total.toFixed(2)} ${moneda} = ${totalConvertido.toFixed(2)} ${monedaDestino}` 
         }}
       />
     </div>

@@ -143,7 +143,7 @@ function App() {
         {vistaActual === 'notas' && <NotasView t={t.notas}/>}
         {vistaActual === 'calc' && (
           <CalculadoraView 
-            t={t.calc} 
+            t={t} 
             tasas={tasas} 
             onSaveNote={(data) => {
               // Reutilizas tu lógica de guardar nota aquí
