@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import NotaModal from './NotaModal';
 
-const FinanzasView = ({ t, tasas }) => {
+const FinanzasView = ({ t, tema, tasas }) => {
   const [saldos, setSaldos] = useState(() => JSON.parse(localStorage.getItem('finanzas')) || { MXN: 0, USD: 0 });
   const [notas, setNotas] = useState(() => JSON.parse(localStorage.getItem('mis_notas')) || []);
   const [montoInput, setMontoInput] = useState('');
@@ -130,6 +130,7 @@ const FinanzasView = ({ t, tasas }) => {
           moneda: monedaSeleccionada,
           resumenTexto: `${accionPendiente} de ${montoInput} ${monedaSeleccionada}`
         }} 
+        tema={tema}
       />
     </div>
   );

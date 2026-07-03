@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import NotaModal from './NotaModal';
 
-const CalculadoraView = ({ t, tasas}) => {
+const CalculadoraView = ({ t, tema, tasas}) => {
   // Definimos la rama específica para no perder las traducciones
   const tc = t.calc;
 
@@ -37,6 +37,7 @@ const CalculadoraView = ({ t, tasas}) => {
     : total;
 
   return (
+    <>
     <div className="card-container">
       <h3>{tc.titulo}</h3>
       
@@ -96,7 +97,9 @@ const CalculadoraView = ({ t, tasas}) => {
       
       <button onClick={() => setModalOpen(true)} className="field-style">{tc.guardar}</button>
       
-      <NotaModal 
+      
+    </div>
+    <NotaModal 
         t={t.notas} 
         isOpen={modalOpen} 
         onClose={() => setModalOpen(false)} 
@@ -108,8 +111,9 @@ const CalculadoraView = ({ t, tasas}) => {
         datoBase={{ 
           resumenTexto: `${total.toFixed(2)} ${moneda} = ${totalConvertido.toFixed(2)} ${monedaDestino}` 
         }}
+        tema={tema}
       />
-    </div>
+    </>
   );
 };
 

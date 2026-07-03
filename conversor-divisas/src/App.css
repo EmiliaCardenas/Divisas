@@ -219,28 +219,41 @@ select.field-style {
 }
 
 /* --- 8. Modal Corregido --- */
+/* Asegura que el modal esté por encima de TODO */
 .modal-overlay {
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  right: 0; 
-  bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-  z-index: 9999; /* Asegura que esté por encima de todo */
-  backdrop-filter: blur(4px); /* Opcional: efecto difuminado al fondo */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  
+  /* Flexbox para centrar contenido */
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  
+  z-index: 9999999 !important; /* Aumentado a 7 nueves */
+  backdrop-filter: blur(5px);
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-.modal-content { 
-  background: white; 
-  padding: 30px; 
-  border-radius: 25px; 
-  width: 90%; 
-  max-width: 300px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-  z-index: 10000; /* Siempre un paso adelante del overlay */
+/* El contenido del modal no debe tener posición relativa si no es necesario */
+.modal-content {
+  background: white !important;
+  padding: 30px !important;
+  border-radius: 30px !important;
+  width: 90% !important;
+  max-width: 350px !important;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
+  
+  /* Reset de posicionamiento */
+  position: relative !important;
+  margin: 0 !important;
+  z-index: 10000000 !important; /* Mayor que el overlay */
 }
 
 /* --- 9. Notas --- */

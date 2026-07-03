@@ -1,11 +1,13 @@
 const axios = require('axios');
 require('dotenv').config();
 
+// Caché para que si se guarden los valores (sin dv)
 let cache = {
     data: null,
     ultimaActualizacion: null
 };
 
+// Nombres de las monedas
 const nombresMonedas = {
     "AUD": "Australian Dollar",
     "CAD": "Canadian Dollar",

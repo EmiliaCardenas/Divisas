@@ -1,7 +1,24 @@
 import { useState } from 'react';
 
 const NotasView = ({ t }) => {
-  const [notas, setNotas] = useState(() => JSON.parse(localStorage.getItem('mis_notas')) || []);
+  const [notas, setNotas] = useState(() => {
+      const notasGuardadas = JSON.parse(localStorage.getItem('mis_notas')) || [];
+      const seisMesesEnMs = 6 * 30 * 24 * 60 * 60 * 1000;
+      const ahora = Date.now();
+
+      const notasFiltradas = notasGuardadas.filter(n => {
+        // Si la nota no tiene fechaCreacion, la conservamos (o puedes borrarlas)
+        if (!n.fechaCreacion) return true;
+        return (ahora - n.fechaCreacion) < seisMesesEnMs;
+      });
+
+      // Si hubo notas eliminadas por antigüedad, actualizamos el localStorage
+      if (notasFiltradas.length !== notasGuardadas.length) {
+        localStorage.setItem('mis_notas', JSON.stringify(notasFiltradas));
+      }
+
+      return notasFiltradas;
+  });
 
   const toggleFavorito = (id) => {
     const nuevasNotas = notas.map(n => 

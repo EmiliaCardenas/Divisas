@@ -1,27 +1,37 @@
 import { useState } from 'react';
+import ReactDOM from 'react-dom'; // 1. Importa ReactDOM
 
-const NotaModal = ({ isOpen, onClose, onSave, datoBase, t = {} }) => {
+const NotaModal = ({ isOpen, onClose, onSave, datoBase, t = {}, tema }) => {
   const [nombre, setNombre] = useState(datoBase.nombre || '');
   const [desc, setDesc] = useState('');
-  const [error, setError] = useState(false); // Estado para el error
+  const [error, setError] = useState(false);
 
   if (!isOpen) return null;
 
   const handleSave = () => {
     if (!nombre.trim()) {
-      setError(true); // Activa el error si está vacío o solo espacios
+      setError(true);
       return;
     }
-    onSave({ ...datoBase, nombre, desc });
-    setNombre(''); // Limpiar para el siguiente uso
+    
+    onSave({ 
+        ...datoBase, 
+        nombre, 
+        desc, 
+        fechaCreacion: Date.now(),
+        fecha: new Date().toLocaleDateString()
+    });
+    
+    setNombre('');
     setDesc('');
     setError(false);
     onClose();
   };
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content" style={{ borderRadius: '30px' }}>
+  // 2. Usamos createPortal para inyectar el modal en el body
+  return ReactDOM.createPortal(
+    <div className={`modal-overlay ${tema}`} onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ borderRadius: '30px' }}>
         <h3 style={{ marginTop: '0' }}>{t.tituloModal || "Save Note"}</h3>
         
         <div className="tabla-container" style={{ marginBottom: '15px' }}>
@@ -34,19 +44,19 @@ const NotaModal = ({ isOpen, onClose, onSave, datoBase, t = {} }) => {
           value={nombre} 
           onChange={e => {
             setNombre(e.target.value);
-            if (e.target.value.trim()) setError(false); // Quita el error al escribir
+            if (e.target.value.trim()) setError(false);
           }} 
           className="field-style"
           style={{ 
             marginBottom: '5px',
-            borderColor: error ? 'red' : 'inherit' // Borde rojo si hay error
+            borderColor: error ? 'red' : 'inherit'
           }}
           maxLength={25}
         />
         {error && (
-        <p style={{ color: 'red', fontSize: '0.75rem', margin: '0 0 10px 5px' }}>
+          <p style={{ color: 'red', fontSize: '0.75rem', margin: '0 0 10px 5px' }}>
             {t.errorNombre || "El nombre es requerido / Name is required"}
-        </p>
+          </p>
         )}
         <input 
           placeholder={t.placeholderDesc || "Description"}
@@ -67,7 +77,8 @@ const NotaModal = ({ isOpen, onClose, onSave, datoBase, t = {} }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body // Aquí le decimos que el modal "vive" en el body
   );
 };
 
