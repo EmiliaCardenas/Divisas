@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { i18n } from '../../utils/i18n';
 import Conversor from '../components/Conversor';
@@ -12,7 +12,6 @@ import './App.css';
 function App() {
   const [tasas, setTasas] = useState({});
   const [cantidad, setCantidad] = useState(0);
-  const [resultado, setResultado] = useState(0);
   const [de, setDe] = useState(() => localStorage.getItem('de') || 'USD');
   const [a, setA] = useState(() => localStorage.getItem('a') || 'MXN');
 
@@ -34,12 +33,10 @@ function App() {
     axios.get('http://localhost:3000/divisas')
       .then(res => setTasas(res.data.conversion_rates));
   }, []);
-
-  useEffect(() => {
-    if (tasas[de] && tasas[a]) {
-      setResultado(((cantidad / tasas[de].tasa) * tasas[a].tasa).toFixed(2));
-    }
-  }, [cantidad, de, a, tasas]);
+  
+  const resultado = (tasas[de] && tasas[a]) 
+    ? ((cantidad / tasas[de].tasa) * tasas[a].tasa).toFixed(2) 
+    : 0;
 
   const swapDivisas = () => { setDe(a); setA(de); };
   return (

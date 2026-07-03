@@ -22,7 +22,6 @@ const get_datos = async (req, res) => {
 
     // Si hay caché válido, servimos los datos filtrados directamente
     if (cache.data && (ahora - cache.ultimaActualizacion < veinticuatroHoras)) {
-        console.log("Sirviendo datos desde memoria...");
         return res.json({ conversion_rates: cache.data });
     }
 

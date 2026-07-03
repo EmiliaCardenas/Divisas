@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import NotaModal from './NotaModal';
 
-const CalculadoraView = ({ t, tasas, onSaveNote }) => {
+const CalculadoraView = ({ t, tasas}) => {
   // Definimos la rama específica para no perder las traducciones
   const tc = t.calc;
 

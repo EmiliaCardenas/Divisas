@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const NotasView = ({ t }) => {
   const [notas, setNotas] = useState(() => JSON.parse(localStorage.getItem('mis_notas')) || []);

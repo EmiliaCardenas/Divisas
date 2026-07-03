@@ -1,5 +1,3 @@
-import React from 'react';
-
 const TablaValores = ({ de, a, tasas, t }) => {
   const valores = [1, 10, 100, 1000, 10000];
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const NotaModal = ({ isOpen, onClose, onSave, datoBase, t = {} }) => {
   const [nombre, setNombre] = useState(datoBase.nombre || '');

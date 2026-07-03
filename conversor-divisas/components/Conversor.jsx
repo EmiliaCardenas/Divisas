@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import NotaModal from './NotaModal';
 
 const Conversor = ({ t, cantidad, setCantidad, de, setDe, a, setA, swapDivisas, tasas, resultado }) => {

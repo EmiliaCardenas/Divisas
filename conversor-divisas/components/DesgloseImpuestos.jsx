@@ -1,4 +1,3 @@
-import React from 'react';
 import { impuestosData } from '../../utils/impuestosData';
 
 const DesgloseImpuestos = ({ t, monedaCodigo, montoBase }) => {
