@@ -97,14 +97,15 @@ const CalculadoraView = ({ t, tema, tasas }) => {
         isOpen={modalOpen} 
         onClose={() => setModalOpen(false)} 
         onSave={(data) => {
-            // "data" contiene {nombre, desc, fecha, etc.} que viene del Modal
-            const nuevaNota = { 
-                ...data, 
+            const nuevaNota = {
+                ...data,
                 id: Date.now(),
-                // Aquí forzamos que el resumen incluya los valores calculados de la calculadora
-                resumenTexto: `${total.toFixed(2)} ${moneda} = ${totalConvertido.toFixed(2)} ${monedaDestino}` 
+                valorInicial: total,
+                monedaInicial: moneda,
+                cantidad: totalConvertido,
+                moneda: monedaDestino,
+                resumenTexto: `${total.toFixed(2)} ${moneda} = ${totalConvertido.toFixed(2)} ${monedaDestino}`
             };
-             console.log(nuevaNota);
             
             const notas = JSON.parse(localStorage.getItem('mis_notas')) || [];
             localStorage.setItem('mis_notas', JSON.stringify([...notas, nuevaNota]));
