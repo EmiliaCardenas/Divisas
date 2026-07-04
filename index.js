@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 3000; 
 
 app.use(cors({
-  origin: 'https://divisas-frontend.onrender.com/', 
+  origin: 'https://divisas-frontend.onrender.com', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
