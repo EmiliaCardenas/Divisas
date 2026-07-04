@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import NotaModal from './NotaModal';
 
-const CalculadoraView = ({ t, tema, tasas }) => {
+const CalculadoraView = ({ t, tema, tasas, onSaveNote }) => {
   const tc = t.calc;
   const [valor, setValor] = useState('');
   const [total, setTotal] = useState(0);
@@ -37,21 +37,16 @@ const CalculadoraView = ({ t, tema, tasas }) => {
   const tasaDestino = tasas[monedaDestino]?.tasa || 1;
   const totalConvertido = (total / tasaOrigen) * tasaDestino;
 
-  const guardarNota = (data) => {
-    const valorSeguroTotal = isNaN(total) ? 0 : total;
-    const valorSeguroConvertido = isNaN(totalConvertido) ? 0 : totalConvertido;
-
-    const notas = JSON.parse(localStorage.getItem('mis_notas')) || [];
-    
-    const nuevaNota = { 
-        ...data, 
-        id: Date.now(),
-        resumenTexto: `${valorSeguroTotal.toFixed(2)} ${moneda} = ${valorSeguroConvertido.toFixed(2)} ${monedaDestino}`
+  const ejecutarGuardado = () => {
+    const notaData = {
+      nombre: "", 
+      resumenTexto: `${total.toFixed(2)} ${moneda} = ${totalConvertido.toFixed(2)} ${monedaDestino}`
     };
-    
-    localStorage.setItem('mis_notas', JSON.stringify([...notas, nuevaNota]));
+
+    onSaveNote(notaData);
     setModalOpen(false);
   };
+
 
   return (
     <>
@@ -115,7 +110,7 @@ const CalculadoraView = ({ t, tema, tasas }) => {
         t={t.notas} 
         isOpen={modalOpen} 
         onClose={() => setModalOpen(false)} 
-        onSave={guardarNota}
+        onSave={ejecutarGuardado}
         datoBase={{ 
         }}
         tema={tema}
