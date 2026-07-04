@@ -38,12 +38,17 @@ const CalculadoraView = ({ t, tema, tasas }) => {
   const totalConvertido = (total / tasaOrigen) * tasaDestino;
 
   const guardarNota = (data) => {
+    const valorSeguroTotal = isNaN(total) ? 0 : total;
+    const valorSeguroConvertido = isNaN(totalConvertido) ? 0 : totalConvertido;
+
     const notas = JSON.parse(localStorage.getItem('mis_notas')) || [];
+    
     const nuevaNota = { 
         ...data, 
         id: Date.now(),
-        resumenTexto: `${total.toFixed(2)} ${moneda} = ${totalConvertido.toFixed(2)} ${monedaDestino}`
+        resumenTexto: `${valorSeguroTotal.toFixed(2)} ${moneda} = ${valorSeguroConvertido.toFixed(2)} ${monedaDestino}`
     };
+    
     localStorage.setItem('mis_notas', JSON.stringify([...notas, nuevaNota]));
     setModalOpen(false);
   };
