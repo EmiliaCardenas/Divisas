@@ -104,6 +104,7 @@ const CalculadoraView = ({ t, tema, tasas }) => {
                 // Aquí forzamos que el resumen incluya los valores calculados de la calculadora
                 resumenTexto: `${total.toFixed(2)} ${moneda} = ${totalConvertido.toFixed(2)} ${monedaDestino}` 
             };
+             console.log(nuevaNota);
             
             const notas = JSON.parse(localStorage.getItem('mis_notas')) || [];
             localStorage.setItem('mis_notas', JSON.stringify([...notas, nuevaNota]));
