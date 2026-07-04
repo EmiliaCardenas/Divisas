@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import NotaModal from './NotaModal';
 
-const CalculadoraView = ({ t, tema, tasas}) => {
+const CalculadoraView = ({ t, tema, tasas }) => {
   const tc = t.calc;
   const [valor, setValor] = useState('');
   const [total, setTotal] = useState(0);
@@ -32,9 +32,21 @@ const CalculadoraView = ({ t, tema, tasas}) => {
     setHistorial([]);
   };
 
-  const totalConvertido = tasas[moneda] && tasas[monedaDestino] 
-    ? (total / tasas[moneda].tasa) * tasas[monedaDestino].tasa 
-    : total;
+  // Cálculo seguro del resultado convertido
+  const tasaOrigen = tasas[moneda]?.tasa || 1;
+  const tasaDestino = tasas[monedaDestino]?.tasa || 1;
+  const totalConvertido = (total / tasaOrigen) * tasaDestino;
+
+  const guardarNota = (data) => {
+    const notas = JSON.parse(localStorage.getItem('mis_notas')) || [];
+    const nuevaNota = { 
+        ...data, 
+        id: Date.now(),
+        resumenTexto: `${total.toFixed(2)} ${moneda} = ${totalConvertido.toFixed(2)} ${monedaDestino}`
+    };
+    localStorage.setItem('mis_notas', JSON.stringify([...notas, nuevaNota]));
+    setModalOpen(false);
+  };
 
   return (
     <>
@@ -59,24 +71,20 @@ const CalculadoraView = ({ t, tema, tasas}) => {
         {Object.keys(tasas).map(c => <option key={c} value={c}>{c}</option>)}
       </select>
       
-      {/* Botones */}
       <div style={{ display: 'flex', gap: '10px', margin: '10px 0', justifyContent: 'center' }}>
         <button className="swap-btn" onClick={() => operar('suma')}>{tc.suma}</button>
         <button className="swap-btn" onClick={() => operar('resta')}>{tc.resta}</button>
       </div>
 
-      {/* Historial */}
       <div style={{ fontSize: '0.85rem', color: '#666', marginBottom: '10px', textAlign: 'center', minHeight: '20px' }}>
         {historial.join(' ')}
       </div>
       
-      {/* Total en moneda origen */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '15px 0' }}>
         <h3 style={{ margin: 0 }}>{total.toFixed(2)} {moneda}</h3>
         <button className="swap-btn" onClick={limpiar}>{tc.limpiar}</button>
       </div>
 
-      {/* Resultado Convertido */}
       <div style={{ margin: '14px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h2 style={{ margin: 0 }}>
             {tc.total}: {totalConvertido.toFixed(2)} {monedaDestino}
@@ -96,20 +104,14 @@ const CalculadoraView = ({ t, tema, tasas}) => {
       </div>
       
       <button onClick={() => setModalOpen(true)} className="field-style">{tc.guardar}</button>
-      
-      
     </div>
+
     <NotaModal 
         t={t.notas} 
         isOpen={modalOpen} 
         onClose={() => setModalOpen(false)} 
-        onSave={(data) => {
-            const notas = JSON.parse(localStorage.getItem('mis_notas')) || [];
-            localStorage.setItem('mis_notas', JSON.stringify([...notas, { ...data, id: Date.now() }]));
-            setModalOpen(false);
-        }}
+        onSave={guardarNota}
         datoBase={{ 
-          resumenTexto: `${total.toFixed(2)} ${moneda} = ${totalConvertido.toFixed(2)} ${monedaDestino}` 
         }}
         tema={tema}
       />
