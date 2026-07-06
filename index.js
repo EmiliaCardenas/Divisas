@@ -14,7 +14,9 @@ const rutasDivisas = require('./routes/divisas.routes');
 // ==========================================
 // Si tus frontends viven en dominios distintos, puedes usar un array en 'origin'
 const whitelist = [
-    'https://divisas-frontend.onrender.com'
+    'https://divisas-frontend.onrender.com', // Producción
+    'http://localhost:3000',                 
+    'http://localhost:5173'                 
 ];
 
 /*

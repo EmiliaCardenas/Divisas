@@ -18,6 +18,16 @@ const NotasView = ({ t }) => {
       return notasFiltradas;
   });
 
+  const [busqueda, setBusqueda] = useState('');
+
+  const notasFiltradas = notas.filter(n => 
+    n.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
+  
+  const notasOrdenadas = [...notasFiltradas].sort((a, b) => 
+    Number(b.esFavorito) - Number(a.esFavorito)
+  );
+
   // Poner si es favorito
   const toggleFavorito = (id) => {
     const nuevasNotas = notas.map(n => 
@@ -34,11 +44,19 @@ const NotasView = ({ t }) => {
     localStorage.setItem('mis_notas', JSON.stringify(nuevasNotas));
   };
 
-  const notasOrdenadas = [...notas].sort((a, b) => Number(b.esFavorito) - Number(a.esFavorito));
-
   return (
     <div className="notas-wrapper">
       <h2 style={{ textAlign: 'center', color: 'var(--color-principal)' }}>{t.titulo}</h2>
+      <div style={{ marginBottom: '20px' }}>
+        <input 
+          type="text"
+          className="field-style"
+          placeholder="Buscar nota..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
+      </div>
+
       {notas.length === 0 && <p style={{textAlign: 'center'}}>{t.vacio}</p>}
       
       <div className="notas-grid">

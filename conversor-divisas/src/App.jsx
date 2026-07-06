@@ -30,7 +30,8 @@ function App() {
   useEffect(() => {
     const fetchTasas = async () => {
       try {
-        const API_URL = 'https://divisas-internacionales.onrender.com'; 
+      //const API_URL = 'http://localhost:3000'; 
+      const API_URL = 'https://divisas-internacionales.onrender.com';
         const res = await axios.get(`${API_URL}/api/divisas`);
         setTasas(res.data.conversion_rates);
       } catch (error) {
