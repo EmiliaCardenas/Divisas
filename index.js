@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 // 1. IMPORTACIÓN DE RUTAS
 // ==========================================
 const rutasDivisas = require('./routes/divisas.routes');
-// const rutasUsuarios = require('./routes/usuarios.routes');
+const rutasSuper = require('./routes/lista-super/super.routes');
 
 // ==========================================
 // 2. CONFIGURACIÓN GLOBAL DE CORS
@@ -15,7 +15,8 @@ const rutasDivisas = require('./routes/divisas.routes');
 // Si tus frontends viven en dominios distintos, puedes usar un array en 'origin'
 const whitelist = [
     'https://divisas-frontend.onrender.com', // Producción
-    'http://localhost:3000',                 
+    'http://localhost:3000',      
+    'http://localhost:3001',           
     'http://localhost:5173'                 
 ];
 
@@ -45,12 +46,8 @@ app.use(express.json());
 // 3. DISTRIBUCIÓN DE RUTAS (API ENDPOINTS)
 // ==========================================
 
-// App: Divisas - Front: https://divisas-frontend.onrender.com
 app.use('/api/divisas', rutasDivisas);
-
-// Ej. App: Usuarios - Front: https://usuarios-admin.onrender.com
-// app.use('/api/usuarios', rutasUsuarios);
-
+app.use('/api/super', rutasSuper);
 
 // ==========================================
 // 4. INICIO DEL SERVIDOR
