@@ -48,5 +48,24 @@ const getUnidades = async (req, res) => {
   }
 };
 
+const getProductosPermanencia = async (req, res) => {
+  try {
+    const data = await Producto.getConPermanencia();
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const updatePermanente = async (req, res) => {
+  try {
+    const { id_producto, es_permanente } = req.body;
+    await Producto.togglePermanente(id_producto, es_permanente);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Exporta también estos nuevos métodos
-module.exports = { getInicio, getListaPorUsuario, addProducto, getUnidades };
+module.exports = { getInicio, getListaPorUsuario, addProducto, getUnidades, updatePermanente, getProductosPermanencia };

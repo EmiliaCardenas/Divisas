@@ -33,4 +33,28 @@ const getUnidades = async () => {
   return rows;
 };
 
-module.exports = { getAll, create, getAllConCategoria, getUnidades };
+// models/lista-super/producto.model.js
+const getConPermanencia = async () => {
+  const query = `
+    SELECT p.id_producto, p.nombre, c.nombre as nombre_categoria, c.id_categoria,
+           IFNULL(perm.es_permanente, 0) as es_permanente
+    FROM producto p
+    JOIN categoria c ON p.id_categoria = c.id_categoria
+    LEFT JOIN permanente perm ON p.id_producto = perm.id_producto
+    ORDER BY c.nombre;
+  `;
+  const [rows] = await db.query(query);
+  return rows;
+};
+
+const togglePermanente = async (id_producto, es_permanente) => {
+  // Utilizamos REPLACE o INSERT ... ON DUPLICATE KEY UPDATE
+  const query = `
+    INSERT INTO permanente (id_producto, es_permanente) 
+    VALUES (?, ?) 
+    ON DUPLICATE KEY UPDATE es_permanente = ?
+  `;
+  return await db.query(query, [id_producto, es_permanente, es_permanente]);
+};
+
+module.exports = { getAll, create, getAllConCategoria, getUnidades, togglePermanente, getConPermanencia };

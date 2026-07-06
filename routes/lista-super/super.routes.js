@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../../controllers/lista-super/super.controller');
 
-// routes/lista-super/super.routes.js
+// Rutas existentes
 router.get('/usuarios', controller.getInicio);
-// Cambiado de /lista/:id_usuario a /lista
 router.get('/lista', controller.getListaPorUsuario); 
 router.get('/unidades', controller.getUnidades);
 router.post('/productos', controller.addProducto);
+
+// Nuevas rutas para gestión de permanentes
+router.get('/productos-permanencia', controller.getProductosPermanencia);
+router.post('/toggle-permanente', controller.updatePermanente);
 
 module.exports = router;

@@ -4,6 +4,7 @@ import SelectorUsuario from './components/SelectorUsuario';
 import ListaProductos from './components/ListaProductos';
 import Layout from './components/Layout';
 import HistorialListas from './components/HistorialListas';
+import ListaPermanentes from './components/ListaPermanentes';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/historial" element={<HistorialListas />} />
           <Route path="/lista" element={<ListaProductos />} />
+          <Route path="/permanentes" element={<ListaPermanentes />} />
         </Route>
       </Routes>
     </BrowserRouter>
