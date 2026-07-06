@@ -5,6 +5,7 @@ import ListaProductos from './components/ListaProductos';
 import Layout from './components/Layout';
 import HistorialListas from './components/HistorialListas';
 import ListaPermanentes from './components/ListaPermanentes';
+import ListaSuper from './components/ListaSuper';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/historial" element={<HistorialListas />} />
           <Route path="/lista" element={<ListaProductos />} />
           <Route path="/permanentes" element={<ListaPermanentes />} />
+          <Route path="/super" element={<ListaSuper />} />
         </Route>
       </Routes>
     </BrowserRouter>

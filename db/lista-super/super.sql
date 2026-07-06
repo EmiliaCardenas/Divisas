@@ -55,3 +55,5 @@ CREATE TABLE marca (
     id_usuario INT,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
+
+ALTER TABLE lista MODIFY id_prodcuto_lista INT AUTO_INCREMENT PRIMARY KEY;

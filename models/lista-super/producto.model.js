@@ -57,4 +57,33 @@ const togglePermanente = async (id_producto, es_permanente) => {
   return await db.query(query, [id_producto, es_permanente, es_permanente]);
 };
 
-module.exports = { getAll, create, getAllConCategoria, getUnidades, togglePermanente, getConPermanencia };
+// Obtener solo los que son permanentes
+const getProductosPermanentes = async () => {
+  const query = `
+    SELECT p.id_producto, p.nombre as nombre_producto, c.nombre as nombre_categoria, c.id_categoria 
+    FROM producto p
+    JOIN permanente perm ON p.id_producto = perm.id_producto
+    JOIN categoria c ON p.id_categoria = c.id_categoria
+    WHERE perm.es_permanente = TRUE;
+  `;
+  const [rows] = await db.query(query);
+  return rows;
+};
+
+// Guardado masivo de la lista
+const guardarListaCompleta = async (productos) => {
+  const fecha = new Date().toISOString().slice(0, 10);
+  
+  await Promise.all(productos.map(p => {
+    // Generar ID combinado: Ejemplo ID producto * 1000 + random 1-999
+    const idGenerado = (p.id_producto * 1000) + Math.floor(Math.random() * 999);
+    
+    return db.query(
+      'INSERT INTO lista (id_prodcuto_lista, id_producto, id_categoria, fecha, cantidad) VALUES (?, ?, ?, ?, ?)',
+      [idGenerado, p.id_producto, p.id_categoria, fecha, p.cantidad || 1]
+    );
+  }));
+};
+
+module.exports = { getAll, create, getAllConCategoria, getUnidades, 
+    togglePermanente, getConPermanencia, guardarListaCompleta, getProductosPermanentes };

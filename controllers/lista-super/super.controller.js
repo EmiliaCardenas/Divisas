@@ -67,5 +67,33 @@ const updatePermanente = async (req, res) => {
   }
 };
 
+// En super.controller.js
+const getListaActiva = async (req, res) => {
+  try {
+    // Obtenemos todos los productos marcados como permanentes
+    const productos = await Producto.getProductosPermanentes();
+    res.status(200).json({ success: true, productos });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const guardarLista = async (req, res) => {
+  try {
+    const { productos } = req.body;
+    
+    if (!productos || productos.length === 0) {
+      throw new Error("No hay productos para guardar");
+    }
+
+    await Producto.guardarListaCompleta(productos);
+    res.status(201).json({ success: true, message: "Lista guardada con éxito" });
+  } catch (error) {
+    console.error("Error en guardarLista:", error); // <-- MIRA EL LOG EN LA TERMINAL
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Exporta también estos nuevos métodos
-module.exports = { getInicio, getListaPorUsuario, addProducto, getUnidades, updatePermanente, getProductosPermanencia };
+module.exports = { getInicio, getListaPorUsuario, addProducto, getUnidades,
+     updatePermanente, getProductosPermanencia, getListaActiva, guardarLista };

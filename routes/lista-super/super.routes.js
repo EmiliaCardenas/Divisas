@@ -11,5 +11,7 @@ router.post('/productos', controller.addProducto);
 // Nuevas rutas para gestión de permanentes
 router.get('/productos-permanencia', controller.getProductosPermanencia);
 router.post('/toggle-permanente', controller.updatePermanente);
+router.get('/lista-activa', controller.getListaActiva); // Carga permanentes
+router.post('/guardar-lista', controller.guardarLista);
 
 module.exports = router;
