@@ -1,15 +1,19 @@
+const db = require('../../db/lista-super/db'); 
+
 const get_datos = async (req, res) => {
   try {
-    // Aquí puedes añadir lógica futura, como consultas a base de datos
+
+    const [rows] = await db.query('SELECT * FROM producto');
+    
     return res.status(200).json({
       success: true,
-      message: "¡Conexión exitosa con el servidor!",
-      timestamp: new Date().toISOString()
+      message: "Conexión exitosa a la DB",
+      data: rows
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Error en el servidor",
+      message: "Error al conectar a la base de datos",
       error: error.message
     });
   }
