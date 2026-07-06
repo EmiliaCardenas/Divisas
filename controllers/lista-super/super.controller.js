@@ -29,4 +29,24 @@ const getListaPorUsuario = async (req, res) => {
   }
 };
 
-module.exports = { getInicio, getListaPorUsuario };
+const addProducto = async (req, res) => {
+  try {
+    const { nombre, id_categoria, id_unidad } = req.body;
+    const idProducto = await Producto.create(nombre, id_categoria, id_unidad);
+    res.status(201).json({ success: true, id_producto: idProducto });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const getUnidades = async (req, res) => {
+  try {
+    const unidades = await Producto.getUnidades();
+    res.status(200).json({ success: true, unidades });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Exporta también estos nuevos métodos
+module.exports = { getInicio, getListaPorUsuario, addProducto, getUnidades };
