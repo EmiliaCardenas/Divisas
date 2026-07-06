@@ -31,7 +31,7 @@ function App() {
     const fetchTasas = async () => {
       try {
         const API_URL = 'https://divisas-internacionales.onrender.com'; 
-        const res = await axios.get(`${API_URL}/divisas`);
+        const res = await axios.get(`${API_URL}/api/divisas`);
         setTasas(res.data.conversion_rates);
       } catch (error) {
         console.error("Error cargando divisas:", error);
