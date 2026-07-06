@@ -1,19 +1,16 @@
-const db = require('../../db/lista-super/db'); 
+const Producto = require('../../models/lista-super/producto.model');
 
 const get_datos = async (req, res) => {
   try {
-
-    const [rows] = await db.query('SELECT * FROM producto');
-    
+    const productos = await Producto.getAll();
     return res.status(200).json({
       success: true,
-      message: "Conexión exitosa a la DB",
-      data: rows
+      data: productos
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Error al conectar a la base de datos",
+      message: "Error al obtener productos",
       error: error.message
     });
   }
