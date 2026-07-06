@@ -12,9 +12,9 @@ const getInicio = async (req, res) => {
 
 const getListaPorUsuario = async (req, res) => {
   try {
+    // Ya no usamos req.params.id_usuario
     const productos = await Producto.getAllConCategoria();
     
-    // Agrupar por categoría
     const productosAgrupados = productos.reduce((acc, curr) => {
       if (!acc[curr.nombre_categoria]) {
         acc[curr.nombre_categoria] = [];

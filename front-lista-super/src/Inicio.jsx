@@ -2,21 +2,19 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import SelectorUsuario from './components/SelectorUsuario';
 import ListaProductos from './components/ListaProductos';
+import Layout from './components/Layout';
+import HistorialListas from './components/HistorialListas';
 
 function App() {
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route 
-          path="/" 
-          element={<SelectorUsuario setUsuariosGlobal={setUsuarioSeleccionado} />} 
-        />
-        <Route 
-          path="/lista" 
-          element={<ListaProductos idUsuario={usuarioSeleccionado} />} 
-        />
+        <Route path="/" element={<SelectorUsuario />} />
+        
+        <Route element={<Layout />}>
+          <Route path="/historial" element={<HistorialListas />} />
+          <Route path="/lista" element={<ListaProductos />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

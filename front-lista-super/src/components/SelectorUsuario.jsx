@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-export default function SelectorUsuario({ setUsuariosGlobal }) {
+export default function SelectorUsuario() {
   const [usuarios, setUsuarios] = useState([]);
   const navigate = useNavigate();
 
@@ -12,16 +12,17 @@ export default function SelectorUsuario({ setUsuariosGlobal }) {
       .catch(err => console.error("Error al cargar usuarios:", err));
   }, []);
 
-  const handleSelect = (id) => {
-    setUsuariosGlobal(id);
-    navigate('/lista');
+  const handleSelect = (usuario) => {
+    // Guardamos el objeto completo del usuario en localStorage
+    localStorage.setItem('usuarioSeleccionado', JSON.stringify(usuario));
+    navigate('/historial'); // Redirigimos al historial como querías
   };
 
   return (
     <section>
       <h1>Selecciona tu usuario</h1>
       {usuarios.map(u => (
-        <button key={u.id_usuario} onClick={() => handleSelect(u.id_usuario)}>
+        <button key={u.id_usuario} onClick={() => handleSelect(u)}>
           {u.nombre}
         </button>
       ))}

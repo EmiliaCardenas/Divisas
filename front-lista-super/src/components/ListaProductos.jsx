@@ -3,26 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ModalAgregarProducto from './ModalAgregarProducto'; 
 
-export default function ListaProductos({ idUsuario }) {
+export default function ListaProductos({}) {
   const [productosAgrupados, setProductosAgrupados] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
   const navigate = useNavigate();
 
  const cargarProductos = () => {
-    axios.get(`http://localhost:3000/api/super/lista/${idUsuario}`)
+    // La URL ya no incluye el id
+    axios.get(`http://localhost:3000/api/super/lista`)
       .then(res => {
         setProductosAgrupados(res.data.productos || {});
       })
       .catch(err => console.error("Error al cargar productos:", err));
   };
 
-  // 2. La llamamos al montar el componente
   useEffect(() => {
-    if (idUsuario) {
-      cargarProductos();
-    }
-  }, [idUsuario]);
+    cargarProductos();
+  }, [])
 
   const abrirModal = (nombreCategoria, idCategoria) => {
     setCategoriaSeleccionada({ nombre: nombreCategoria, id: idCategoria });
