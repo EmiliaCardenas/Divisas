@@ -13,4 +13,15 @@ const create = async (data) => {
   return result.insertId;
 };
 
-module.exports = { getAll, create };
+const getAllConCategoria = async () => {
+  const query = `
+    SELECT p.id_producto, p.nombre as nombre_producto, c.nombre as nombre_categoria 
+    FROM producto p
+    JOIN categoria c ON p.id_categoria = c.id_categoria
+    ORDER BY c.nombre;
+  `;
+  const [rows] = await db.query(query);
+  return rows;
+};
+
+module.exports = { getAll, create, getAllConCategoria };

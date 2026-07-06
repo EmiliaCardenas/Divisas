@@ -12,9 +12,18 @@ const getInicio = async (req, res) => {
 
 const getListaPorUsuario = async (req, res) => {
   try {
-    const { id_usuario } = req.params;
-    const productos = await Producto.getAll(); 
-    res.status(200).json({ success: true, productos, usuario_actual: id_usuario });
+    const productos = await Producto.getAllConCategoria();
+    
+    // Agrupar por categoría
+    const productosAgrupados = productos.reduce((acc, curr) => {
+      if (!acc[curr.nombre_categoria]) {
+        acc[curr.nombre_categoria] = [];
+      }
+      acc[curr.nombre_categoria].push(curr);
+      return acc;
+    }, {});
+
+    res.status(200).json({ success: true, productos: productosAgrupados });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
