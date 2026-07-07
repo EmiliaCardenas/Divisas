@@ -56,3 +56,42 @@ ALTER TABLE lista MODIFY id_prodcuto_lista INT AUTO_INCREMENT PRIMARY KEY;
 ALTER TABLE marca ADD COLUMN id_lista INT;
 ALTER TABLE marca ADD FOREIGN KEY (id_lista) REFERENCES lista(id_lista);
 ALTER TABLE marca ADD UNIQUE(id_lista, id_prodcuto_lista);
+
+INSERT INTO categoria (nombre) VALUES 
+('Salchichonería'),
+('Despensa'),
+('Lácteos y huevos'),
+('Higiene'),
+('Bebidas'),
+('Panadería'),
+('Fruta'),
+('Verdura'),
+('Tortillas'),
+('Carne'),
+('Pollo'),
+('Cerdo'),
+('Pescado'),
+('Otros');
+
+INSERT INTO unidades (nombre) VALUES 
+('mg'),
+('g'),
+('kg'),
+('ml'),
+('l'),
+('Pieza(s)'),
+('Paquete de 2'),
+('Paquete de 4'),
+('Paquete de 6'),
+('Paquete de 8'),
+('Paquete de 10'),
+('Paquete de 12'),
+('Paquete de 14'),
+('Paquete de 16'),
+('Paquete de 18'),
+('Paquete de 20');
+
+INSERT INTO usuario (nombre, color) VALUES 
+('Alejandro', '#FF5733'),
+('Mariana', '#33FF57'),
+('Carlos', '#3357FF');

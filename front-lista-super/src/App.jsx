@@ -16,7 +16,6 @@ function App() {
         
         <Route element={<Layout />}>
           <Route path="/historial" element={<HistorialListas />} />
-          {/* Nueva ruta dinámica para ver el detalle de una lista específica */}
           <Route path="/historial/:fecha" element={<DetalleLista />} />
           <Route path="/lista" element={<ListaProductos />} />
           <Route path="/permanentes" element={<ListaPermanentes />} />

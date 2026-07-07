@@ -9,10 +9,12 @@ const getAll = async () => {
 // Obtener las categorias ligadas al producto
 const getAllConCategoria = async () => {
   const query = `
-    SELECT p.id_producto, p.nombre as nombre_producto, 
-           c.nombre as nombre_categoria, c.id_categoria 
-    FROM producto p
-    JOIN categoria c ON p.id_categoria = c.id_categoria
+    SELECT c.id_categoria, c.nombre as nombre_categoria, 
+           p.id_producto, p.nombre as nombre_producto, 
+           u.nombre as nombre_unidad
+    FROM categoria c
+    LEFT JOIN producto p ON c.id_categoria = p.id_categoria
+    LEFT JOIN unidades u ON p.id_unidad = u.id_unidad
     ORDER BY c.nombre;
   `;
   const [rows] = await db.query(query);

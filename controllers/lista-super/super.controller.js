@@ -14,13 +14,16 @@ const getInicio = async (req, res) => {
 // Lsita general de los productos
 const getListaPorUsuario = async (req, res) => {
   try {
-    const productos = await Producto.getAllConCategoria();
+    const todos = await Producto.getAllConCategoria();
     
-    const productosAgrupados = productos.reduce((acc, curr) => {
+    const productosAgrupados = todos.reduce((acc, curr) => {
       if (!acc[curr.nombre_categoria]) {
         acc[curr.nombre_categoria] = [];
       }
-      acc[curr.nombre_categoria].push(curr);
+      if (curr.id_producto) {
+        acc[curr.nombre_categoria].push(curr);
+      }
+      
       return acc;
     }, {});
 
