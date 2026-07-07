@@ -63,10 +63,12 @@ const togglePermanente = async (id_producto, es_permanente) => {
 // Obtener solo los productos permanentes
 const getProductosPermanentes = async () => {
   const query = `
-    SELECT p.id_producto, p.nombre as nombre_producto, c.nombre as nombre_categoria, c.id_categoria 
+    SELECT p.id_producto, p.nombre as nombre_producto, c.nombre as nombre_categoria, p.id_categoria,
+           u.nombre as nombre_unidad 
     FROM producto p
     JOIN permanente perm ON p.id_producto = perm.id_producto
     JOIN categoria c ON p.id_categoria = c.id_categoria
+    LEFT JOIN unidades u ON p.id_unidad = u.id_unidad
     WHERE perm.es_permanente = TRUE;
   `;
   const [rows] = await db.query(query);
@@ -99,16 +101,29 @@ const getListaPorFecha = async (fecha) => {
   }
 };
 
-// Marcar/Desmarcar producto
+// Guardar una nueva lista
 const guardarListaCompleta = async (productos) => {
   const fecha = new Date().toISOString().slice(0, 10);
   
-  await Promise.all(productos.map(p => {
-    return db.query(
-      'INSERT INTO lista (id_producto, id_categoria, fecha, cantidad) VALUES (?, ?, ?, ?)',
-      [p.id_producto, p.id_categoria, fecha, p.cantidad || 1]
+  for (const p of productos) {
+    if (!p.id_producto || !p.id_categoria) continue;
+    const [existente] = await db.query(
+      'SELECT id_prodcuto_lista FROM lista WHERE id_producto = ? AND fecha = ?',
+      [p.id_producto, fecha]
     );
-  }));
+
+    if (existente && existente.length > 0) {
+      await db.query(
+        'UPDATE lista SET cantidad = ? WHERE id_prodcuto_lista = ?',
+        [p.cantidad || 1, existente[0].id_prodcuto_lista]
+      );
+    } else {
+      await db.query(
+        `INSERT INTO lista (id_producto, id_categoria, fecha, cantidad) VALUES (?, ?, ?, ?)`,
+        [p.id_producto, p.id_categoria, fecha, p.cantidad || 1]
+      );
+    }
+  }
 };
 
 // Cambio al marcar/desmarcar

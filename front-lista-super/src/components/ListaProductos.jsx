@@ -32,7 +32,7 @@ export default function ListaProductos({}) {
   const [productosAgrupados, setProductosAgrupados] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
-  const navigate = useNavigate();
+  const [busqueda, setBusqueda] = useState('');
 
   const cargarProductos = () => {
     axios.get(`http://localhost:3000/api/super/lista`)
@@ -51,74 +51,83 @@ export default function ListaProductos({}) {
     setIsModalOpen(true);
   };
 
+  const obtenerProductosFiltrados = () => {
+    const filtrados = {};
+    Object.entries(productosAgrupados).forEach(([cat, data]) => {
+      const productosFiltrados = data.productos.filter(p => 
+        p.nombre_producto.toLowerCase().includes(busqueda.toLowerCase())
+      );
+      if (productosFiltrados.length > 0) {
+        filtrados[cat] = { ...data, productos: productosFiltrados };
+      }
+    });
+    return filtrados;
+  };
+
+  const listaFiltrada = obtenerProductosFiltrados();
+
   return (
     <FondoLayout alignTop={true}> 
       <h1 style={{ color: '#5a554a', marginBottom: '25px', fontSize: '32px', textAlign: 'center', fontFamily: 'inherit' }}>
         Todos los productos
       </h1>
       
-      {Object.keys(productosAgrupados).map(categoria => (
-        <div key={categoria} style={{ marginBottom: '20px' }}>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between', 
-            marginBottom: '5px' 
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#5a554a' }}>
-              {iconMap[categoria]} {/* Aquí se inyecta el icono */}
-              <h2 style={{ fontSize: '20px', margin: 0 }}>{categoria}</h2>
+      {/* Buscador */}
+      <input
+        type="text"
+        placeholder="Buscar producto..."
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        style={{
+          width: '100%',
+          padding: '12px',
+          marginBottom: '20px',
+          borderRadius: '8px',
+          border: '1px solid #d1ccc0',
+          fontSize: '16px',
+          boxSizing: 'border-box'
+        }}
+      />
+
+      {Object.entries(productosAgrupados).map(([nombreCategoria, data]) => {
+        const productosFiltrados = data.productos.filter(p => 
+          p.nombre_producto.toLowerCase().includes(busqueda.toLowerCase())
+        );
+        if (busqueda && productosFiltrados.length === 0) return null;
+
+        return (
+          <div key={nombreCategoria} style={{ marginBottom: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '5px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#5a554a' }}>
+                <div style={{ backgroundColor: '#706b5e', color: 'white', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {iconMap[nombreCategoria] || <Shapes size={20} />}
+                </div>
+                <h2 style={{ fontSize: '20px', margin: 0 }}>{nombreCategoria}</h2>
+              </div>
+              
+              <button 
+                onClick={() => abrirModal(nombreCategoria, data.id_categoria)}
+                style={{ backgroundColor: '#706b5e', color: 'white', border: 'none', borderRadius: '50%', width: '30px', height: '30px', fontSize: '18px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                +
+              </button>
             </div>
             
-            <button 
-              onClick={() => abrirModal(categoria, productosAgrupados[categoria].length > 0 ? productosAgrupados[categoria][0].id_categoria : null)}
-              style={{
-                backgroundColor: '#706b5e',
-                color: 'white',
-                border: 'none',
-                borderRadius: '50%',
-                width: '30px',
-                height: '30px',
-                fontSize: '18px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              +
-            </button>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, borderTop: '1px solid #d1ccc0' }}>
+              {productosFiltrados.length > 0 ? (
+                productosFiltrados.map(p => (
+                  <li key={p.id_producto} style={{ padding: '8px 4px', borderBottom: '1px solid #d1ccc0', color: '#5a554a', display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline', gap: '5px' }}>
+                    <span style={{ fontWeight: '500' }}>{p.nombre_producto}</span>
+                    <span style={{ fontSize: '0.85em', color: '#8c8c8c', fontWeight: 'normal' }}>- {p.nombre_unidad}</span>
+                  </li>
+                ))
+              ) : (
+                <li style={{ padding: '8px 4px', color: '#ccc', fontStyle: 'italic' }}>Sin productos</li>
+              )}
+            </ul>
           </div>
-          <ul style={{ 
-            listStyle: 'none', 
-            padding: 0, 
-            margin: 0, 
-            borderTop: '1px solid #d1ccc0' 
-          }}>
-            {productosAgrupados[categoria].map(p => (
-              <li key={p.id_producto} style={{ 
-              padding: '8px 4px', 
-              borderBottom: '1px solid #d1ccc0',
-              color: '#5a554a',
-              display: 'flex',        
-              justifyContent: 'flex-start',
-              alignItems: 'baseline',
-              gap: '5px' 
-            }}>
-              <span style={{ fontWeight: '500' }}>{p.nombre_producto}</span>
-              <span style={{ 
-                fontSize: '0.85em', 
-                color: '#8c8c8c', 
-                fontWeight: 'normal'
-              }}>
-                - {p.nombre_unidad}
-              </span>
-            </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+        );
+      })}
 
       {isModalOpen && (
         <ModalAgregarProducto 

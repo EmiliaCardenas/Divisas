@@ -52,6 +52,8 @@ CREATE TABLE marca (
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
+ALTER TABLE lista MODIFY id_prodcuto_lista BIGINT;
+ALTER TABLE permanente ADD UNIQUE(id_producto);
 ALTER TABLE lista MODIFY id_prodcuto_lista INT AUTO_INCREMENT PRIMARY KEY;
 ALTER TABLE marca ADD COLUMN id_lista INT;
 ALTER TABLE marca ADD FOREIGN KEY (id_lista) REFERENCES lista(id_lista);
@@ -74,11 +76,11 @@ INSERT INTO categoria (nombre) VALUES
 ('Otros');
 
 INSERT INTO unidades (nombre) VALUES 
-('mg'),
-('g'),
-('kg'),
-('ml'),
-('l'),
+('miligramos (mg)'),
+('gramos (g)'),
+('kilogramos (kg)'),
+('mililitros (ml)'),
+('litros (l)'),
 ('Pieza(s)'),
 ('Paquete de 2'),
 ('Paquete de 4'),

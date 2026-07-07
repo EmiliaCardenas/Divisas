@@ -11,17 +11,20 @@ const getInicio = async (req, res) => {
   }
 };
 
-// Lsita general de los productos
+// Lista general de los productos
 const getListaPorUsuario = async (req, res) => {
   try {
     const todos = await Producto.getAllConCategoria();
-    
     const productosAgrupados = todos.reduce((acc, curr) => {
       if (!acc[curr.nombre_categoria]) {
-        acc[curr.nombre_categoria] = [];
+        acc[curr.nombre_categoria] = {
+          id_categoria: curr.id_categoria, 
+          productos: []
+        };
       }
+      
       if (curr.id_producto) {
-        acc[curr.nombre_categoria].push(curr);
+        acc[curr.nombre_categoria].productos.push(curr);
       }
       
       return acc;
