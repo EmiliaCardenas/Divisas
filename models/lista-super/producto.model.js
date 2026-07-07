@@ -104,7 +104,8 @@ const guardarListaCompleta = async (productos) => {
   const fecha = new Date().toISOString().slice(0, 10);
   
   for (const p of productos) {
-    if (!p.id_producto || !p.id_categoria) continue;
+    if (!p.id_producto || !p.id_categoria || p.cantidad <= 0) continue;
+
     const [existente] = await db.query(
       'SELECT id_prodcuto_lista FROM lista WHERE id_producto = ? AND fecha = ?',
       [p.id_producto, fecha]
@@ -113,14 +114,13 @@ const guardarListaCompleta = async (productos) => {
     if (existente && existente.length > 0) {
       await db.query(
         'UPDATE lista SET cantidad = ? WHERE id_prodcuto_lista = ?',
-        [p.cantidad || 0, existente[0].id_prodcuto_lista]
+        [p.cantidad, existente[0].id_prodcuto_lista]
       );
     } else {
       const randomBigIntId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-
       await db.query(
         `INSERT INTO lista (id_prodcuto_lista, id_producto, id_categoria, fecha, cantidad) VALUES (?, ?, ?, ?, ?)`,
-        [randomBigIntId, p.id_producto, p.id_categoria, fecha, p.cantidad || 1]
+        [randomBigIntId, p.id_producto, p.id_categoria, fecha, p.cantidad]
       );
     }
   }

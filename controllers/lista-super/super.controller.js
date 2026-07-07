@@ -96,6 +96,7 @@ const guardarLista = async (req, res) => {
     if (!productos || productos.length === 0) {
       throw new Error("No hay productos para guardar");
     }
+    
     await Producto.guardarListaCompleta(productos);
     res.status(201).json({ success: true, message: "Lista guardada con éxito" });
   } catch (error) {

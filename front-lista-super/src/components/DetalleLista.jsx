@@ -117,7 +117,9 @@ export default function DetalleLista() {
   };
 
 
-  const productosAgrupados = agruparPorCategoria(productos);
+  const productosValidos = productos.filter(p => p.cantidad && p.cantidad > 0);
+
+  const productosAgrupados = agruparPorCategoria(productosValidos);
 
   return (
     <>

@@ -55,7 +55,7 @@ export default function ListaSuper() {
         nombre_producto: producto.nombre_producto,
         id_categoria: producto.id_categoria,
         nombre_unidad: producto.nombre_unidad,
-        cantidad: 1
+        cantidad: '' 
       }]);
     }
   };
@@ -64,6 +64,13 @@ export default function ListaSuper() {
 
   const handleGuardarLista = async () => {
     if (cargando) return;
+
+    const productosParaGuardar = listaActiva.filter(p => p.cantidad && p.cantidad > 0);
+
+    if (productosParaGuardar.length === 0) {
+      setMensaje({ texto: "Debes agregar al menos un producto. Cantidad mayor a 0.", tipo: 'error' });
+      return;
+    }
 
     const ahora = new Date();
     const hoy = `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, '0')}-${String(ahora.getDate()).padStart(2, '0')}`;
@@ -79,7 +86,8 @@ export default function ListaSuper() {
         return; 
       }
 
-      await axios.post('/api/super/guardar-lista', { productos: listaActiva });
+      await axios.post('/api/super/guardar-lista', { productos: productosParaGuardar });
+      
       setMensaje({ texto: "Lista guardada con éxito", tipo: 'exito' });
       setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3000);
 
@@ -132,11 +140,15 @@ export default function ListaSuper() {
 
                 <input 
                   type="number" 
-                  defaultValue={p.cantidad || 1} 
+                  value={p.cantidad === null ? '' : p.cantidad}
+                  placeholder="0"
                   style={{ width: '50px', padding: '4px', borderRadius: '4px', border: '1px solid #d1ccc0' }}
                   onChange={(e) => {
+                    const val = e.target.value;
                     const nuevaLista = listaActiva.map(item => 
-                      item.id_producto === p.id_producto ? {...item, cantidad: parseInt(e.target.value)} : item
+                      item.id_producto === p.id_producto 
+                        ? {...item, cantidad: val === '' ? '' : parseInt(val, 10)} 
+                        : item
                     );
                     setListaActiva(nuevaLista);
                   }} 

@@ -121,7 +121,12 @@ export default function ListaPermanentes() {
                       type="checkbox" 
                       checked={!!p.es_permanente} 
                       onChange={() => handleToggle(p.id_producto, p.es_permanente)} 
-                      style={{ cursor: 'pointer' }}
+                      style={{ 
+                        cursor: 'pointer',
+                        transform: 'scale(1.5)', 
+                        marginRight: '12px',
+                        marginLeft: '4px'
+                      }}
                     />
                     <span style={{ fontWeight: '500' }}>{p.nombre}</span>
                   </li>
