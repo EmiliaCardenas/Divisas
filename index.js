@@ -28,7 +28,7 @@ const whitelist = [
     'https://tienda-productos.onrender.com'
 ];
 */
-
+/*
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || whitelist.indexOf(origin) !== -1) {
@@ -40,6 +40,8 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
+*/
+app.use(cors());
 
 app.use(express.json());
 
