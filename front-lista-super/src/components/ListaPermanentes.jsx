@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ModalAgregarProducto from './ModalAgregarProducto';
-import FondoLayout from './vizual/FondoLayout'; 
 
 import { 
   Ham, PiggyBank, Drumstick, Beef, Apple, Carrot, Fish, 
@@ -69,7 +68,7 @@ export default function ListaPermanentes() {
   };
 
   return (
-    <FondoLayout alignTop={true}>
+    <>
       <h1 style={{ color: '#5a554a', marginBottom: '25px', fontSize: '32px', textAlign: 'center', fontFamily: 'inherit' }}>
         Gestión de Permanentes
       </h1>
@@ -144,6 +143,6 @@ export default function ListaPermanentes() {
           onProductoAgregado={cargar} 
         />
       )}
-    </FondoLayout>
+    </>
   );
 }

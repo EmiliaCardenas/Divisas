@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import FondoLayout from './vizual/FondoLayout';
 import { 
   Ham, PiggyBank, Drumstick, Beef, Apple, Carrot, Fish, 
   CupSoda, Milk, Croissant, Wheat, PersonStanding, Shapes, BrushCleaning, Trash2 } from 'lucide-react';
@@ -111,7 +110,7 @@ export default function DetalleLista() {
   const productosAgrupados = agruparPorCategoria(productos);
 
   return (
-    <FondoLayout alignTop={true}>
+    <>
       <div style={{ marginBottom: '25px', textAlign: 'center' }}>
         <h1 style={{ color: '#5a554a', fontSize: '32px', margin: '0 0 10px 0' }}>
           Lista del {fechaFormateada}
@@ -226,6 +225,6 @@ export default function DetalleLista() {
           {mensaje.texto}
         </div>
       )}
-    </FondoLayout>
+    </>
   );
 }

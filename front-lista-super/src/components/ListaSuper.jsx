@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import FondoLayout from './vizual/FondoLayout';
 
 import { 
   Ham, PiggyBank, Drumstick, Beef, Apple, Carrot, Fish, 
@@ -93,7 +92,7 @@ const handleGuardarLista = async () => {
   );
 
   return (
-    <FondoLayout alignTop={true}>
+    <>
       <h1 style={{ color: '#5a554a', marginBottom: '25px', fontSize: '32px', textAlign: 'center' }}>
         Lista de Super
       </h1>
@@ -183,6 +182,6 @@ const handleGuardarLista = async () => {
           {mensaje.texto}
         </div>
       )}
-    </FondoLayout>
+    </>
   );
 }

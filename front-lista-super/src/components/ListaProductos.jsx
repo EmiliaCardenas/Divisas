@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ModalAgregarProducto from './ModalAgregarProducto';
-import FondoLayout from './vizual/FondoLayout';
 
 import { 
   Ham, PiggyBank, Drumstick, Beef, Apple, Carrot, Fish, 
@@ -67,7 +66,7 @@ export default function ListaProductos({}) {
   const listaFiltrada = obtenerProductosFiltrados();
 
   return (
-    <FondoLayout alignTop={true}> 
+    <> 
       <h1 style={{ color: '#5a554a', marginBottom: '25px', fontSize: '32px', textAlign: 'center', fontFamily: 'inherit' }}>
         Todos los productos
       </h1>
@@ -136,6 +135,6 @@ export default function ListaProductos({}) {
           onProductoAgregado={cargarProductos}
         />
       )}
-    </FondoLayout>
+    </>
   );
 }

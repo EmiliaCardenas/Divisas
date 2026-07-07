@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import FondoLayout from './vizual/FondoLayout';
-import { Calendar } from 'lucide-react'; // Opcional, para dar un toque visual
+import { Calendar } from 'lucide-react'; 
 
 export default function HistorialListas() {
   const [fechas, setFechas] = useState([]);
@@ -15,7 +14,7 @@ export default function HistorialListas() {
   }, []);
 
   return (
-    <FondoLayout alignTop={true}>
+    <>
       <h1 style={{ color: '#5a554a', fontSize: '32px', marginBottom: '25px', textAlign: 'center' }}>
         Historial de Listas
       </h1>
@@ -58,6 +57,6 @@ export default function HistorialListas() {
           </p>
         )}
       </div>
-    </FondoLayout>
+    </>
   );
 }
