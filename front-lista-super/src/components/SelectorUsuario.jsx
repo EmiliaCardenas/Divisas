@@ -8,7 +8,7 @@ export default function SelectorUsuario() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/super/usuarios')
+    axios.get('/api/super/usuarios')
       .then(res => setUsuarios(res.data.usuarios || []))
       .catch(err => console.error("Error al cargar usuarios:", err));
   }, []);
@@ -26,13 +26,13 @@ export default function SelectorUsuario() {
       justifyContent: 'center',
       alignItems: 'center',
       minHeight: '100vh',
-      backgroundColor: '#f5f2ed', // Fondo arena
+      backgroundColor: '#f5f2ed',
       fontFamily: "'Segoe UI', sans-serif",
       padding: '20px',
       boxSizing: 'border-box'
     }}>
       <div style={{
-        backgroundColor: '#ffffff', // Tarjeta blanca
+        backgroundColor: '#ffffff',
         padding: '40px',
         borderRadius: '15px',
         boxShadow: '0 10px 25px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05)',

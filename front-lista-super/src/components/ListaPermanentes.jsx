@@ -31,7 +31,7 @@ export default function ListaPermanentes() {
   const [busqueda, setBusqueda] = useState('');
 
   const cargar = () => {
-    axios.get('http://localhost:3000/api/super/productos-permanencia')
+    axios.get('/api/super/productos-permanencia')
       .then(res => {
         const unicos = Array.from(new Map(res.data.data.map(item => [item.id_producto, item])).values());
         
@@ -57,7 +57,7 @@ export default function ListaPermanentes() {
       return nuevoEstado;
     });
     try {
-      await axios.post('http://localhost:3000/api/super/toggle-permanente', {
+      await axios.post('/api/super/toggle-permanente', {
         id_producto, 
         es_permanente: !estadoActual
       });

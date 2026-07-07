@@ -34,7 +34,7 @@ export default function ListaProductos({}) {
   const [busqueda, setBusqueda] = useState('');
 
   const cargarProductos = () => {
-    axios.get(`http://localhost:3000/api/super/lista`)
+    axios.get(`/api/super/lista`)
       .then(res => {
         setProductosAgrupados(res.data.productos || {});
       })

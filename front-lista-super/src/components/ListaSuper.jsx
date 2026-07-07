@@ -29,10 +29,10 @@ export default function ListaSuper() {
   const [mostrarCatalogo, setMostrarCatalogo] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/super/lista-activa')
+    axios.get('/api/super/lista-activa')
       .then(res => setListaActiva(res.data.productos || []));
 
-    axios.get('http://localhost:3000/api/super/lista')
+    axios.get('/api/super/lista')
       .then(res => setCatalogo(res.data.productos || {}));
   }, []);
 
@@ -65,13 +65,13 @@ const handleGuardarLista = async () => {
   const hoy = new Date().toISOString().slice(0, 10);
 
   try {
-    const res = await axios.get(`http://localhost:3000/api/super/lista-por-fecha/${hoy}`);
+    const res = await axios.get(`/api/super/lista-por-fecha/${hoy}`);
     if (res.data.productos && res.data.productos.length > 0) {
       setMensaje({ texto: "Ya existe una lista guardada para el día de hoy.", tipo: 'error' });
       return; 
     }
 
-    await axios.post('http://localhost:3000/api/super/guardar-lista', { productos: listaActiva });
+    await axios.post('/api/super/guardar-lista', { productos: listaActiva });
     setMensaje({ texto: "Lista guardada con éxito", tipo: 'exito' });
     setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3000);
 

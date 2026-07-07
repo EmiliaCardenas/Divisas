@@ -32,7 +32,7 @@ export default function DetalleLista() {
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/api/super/lista-por-fecha/${fechaFormateada}`)
+    axios.get(`/api/super/lista-por-fecha/${fechaFormateada}`)
       .then(res => setProductos(res.data.productos))
       .catch(err => console.error("Error al cargar:", err));
   }, [fechaFormateada]);
@@ -53,7 +53,7 @@ export default function DetalleLista() {
 
   const eliminarProducto = async (id_lista) => {
     try {
-      await axios.delete(`http://localhost:3000/api/super/eliminar-producto/${id_lista}`);
+      await axios.delete(`/api/super/eliminar-producto/${id_lista}`);
       setProductos(productos.filter(p => p.id_lista !== id_lista));
       mostrarMensaje("Producto eliminado correctamente", 'exito');
     } catch (err) {
@@ -64,7 +64,7 @@ export default function DetalleLista() {
 
   const eliminarTodaLaLista = async () => {
     try {
-      await axios.delete(`http://localhost:3000/api/super/eliminar-lista-completa/${fechaFormateada}`);
+      await axios.delete(`/api/super/eliminar-lista-completa/${fechaFormateada}`);
       setProductos([]); 
       setEditando(false);
       mostrarMensaje("Lista eliminada correctamente", 'exito');
@@ -76,7 +76,7 @@ export default function DetalleLista() {
 
   const handleGuardarEdicion = async () => {
     try {
-      await axios.post('http://localhost:3000/api/super/actualizar-lista', { 
+      await axios.post('/api/super/actualizar-lista', { 
         productos: productos,
         fecha: fechaFormateada 
       });
@@ -90,7 +90,7 @@ export default function DetalleLista() {
 
   const toggleMarcar = (p) => {
     const nuevoEstado = !p.marcado;
-    axios.post('http://localhost:3000/api/super/marcar', {
+    axios.post('/api/super/marcar', {
       id_lista: p.id_lista,
       marcado: nuevoEstado,
       id_usuario: usuario.id_usuario

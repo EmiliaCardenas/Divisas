@@ -9,7 +9,7 @@ export default function ModalAgregarProducto({ categoria, onClose, onProductoAgr
   const [dropdownAbierto, setDropdownAbierto] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/super/unidades')
+    axios.get('/api/super/unidades')
       .then(res => {
         if (res.data && Array.isArray(res.data.unidades)) {
           setUnidades(res.data.unidades);
@@ -26,7 +26,7 @@ export default function ModalAgregarProducto({ categoria, onClose, onProductoAgr
     }
     
     try {
-      await axios.post('http://localhost:3000/api/super/productos', {
+      await axios.post('/api/super/productos', {
         nombre,
         id_categoria: categoria.id,
         id_unidad: idUnidad

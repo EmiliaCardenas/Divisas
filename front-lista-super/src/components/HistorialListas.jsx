@@ -8,7 +8,7 @@ export default function HistorialListas() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/super/historial-fechas')
+    axios.get('/api/super/historial-fechas')
       .then(res => setFechas(res.data.fechas))
       .catch(err => console.error("Error cargando historial:", err));
   }, []);

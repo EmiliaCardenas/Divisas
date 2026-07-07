@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
+
 import SelectorUsuario from './components/SelectorUsuario';
 import ListaProductos from './components/ListaProductos';
 import Layout from './components/Layout';
@@ -7,6 +9,9 @@ import HistorialListas from './components/HistorialListas';
 import ListaPermanentes from './components/ListaPermanentes';
 import ListaSuper from './components/ListaSuper';
 import DetalleLista from './components/DetalleLista';
+
+// axios.defaults.baseURL = 'http://localhost:3000'; 
+axios.defaults.baseURL = 'https://divisas-internacionales.onrender.com'; 
 
 function App() {
   return (
