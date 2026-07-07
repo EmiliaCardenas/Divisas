@@ -10,8 +10,8 @@ import ListaPermanentes from './components/ListaPermanentes';
 import ListaSuper from './components/ListaSuper';
 import DetalleLista from './components/DetalleLista';
 
-// axios.defaults.baseURL = 'http://localhost:3000'; 
-axios.defaults.baseURL = 'https://divisas-internacionales.onrender.com'; 
+axios.defaults.baseURL = 'http://localhost:3000'; 
+// axios.defaults.baseURL = 'https://divisas-internacionales.onrender.com'; 
 
 function App() {
   return (

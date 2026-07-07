@@ -5,6 +5,8 @@ export default function ModalAgregarProducto({ categoria, onClose, onProductoAgr
   const [nombre, setNombre] = useState('');
   const [idUnidad, setIdUnidad] = useState('');
   const [unidades, setUnidades] = useState([]);
+  const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState('');
 
   const [dropdownAbierto, setDropdownAbierto] = useState(false);
 
@@ -20,10 +22,21 @@ export default function ModalAgregarProducto({ categoria, onClose, onProductoAgr
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!idUnidad) {
-      alert("Por favor selecciona una unidad");
+
+    setError('');
+
+    if (!nombre.trim()) {
+      setError('Escriba el nombre.');
       return;
     }
+    if (!idUnidad) {
+      setError('Selecciona una unidad.');
+      return;
+    }
+    
+    if (cargando) return; 
+
+    setCargando(true);
     
     try {
       await axios.post('/api/super/productos', {
@@ -35,6 +48,8 @@ export default function ModalAgregarProducto({ categoria, onClose, onProductoAgr
       onClose();
     } catch (err) {
       console.error("Error al guardar:", err);
+      setError('Ocurrió un error al guardar. Intenta de nuevo.');
+      setCargando(false);
     }
   };
 
@@ -75,8 +90,7 @@ export default function ModalAgregarProducto({ categoria, onClose, onProductoAgr
         <input 
           value={nombre} 
           onChange={(e) => setNombre(e.target.value)} 
-          placeholder="Nombre del producto" 
-          required 
+          placeholder="Nombre del producto"  
           style={{ 
             padding: '12px', 
             borderRadius: '8px', 
@@ -149,16 +163,46 @@ export default function ModalAgregarProducto({ categoria, onClose, onProductoAgr
             </ul>
           )}
         </div>
+        {error && (
+              <div style={{ 
+                color: '#b91c1c', 
+                backgroundColor: '#fee2e2', 
+                padding: '8px', 
+                borderRadius: '6px', 
+                fontSize: '14px', 
+                textAlign: 'center',
+                fontWeight: '500'
+              }}>
+                {error}
+              </div>
+            )}
 
         <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-          <button type="submit" style={{ flex: 1, padding: '12px', backgroundColor: '#706b5e', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px' }}>
-            Guardar
+          <button 
+            type="submit" 
+            disabled={cargando}
+            style={{ 
+              flex: 1, 
+              padding: '12px', 
+              backgroundColor: cargando ? '#b0aca0' : '#706b5e',
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '8px', 
+              cursor: cargando ? 'not-allowed' : 'pointer', 
+              fontWeight: 'bold', 
+              fontSize: '15px',
+              opacity: cargando ? 0.7 : 1 
+            }}
+          >
+            {cargando ? 'Guardando...' : 'Guardar'}
           </button>
           <button type="button" onClick={onClose} style={{ flex: 1, padding: '12px', backgroundColor: '#e0ddd5', color: '#5a554a', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px' }}>
             Cancelar
           </button>
         </div>
       </form>
+
     </div>
+    
   );
 }

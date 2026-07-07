@@ -30,6 +30,7 @@ export default function DetalleLista() {
   const fechaFormateada = fecha.split('T')[0];
   const [editando, setEditando] = useState(false);
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
+  const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
     axios.get(`/api/super/lista-por-fecha/${fechaFormateada}`)
@@ -51,30 +52,9 @@ export default function DetalleLista() {
     setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3000);
   };
 
-  const eliminarProducto = async (id_lista) => {
-    try {
-      await axios.delete(`/api/super/eliminar-producto/${id_lista}`);
-      setProductos(productos.filter(p => p.id_lista !== id_lista));
-      mostrarMensaje("Producto eliminado correctamente", 'exito');
-    } catch (err) {
-      console.error("Error al eliminar en BD:", err);
-      mostrarMensaje("No se pudo eliminar el producto", 'error');
-    }
-  };
-
-  const eliminarTodaLaLista = async () => {
-    try {
-      await axios.delete(`/api/super/eliminar-lista-completa/${fechaFormateada}`);
-      setProductos([]); 
-      setEditando(false);
-      mostrarMensaje("Lista eliminada correctamente", 'exito');
-    } catch (err) {
-      console.error("Error al eliminar la lista completa:", err);
-      mostrarMensaje("No se pudo eliminar la lista completa", 'error');
-    }
-  };
-
   const handleGuardarEdicion = async () => {
+    if (cargando) return;
+    setCargando(true);
     try {
       await axios.post('/api/super/actualizar-lista', { 
         productos: productos,
@@ -83,8 +63,38 @@ export default function DetalleLista() {
       setEditando(false);
       mostrarMensaje("Lista actualizada correctamente", 'exito');
     } catch (err) {
-      console.error("Error al guardar:", err);
       mostrarMensaje("Error al actualizar la lista", 'error');
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const eliminarTodaLaLista = async () => {
+    if (cargando) return;
+    setCargando(true);
+    try {
+      await axios.delete(`/api/super/eliminar-lista-completa/${fechaFormateada}`);
+      setProductos([]); 
+      setEditando(false);
+      mostrarMensaje("Lista eliminada correctamente", 'exito');
+    } catch (err) {
+      mostrarMensaje("No se pudo eliminar la lista completa", 'error');
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const eliminarProducto = async (id_lista) => {
+    if (cargando) return;
+    setCargando(true);
+    try {
+      await axios.delete(`/api/super/eliminar-producto/${id_lista}`);
+      setProductos(productos.filter(p => p.id_lista !== id_lista));
+      mostrarMensaje("Producto eliminado correctamente", 'exito');
+    } catch (err) {
+      mostrarMensaje("No se pudo eliminar el producto", 'error');
+    } finally {
+      setCargando(false);
     }
   };
 
@@ -198,14 +208,33 @@ export default function DetalleLista() {
         <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
           <button 
             onClick={handleGuardarEdicion}
-            style={{ flex: 2, padding: '15px', backgroundColor: '#5a554a', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+            disabled={cargando}
+            style={{ 
+              flex: 2, 
+              padding: '15px', 
+              backgroundColor: cargando ? '#b0aca0' : '#5a554a', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '8px', 
+              cursor: cargando ? 'not-allowed' : 'pointer',
+              opacity: cargando ? 0.7 : 1
+            }}
           >
-            Guardar Cambios
+            {cargando ? 'Guardando...' : 'Guardar Cambios'}
           </button>
           <button 
             onClick={eliminarTodaLaLista}
-            style={{ flex: 1, padding: '15px', backgroundColor: '#b91c1c', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', justifyContent: 'center' }}
-            title="Eliminar lista completa"
+            disabled={cargando}
+            style={{ 
+              flex: 1, 
+              padding: '15px', 
+              backgroundColor: cargando ? '#b0aca0' : '#b91c1c', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '8px', 
+              cursor: cargando ? 'not-allowed' : 'pointer',
+              opacity: cargando ? 0.7 : 1
+            }}
           >
             <Trash2 size={20} />
           </button>

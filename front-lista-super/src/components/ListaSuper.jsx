@@ -27,6 +27,7 @@ export default function ListaSuper() {
   const [listaActiva, setListaActiva] = useState([]);
   const [catalogo, setCatalogo] = useState({});
   const [mostrarCatalogo, setMostrarCatalogo] = useState(false);
+  const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
     axios.get('/api/super/lista-activa')
@@ -61,30 +62,34 @@ export default function ListaSuper() {
 
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
 
-const handleGuardarLista = async () => {
-  const ahora = new Date();
-  const yyyy = ahora.getFullYear();
-  const mm = String(ahora.getMonth() + 1).padStart(2, '0'); 
-  const dd = String(ahora.getDate()).padStart(2, '0');
-  
-  const hoy = `${yyyy}-${mm}-${dd}`;
+  const handleGuardarLista = async () => {
+    if (cargando) return;
 
-  try {
-    const res = await axios.get(`/api/super/lista-por-fecha/${hoy}`);
-    if (res.data.productos && res.data.productos.length > 0) {
-      setMensaje({ texto: "Ya existe una lista guardada para el día de hoy.", tipo: 'error' });
-      return; 
+    const ahora = new Date();
+    const hoy = `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, '0')}-${String(ahora.getDate()).padStart(2, '0')}`;
+
+    setCargando(true);
+    setMensaje({ texto: '', tipo: '' }); 
+
+    try {
+      const res = await axios.get(`/api/super/lista-por-fecha/${hoy}`);
+      if (res.data.productos && res.data.productos.length > 0) {
+        setMensaje({ texto: "Ya existe una lista guardada para el día de hoy.", tipo: 'error' });
+        setCargando(false);
+        return; 
+      }
+
+      await axios.post('/api/super/guardar-lista', { productos: listaActiva });
+      setMensaje({ texto: "Lista guardada con éxito", tipo: 'exito' });
+      setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3000);
+
+    } catch (err) {
+      console.error("Error:", err);
+      setMensaje({ texto: "Error al verificar o guardar la lista", tipo: 'error' });
+    } finally {
+      setCargando(false);
     }
-
-    await axios.post('/api/super/guardar-lista', { productos: listaActiva });
-    setMensaje({ texto: "Lista guardada con éxito", tipo: 'exito' });
-    setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3000);
-
-  } catch (err) {
-    console.error("Error:", err);
-    setMensaje({ texto: "Error al verificar o guardar la lista", tipo: 'error' });
-  }
-};
+  };
 
   const renderIcono = (cat) => (
     <div style={{ 
@@ -171,8 +176,22 @@ const handleGuardarLista = async () => {
         </div>
       )}
 
-      <button onClick={handleGuardarLista} style={{ width: '100%', padding: '15px', backgroundColor: '#5a554a', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', marginTop: '20px' }}>
-        Finalizar y Guardar Lista
+      <button 
+        onClick={handleGuardarLista} 
+        disabled={cargando}
+        style={{ 
+          width: '100%', 
+          padding: '15px', 
+          backgroundColor: cargando ? '#b0aca0' : '#5a554a', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '8px', 
+          cursor: cargando ? 'not-allowed' : 'pointer', 
+          marginTop: '20px',
+          opacity: cargando ? 0.7 : 1
+        }}
+      >
+        {cargando ? 'Guardando...' : 'Finalizar y Guardar Lista'}
       </button>
       {mensaje.texto && (
         <div style={{
