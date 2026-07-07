@@ -46,7 +46,7 @@ export default function HistorialListas() {
                   onMouseOut={(e) => e.target.style.backgroundColor = '#fff'}
                 >
                   <Calendar size={18} />
-                  Lista del {new Date(item.fecha).toLocaleDateString()}
+                  Lista del {item.fecha.split('T')[0].split('-').reverse().join('/')}
                 </button>
               </li>
             ))}
