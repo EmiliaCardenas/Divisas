@@ -85,20 +85,18 @@ const getFechasHistorial = async () => {
 const getListaPorFecha = async (fecha) => {
   const query = `
     SELECT l.id_lista, l.id_producto, l.cantidad, p.nombre as nombre_producto, 
-           c.nombre as nombre_categoria, IFNULL(m.marcado, 0) as marcado
+           c.nombre as nombre_categoria, IFNULL(m.marcado, 0) as marcado,
+           u.color as color_usuario_que_marco,
+           u.nombre as nombre_usuario_que_marco
     FROM lista l
     INNER JOIN producto p ON l.id_producto = p.id_producto
     INNER JOIN categoria c ON l.id_categoria = c.id_categoria
     LEFT JOIN marca m ON l.id_lista = m.id_lista
+    LEFT JOIN usuario u ON m.id_usuario = u.id_usuario
     WHERE l.fecha = ?
   `;
-  try {
-    const [rows] = await db.query(query, [fecha]);
-    return rows;
-  } catch (error) {
-    console.error("Error detallado en SQL:", error);
-    throw error;
-  }
+  const [rows] = await db.query(query, [fecha]);
+  return rows;
 };
 
 // Guardar una nueva lista
@@ -115,7 +113,7 @@ const guardarListaCompleta = async (productos) => {
     if (existente && existente.length > 0) {
       await db.query(
         'UPDATE lista SET cantidad = ? WHERE id_prodcuto_lista = ?',
-        [p.cantidad || 1, existente[0].id_prodcuto_lista]
+        [p.cantidad || 0, existente[0].id_prodcuto_lista]
       );
     } else {
       await db.query(
@@ -133,11 +131,35 @@ const toggleMarcado = async (id_lista, marcado, id_usuario) => {
     SELECT ?, id_prodcuto_lista, ?, ?
     FROM lista
     WHERE id_lista = ?
-    ON DUPLICATE KEY UPDATE marcado = ?
+    ON DUPLICATE KEY UPDATE 
+      marcado = VALUES(marcado),
+      id_usuario = VALUES(id_usuario)
   `;
-  return await db.query(query, [id_lista, marcado, id_usuario, id_lista, marcado]);
+  return await db.query(query, [id_lista, marcado, id_usuario, id_lista]);
+};
+
+// Editar la cantidad
+const updateCantidad = async (id_lista, cantidad) => {
+  return await db.query('UPDATE lista SET cantidad = ? WHERE id_lista = ?', [cantidad, id_lista]);
+};
+
+// Quitar productos de la lista
+const removerDeLista = async (id_lista) => {
+  await db.query('DELETE FROM marca WHERE id_lista = ?', [id_lista]);
+  return await db.query('DELETE FROM lista WHERE id_lista = ?', [id_lista]);
+};
+
+// Eliminar toda la lista
+const eliminarTodaLaLista = async (fecha) => {
+  await db.query(`
+    DELETE m FROM marca m
+    INNER JOIN lista l ON m.id_lista = l.id_lista
+    WHERE l.fecha = ?
+  `, [fecha]);
+  return await db.query('DELETE FROM lista WHERE fecha = ?', [fecha]);
 };
 
 module.exports = { getAll, create, getAllConCategoria, getUnidades, 
     togglePermanente, getConPermanencia, guardarListaCompleta, getProductosPermanentes,
-getListaPorFecha, toggleMarcado, getFechasHistorial };
+getListaPorFecha, toggleMarcado, getFechasHistorial, updateCantidad, removerDeLista,
+eliminarTodaLaLista };

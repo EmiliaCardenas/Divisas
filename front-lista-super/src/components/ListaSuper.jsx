@@ -71,7 +71,7 @@ const handleGuardarLista = async () => {
       setMensaje({ texto: "Ya existe una lista guardada para el día de hoy.", tipo: 'error' });
       return; 
     }
-    
+
     await axios.post('http://localhost:3000/api/super/guardar-lista', { productos: listaActiva });
     setMensaje({ texto: "Lista guardada con éxito", tipo: 'exito' });
     setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3000);

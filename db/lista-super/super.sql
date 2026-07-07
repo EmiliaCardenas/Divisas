@@ -35,7 +35,7 @@ CREATE TABLE permanente (
 
 CREATE TABLE lista (
     id_lista INT AUTO_INCREMENT PRIMARY KEY,
-    id_prodcuto_lista INT NOT NULL, 
+    id_prodcuto_lista BIGINT NOT NULL, 
     id_producto INT,
     id_categoria INT,
     fecha DATE,
@@ -46,13 +46,12 @@ CREATE TABLE lista (
 
 CREATE TABLE marca (
     id_marca INT AUTO_INCREMENT PRIMARY KEY,
-    id_prodcuto_lista INT NOT NULL,
+    id_prodcuto_lista BIGINT NOT NULL,
     marcado BOOLEAN DEFAULT FALSE,
     id_usuario INT,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
-ALTER TABLE lista MODIFY id_prodcuto_lista BIGINT;
 ALTER TABLE permanente ADD UNIQUE(id_producto);
 ALTER TABLE lista MODIFY id_prodcuto_lista INT AUTO_INCREMENT PRIMARY KEY;
 ALTER TABLE marca ADD COLUMN id_lista INT;

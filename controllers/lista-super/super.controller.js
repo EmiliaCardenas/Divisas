@@ -131,10 +131,48 @@ const updateMarcado = async (req, res) => {
     await Producto.toggleMarcado(id_lista, marcado, id_usuario);
     res.status(200).json({ success: true });
   } catch (error) {
+    console.error("Error SQL:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Editar la lista ya hecha
+const updateLista = async (req, res) => {
+  const { productos } = req.body;
+  try {
+    for (let p of productos) {
+      const resultado = await Producto.updateCantidad(p.id_lista, p.cantidad);
+    }
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("Error en el servidor:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Eliminar producto de la lista
+const eliminarDeLista = async (req, res) => {
+  try {
+    const { id_lista } = req.params;
+    await Producto.removerDeLista(id_lista);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Eliminar toda la lista
+const eliminarListaCompleta = async (req, res) => {
+  try {
+    const { fecha } = req.params;
+    await Producto.eliminarTodaLaLista(fecha);
+    res.status(200).json({ success: true, message: "Lista eliminada exitosamente" });
+  } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
 module.exports = { getInicio, getListaPorUsuario, addProducto, getUnidades,
      updatePermanente, getProductosPermanencia, getListaActiva, guardarLista,
-    updateMarcado, getListaPorFecha,getHistorialFechas };
+    updateMarcado, getListaPorFecha,getHistorialFechas, updateLista, eliminarDeLista,
+   eliminarListaCompleta  };

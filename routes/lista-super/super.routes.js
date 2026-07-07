@@ -29,4 +29,11 @@ router.get('/lista-por-fecha/:fecha', controller.getListaPorFecha);
 // Marcar seleccionado
 router.post('/marcar', controller.updateMarcado);
 
+// Actualizar la lista
+router.post('/actualizar-lista', controller.updateLista);
+
+// Eliminar
+router.delete('/eliminar-producto/:id_lista', controller.eliminarDeLista);
+router.delete('/eliminar-lista-completa/:fecha', controller.eliminarListaCompleta);
+
 module.exports = router;
