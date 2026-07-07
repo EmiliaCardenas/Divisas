@@ -5,7 +5,7 @@ export default function Layout() {
   return (
     <div>
       <Navbar />
-      <Outlet /> {/* Aquí se renderizarán Historial o ListaProductos */}
+      <Outlet />
     </div>
   );
 }

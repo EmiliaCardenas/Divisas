@@ -116,9 +116,11 @@ const guardarListaCompleta = async (productos) => {
         [p.cantidad || 0, existente[0].id_prodcuto_lista]
       );
     } else {
+      const randomBigIntId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+
       await db.query(
-        `INSERT INTO lista (id_producto, id_categoria, fecha, cantidad) VALUES (?, ?, ?, ?)`,
-        [p.id_producto, p.id_categoria, fecha, p.cantidad || 1]
+        `INSERT INTO lista (id_prodcuto_lista, id_producto, id_categoria, fecha, cantidad) VALUES (?, ?, ?, ?, ?)`,
+        [randomBigIntId, p.id_producto, p.id_categoria, fecha, p.cantidad || 1]
       );
     }
   }
