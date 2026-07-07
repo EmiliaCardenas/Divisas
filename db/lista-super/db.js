@@ -1,3 +1,4 @@
+/*
 const mysql = require('mysql2/promise');
 require('dotenv').config(); 
 
@@ -10,3 +11,15 @@ const pool = mysql.createPool({
 });
 
 module.exports = pool;
+*/
+
+const mysql = require('mysql2/promise');
+
+const db = mysql.createPool({
+  uri: process.env.DATABASE_URL, 
+  ssl: {
+    rejectUnauthorized: true 
+  }
+});
+
+module.exports = db;
