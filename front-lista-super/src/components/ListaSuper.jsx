@@ -62,7 +62,12 @@ export default function ListaSuper() {
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
 
 const handleGuardarLista = async () => {
-  const hoy = new Date().toISOString().slice(0, 10);
+  const ahora = new Date();
+  const yyyy = ahora.getFullYear();
+  const mm = String(ahora.getMonth() + 1).padStart(2, '0'); 
+  const dd = String(ahora.getDate()).padStart(2, '0');
+  
+  const hoy = `${yyyy}-${mm}-${dd}`;
 
   try {
     const res = await axios.get(`/api/super/lista-por-fecha/${hoy}`);
