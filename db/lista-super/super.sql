@@ -89,7 +89,9 @@ INSERT INTO unidades (nombre) VALUES
 ('Paquete de 14'),
 ('Paquete de 16'),
 ('Paquete de 18'),
-('Paquete de 20');
+('Paquete de 20'),
+('Paquete de 24'),
+('Paquete de 32');
 
 INSERT INTO usuario (nombre, color) VALUES 
 ('Marcela', '#850000'),

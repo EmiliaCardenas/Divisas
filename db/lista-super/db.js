@@ -16,10 +16,8 @@ module.exports = pool;
 const mysql = require('mysql2/promise');
 const { URL } = require('url');
 
-// 1. Parsear la URL
 const dbUrl = new URL(process.env.DATABASE_URL);
 
-// 2. Crear el pool
 const db = mysql.createPool({
   host: dbUrl.hostname,
   user: dbUrl.username,
@@ -31,9 +29,8 @@ const db = mysql.createPool({
   }
 });
 
-// 3. LA PRUEBA (Ponla justo aquí)
 db.query('SELECT 1')
-  .then(() => console.log('✅ ¡Conexión a la base de datos establecida con éxito!'))
-  .catch(err => console.error('❌ Error fatal al conectar a la base de datos:', err));
+  .then(() => console.log('¡Conexión a la base de datos establecida con éxito!'))
+  .catch(err => console.error('Error al conectar a la base de datos:', err));
 
 module.exports = db;

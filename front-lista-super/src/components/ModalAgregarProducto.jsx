@@ -38,7 +38,7 @@ export default function ModalAgregarProducto({ categoria, onClose, onProductoAgr
     }
   };
 
-  const unidadSeleccionada = unidades.find(u => u.id_unidad === String(idUnidad));
+  const unidadSeleccionada = unidades.find(u => u.id_unidad == idUnidad);
 
   return (
     <div style={{
