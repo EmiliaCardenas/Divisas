@@ -161,7 +161,11 @@ const eliminarTodaLaLista = async (fecha) => {
   return await db.query('DELETE FROM lista WHERE fecha = ?', [fecha]);
 };
 
+const eliminarProductoCatalogo = async (id_producto) => {
+  return await db.query('DELETE FROM producto WHERE id_producto = ?', [id_producto]);
+};
+
 module.exports = { getAll, create, getAllConCategoria, getUnidades, 
     togglePermanente, getConPermanencia, guardarListaCompleta, getProductosPermanentes,
 getListaPorFecha, toggleMarcado, getFechasHistorial, updateCantidad, removerDeLista,
-eliminarTodaLaLista };
+eliminarTodaLaLista, eliminarProductoCatalogo };

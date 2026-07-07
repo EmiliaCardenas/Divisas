@@ -1,4 +1,4 @@
-
+import { Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -32,6 +32,8 @@ export default function ListaProductos({}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
   const [busqueda, setBusqueda] = useState('');
+  const [editando, setEditando] = useState(false);
+  const [cargando, setCargando] = useState(false);
 
   const cargarProductos = () => {
     axios.get(`/api/super/lista`)
@@ -65,11 +67,36 @@ export default function ListaProductos({}) {
 
   const listaFiltrada = obtenerProductosFiltrados();
 
+  const eliminarProducto = async (id_producto) => {
+    if (cargando) return;
+    setCargando(true);
+    try {
+      await axios.delete(`/api/super/eliminar-producto-catalogo/${id_producto}`);
+      cargarProductos(); 
+    } catch (err) {
+      console.error("Error al eliminar:", err);
+      alert("No se pudo eliminar el producto");
+    } finally {
+      setCargando(false);
+    }
+  };
+
   return (
     <> 
       <h1 style={{ color: '#5a554a', marginBottom: '25px', fontSize: '32px', textAlign: 'center', fontFamily: 'inherit' }}>
         Todos los productos
       </h1>
+
+      <button 
+        onClick={() => setEditando(!editando)}
+        style={{ 
+          backgroundColor: editando ? '#d1ccc0' : '#706b5e', 
+          color: 'white', border: 'none', borderRadius: '8px', padding: '8px 16px', 
+          cursor: 'pointer', marginBottom: '10px' 
+        }}
+      >
+        {editando ? 'Finalizar edición' : 'Editar catálogo'}
+      </button>
       
       {/* Buscador */}
       <input
@@ -115,9 +142,21 @@ export default function ListaProductos({}) {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, borderTop: '1px solid #d1ccc0' }}>
               {productosFiltrados.length > 0 ? (
                 productosFiltrados.map(p => (
-                  <li key={p.id_producto} style={{ padding: '8px 4px', borderBottom: '1px solid #d1ccc0', color: '#5a554a', display: 'flex', justifyContent: 'flex-start', alignItems: 'baseline', gap: '5px' }}>
-                    <span style={{ fontWeight: '500' }}>{p.nombre_producto}</span>
-                    <span style={{ fontSize: '0.85em', color: '#8c8c8c', fontWeight: 'normal' }}>- {p.nombre_unidad}</span>
+                  <li key={p.id_producto} style={{ padding: '8px 4px', borderBottom: '1px solid #d1ccc0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <span style={{ fontWeight: '500' }}>{p.nombre_producto}</span>
+                      <span style={{ fontSize: '0.85em', color: '#8c8c8c', marginLeft: '5px' }}>- {p.nombre_unidad}</span>
+                    </div>
+                    
+                    {editando && (
+                      <button 
+                        onClick={() => eliminarProducto(p.id_producto)}
+                        disabled={cargando}
+                        style={{ background: 'none', border: 'none', color: '#b91c1c', cursor: 'pointer' }}
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    )}
                   </li>
                 ))
               ) : (

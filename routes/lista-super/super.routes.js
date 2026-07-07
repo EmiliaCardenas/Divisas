@@ -35,5 +35,6 @@ router.post('/actualizar-lista', controller.updateLista);
 // Eliminar
 router.delete('/eliminar-producto/:id_lista', controller.eliminarDeLista);
 router.delete('/eliminar-lista-completa/:fecha', controller.eliminarListaCompleta);
+router.delete('/eliminar-producto-catalogo/:id_producto', controller.eliminarProductoCatalogo);
 
 module.exports = router;

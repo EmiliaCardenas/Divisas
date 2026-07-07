@@ -172,7 +172,18 @@ const eliminarListaCompleta = async (req, res) => {
   }
 };
 
+const eliminarProductoCatalogo = async (req, res) => {
+  try {
+    const { id_producto } = req.params;
+    await Producto.eliminarProductoCatalogo(id_producto);
+    res.status(200).json({ message: "Producto eliminado correctamente" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "No se pudo eliminar el producto" });
+  }
+};
+
 module.exports = { getInicio, getListaPorUsuario, addProducto, getUnidades,
      updatePermanente, getProductosPermanencia, getListaActiva, guardarLista,
     updateMarcado, getListaPorFecha,getHistorialFechas, updateLista, eliminarDeLista,
-   eliminarListaCompleta  };
+   eliminarListaCompleta, eliminarProductoCatalogo  };
