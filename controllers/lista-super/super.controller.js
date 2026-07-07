@@ -1,6 +1,7 @@
 const Usuario = require('../../models/lista-super/usuario.model');
 const Producto = require('../../models/lista-super/producto.model');
 
+// Metodo de seleccionar al inicio
 const getInicio = async (req, res) => {
   try {
     const usuarios = await Usuario.getAllUsuarios();
@@ -10,9 +11,9 @@ const getInicio = async (req, res) => {
   }
 };
 
+// Lsita general de los productos
 const getListaPorUsuario = async (req, res) => {
   try {
-    // Ya no usamos req.params.id_usuario
     const productos = await Producto.getAllConCategoria();
     
     const productosAgrupados = productos.reduce((acc, curr) => {
@@ -29,6 +30,7 @@ const getListaPorUsuario = async (req, res) => {
   }
 };
 
+// Añadir nuevo producto
 const addProducto = async (req, res) => {
   try {
     const { nombre, id_categoria, id_unidad } = req.body;
@@ -39,6 +41,7 @@ const addProducto = async (req, res) => {
   }
 };
 
+// Obtener unidades de medida
 const getUnidades = async (req, res) => {
   try {
     const unidades = await Producto.getUnidades();
@@ -48,6 +51,7 @@ const getUnidades = async (req, res) => {
   }
 };
 
+// Obtener productos permanentes
 const getProductosPermanencia = async (req, res) => {
   try {
     const data = await Producto.getConPermanencia();
@@ -57,6 +61,7 @@ const getProductosPermanencia = async (req, res) => {
   }
 };
 
+// Editar permanencia
 const updatePermanente = async (req, res) => {
   try {
     const { id_producto, es_permanente } = req.body;
@@ -67,10 +72,9 @@ const updatePermanente = async (req, res) => {
   }
 };
 
-// En super.controller.js
+// Lista basica con permanentes
 const getListaActiva = async (req, res) => {
   try {
-    // Obtenemos todos los productos marcados como permanentes
     const productos = await Producto.getProductosPermanentes();
     res.status(200).json({ success: true, productos });
   } catch (error) {
@@ -78,6 +82,7 @@ const getListaActiva = async (req, res) => {
   }
 };
 
+// Guardar una nueva lista
 const guardarLista = async (req, res) => {
   try {
     const { productos } = req.body;
@@ -85,24 +90,24 @@ const guardarLista = async (req, res) => {
     if (!productos || productos.length === 0) {
       throw new Error("No hay productos para guardar");
     }
-
     await Producto.guardarListaCompleta(productos);
     res.status(201).json({ success: true, message: "Lista guardada con éxito" });
   } catch (error) {
-    console.error("Error en guardarLista:", error); // <-- MIRA EL LOG EN LA TERMINAL
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
+// Obtener el historial por fecha
 const getHistorialFechas = async (req, res) => {
   try {
-    const fechas = await Producto.getFechasHistorial(); // Nueva consulta
+    const fechas = await Producto.getFechasHistorial();
     res.status(200).json({ success: true, fechas });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
+// Obtener toda la lista dependiendo de su fecha
 const getListaPorFecha = async (req, res) => {
   try {
     const { fecha } = req.params;
@@ -113,6 +118,7 @@ const getListaPorFecha = async (req, res) => {
   }
 };
 
+// Cambio en marcar/desmarcar
 const updateMarcado = async (req, res) => {
   try {
     const { id_lista, marcado, id_usuario } = req.body;
@@ -123,7 +129,6 @@ const updateMarcado = async (req, res) => {
   }
 };
 
-// Exporta también estos nuevos métodos
 module.exports = { getInicio, getListaPorUsuario, addProducto, getUnidades,
      updatePermanente, getProductosPermanencia, getListaActiva, guardarLista,
     updateMarcado, getListaPorFecha,getHistorialFechas };

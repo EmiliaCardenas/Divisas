@@ -1,12 +1,13 @@
 const db = require('../../db/lista-super/db');
 
+// Obtener todos los productos
 const getAll = async () => {
   const [rows] = await db.query('SELECT * FROM producto');
   return rows;
 };
 
+// Obtener las categorias ligadas al producto
 const getAllConCategoria = async () => {
-  // Ahora seleccionamos también el id_categoria
   const query = `
     SELECT p.id_producto, p.nombre as nombre_producto, 
            c.nombre as nombre_categoria, c.id_categoria 
@@ -18,7 +19,7 @@ const getAllConCategoria = async () => {
   return rows;
 };
 
-// Nueva función para insertar
+// Crear nuevo producto
 const create = async (nombre, id_categoria, id_unidad) => {
   const [result] = await db.query(
     'INSERT INTO producto (nombre, id_categoria, id_unidad) VALUES (?, ?, ?)',
@@ -27,13 +28,13 @@ const create = async (nombre, id_categoria, id_unidad) => {
   return result.insertId;
 };
 
-// Nueva función para obtener unidades (para el select del modal)
+// Obtener unidades de medida
 const getUnidades = async () => {
   const [rows] = await db.query('SELECT * FROM unidades');
   return rows;
 };
 
-// models/lista-super/producto.model.js
+// Obtener productos permanentes
 const getConPermanencia = async () => {
   const query = `
     SELECT p.id_producto, p.nombre, c.nombre as nombre_categoria, c.id_categoria,
@@ -47,8 +48,8 @@ const getConPermanencia = async () => {
   return rows;
 };
 
+// Cambio en su pertenencia
 const togglePermanente = async (id_producto, es_permanente) => {
-  // Utilizamos REPLACE o INSERT ... ON DUPLICATE KEY UPDATE
   const query = `
     INSERT INTO permanente (id_producto, es_permanente) 
     VALUES (?, ?) 
@@ -57,7 +58,7 @@ const togglePermanente = async (id_producto, es_permanente) => {
   return await db.query(query, [id_producto, es_permanente, es_permanente]);
 };
 
-// Obtener solo los que son permanentes
+// Obtener solo los productos permanentes
 const getProductosPermanentes = async () => {
   const query = `
     SELECT p.id_producto, p.nombre as nombre_producto, c.nombre as nombre_categoria, c.id_categoria 
@@ -70,17 +71,14 @@ const getProductosPermanentes = async () => {
   return rows;
 };
 
-
+// Fechas en el historial
 const getFechasHistorial = async () => {
   const [rows] = await db.query('SELECT DISTINCT fecha FROM lista ORDER BY fecha DESC');
   return rows;
 };
 
-// Obtener una lista específica por fecha
-// models/lista-super/producto.model.js
-
+// Listas agrupadas en la fecha
 const getListaPorFecha = async (fecha) => {
-  // Asegúrate de que los nombres de las tablas y columnas coincidan exactamente con tu BD
   const query = `
     SELECT l.id_lista, l.id_producto, l.cantidad, p.nombre as nombre_producto, 
            c.nombre as nombre_categoria, IFNULL(m.marcado, 0) as marcado
@@ -94,7 +92,7 @@ const getListaPorFecha = async (fecha) => {
     const [rows] = await db.query(query, [fecha]);
     return rows;
   } catch (error) {
-    console.error("Error detallado en SQL:", error); // Esto te dirá el problema real
+    console.error("Error detallado en SQL:", error);
     throw error;
   }
 };
@@ -104,7 +102,6 @@ const guardarListaCompleta = async (productos) => {
   const fecha = new Date().toISOString().slice(0, 10);
   
   await Promise.all(productos.map(p => {
-    // Ya no necesitamos enviar id_prodcuto_lista, la BD lo hace solo (AUTO_INCREMENT)
     return db.query(
       'INSERT INTO lista (id_producto, id_categoria, fecha, cantidad) VALUES (?, ?, ?, ?)',
       [p.id_producto, p.id_categoria, fecha, p.cantidad || 1]
@@ -112,10 +109,8 @@ const guardarListaCompleta = async (productos) => {
   }));
 };
 
-// 2. Asegurar que toggleMarcado usa correctamente la columna id_lista
+// Cambio al marcar/desmarcar
 const toggleMarcado = async (id_lista, marcado, id_usuario) => {
-  // Primero, obtenemos el id_prodcuto_lista necesario para la tabla marca
-  // Basándonos en el id_lista que recibimos
   const query = `
     INSERT INTO marca (id_lista, id_prodcuto_lista, marcado, id_usuario)
     SELECT ?, id_prodcuto_lista, ?, ?
@@ -123,9 +118,6 @@ const toggleMarcado = async (id_lista, marcado, id_usuario) => {
     WHERE id_lista = ?
     ON DUPLICATE KEY UPDATE marcado = ?
   `;
-  
-  // Enviamos los parámetros necesarios
-  // id_lista (1), marcado (2), id_usuario (3), id_lista (4 para el WHERE), marcado (5 para el update)
   return await db.query(query, [id_lista, marcado, id_usuario, id_lista, marcado]);
 };
 
