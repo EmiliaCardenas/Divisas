@@ -13,5 +13,8 @@ router.get('/productos-permanencia', controller.getProductosPermanencia);
 router.post('/toggle-permanente', controller.updatePermanente);
 router.get('/lista-activa', controller.getListaActiva); // Carga permanentes
 router.post('/guardar-lista', controller.guardarLista);
+router.get('/historial-fechas', controller.getHistorialFechas); // Obtener días con compras
+router.get('/lista-por-fecha/:fecha', controller.getListaPorFecha);
+router.post('/marcar', controller.updateMarcado); // Marcar/desmarcar producto
 
 module.exports = router;

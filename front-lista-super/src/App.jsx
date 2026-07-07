@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import HistorialListas from './components/HistorialListas';
 import ListaPermanentes from './components/ListaPermanentes';
 import ListaSuper from './components/ListaSuper';
+import DetalleLista from './components/DetalleLista';
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         
         <Route element={<Layout />}>
           <Route path="/historial" element={<HistorialListas />} />
+          {/* Nueva ruta dinámica para ver el detalle de una lista específica */}
+          <Route path="/historial/:fecha" element={<DetalleLista />} />
           <Route path="/lista" element={<ListaProductos />} />
           <Route path="/permanentes" element={<ListaPermanentes />} />
           <Route path="/super" element={<ListaSuper />} />

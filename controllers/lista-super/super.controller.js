@@ -94,6 +94,36 @@ const guardarLista = async (req, res) => {
   }
 };
 
+const getHistorialFechas = async (req, res) => {
+  try {
+    const fechas = await Producto.getFechasHistorial(); // Nueva consulta
+    res.status(200).json({ success: true, fechas });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const getListaPorFecha = async (req, res) => {
+  try {
+    const { fecha } = req.params;
+    const productos = await Producto.getListaPorFecha(fecha);
+    res.status(200).json({ success: true, productos });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const updateMarcado = async (req, res) => {
+  try {
+    const { id_lista, marcado, id_usuario } = req.body;
+    await Producto.toggleMarcado(id_lista, marcado, id_usuario);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Exporta también estos nuevos métodos
 module.exports = { getInicio, getListaPorUsuario, addProducto, getUnidades,
-     updatePermanente, getProductosPermanencia, getListaActiva, guardarLista };
+     updatePermanente, getProductosPermanencia, getListaActiva, guardarLista,
+    updateMarcado, getListaPorFecha,getHistorialFechas };

@@ -57,3 +57,13 @@ CREATE TABLE marca (
 );
 
 ALTER TABLE lista MODIFY id_prodcuto_lista INT AUTO_INCREMENT PRIMARY KEY;
+
+-- 1. Si ya habías agregado id_lista, úsalo. Si no, agrégalo:
+ALTER TABLE marca ADD COLUMN id_lista INT;
+
+-- 2. Ahora vinculamos la relación:
+ALTER TABLE marca ADD FOREIGN KEY (id_lista) REFERENCES lista(id_lista);
+
+-- 3. Para evitar que el mismo producto se marque varias veces en la misma lista,
+-- la clave única debe ser sobre id_lista y id_prodcuto_lista (o id_producto si lo agregas)
+ALTER TABLE marca ADD UNIQUE(id_lista, id_prodcuto_lista);
