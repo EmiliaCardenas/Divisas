@@ -53,7 +53,6 @@ CREATE TABLE marca (
 );
 
 ALTER TABLE permanente ADD UNIQUE(id_producto);
-ALTER TABLE lista MODIFY id_prodcuto_lista INT AUTO_INCREMENT PRIMARY KEY;
 ALTER TABLE marca ADD COLUMN id_lista INT;
 ALTER TABLE marca ADD FOREIGN KEY (id_lista) REFERENCES lista(id_lista);
 ALTER TABLE marca ADD UNIQUE(id_lista, id_prodcuto_lista);
@@ -93,6 +92,6 @@ INSERT INTO unidades (nombre) VALUES
 ('Paquete de 20');
 
 INSERT INTO usuario (nombre, color) VALUES 
-('Alejandro', '#FF5733'),
-('Mariana', '#33FF57'),
-('Carlos', '#3357FF');
+('Marcela', '#850000'),
+('Javier', '#0b00a6'),
+('Emilia', '#7500db');
