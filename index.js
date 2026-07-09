@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 // ==========================================
 const rutasDivisas = require('./routes/divisas.routes');
 const rutasSuper = require('./routes/lista-super/super.routes');
+const rutasKpop = require('./routes/kpop-app/kpop.routes');
 
 // ==========================================
 // 2. CONFIGURACIÓN GLOBAL DE CORS
@@ -17,7 +18,8 @@ const whitelist = [
     'https://divisas-frontend.onrender.com', // Producción
     'https://lista-del-super.onrender.com', // Producción
     'http://localhost:3000',      
-    'http://localhost:3001',           
+    'http://localhost:3001',  
+    'http://localhost:3002',          
     'http://localhost:5173'                 
 ];
 
@@ -49,6 +51,7 @@ app.use(express.json());
 
 app.use('/api/divisas', rutasDivisas);
 app.use('/api/super', rutasSuper);
+app.use('/api/kpop', rutasKpop);
 
 // ==========================================
 // 4. INICIO DEL SERVIDOR
