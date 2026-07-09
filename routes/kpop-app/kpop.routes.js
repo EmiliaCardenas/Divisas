@@ -7,5 +7,9 @@ router.get('/top-canciones', controller.obtenerRanking);
 router.post('/artista', controller.crearArtista);
 router.post('/album', controller.crearAlbum);
 router.post('/cancion', controller.crearCancion);
+router.get('/grupos', controller.getGrupos);
+router.get('/artistas', controller.getArtistas);
+router.get('/albumes', controller.getAlbumes);
+router.post('/colaboracion', controller.crearColaboracion); // Esta es la que faltaba
 
 module.exports = router;

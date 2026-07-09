@@ -33,10 +33,11 @@ CREATE TABLE canciones (
 );
 
 -- Tabla intermedia para artistas colaboradores (Muchos a Muchos)
+
 CREATE TABLE colaboraciones (
+    id_colaboracion INT AUTO_INCREMENT PRIMARY KEY,
     id_cancion INT,
     id_artista INT,
-    PRIMARY KEY (id_cancion, id_artista),
     FOREIGN KEY (id_cancion) REFERENCES canciones(id_cancion),
     FOREIGN KEY (id_artista) REFERENCES artistas(id_artista)
 );
@@ -49,3 +50,10 @@ CREATE TABLE rankings (
     fecha_ranking TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_cancion) REFERENCES canciones(id_cancion)
 );
+
+ALTER TABLE colaboraciones 
+ADD COLUMN id_album INT NULL,
+ADD CONSTRAINT fk_colab_album FOREIGN KEY (id_album) REFERENCES albumes(id_album);
+
+-- Asegúrate de que id_cancion también sea NULL para permitir que sea opcional
+ALTER TABLE colaboraciones MODIFY id_cancion INT NULL;

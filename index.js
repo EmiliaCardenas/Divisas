@@ -53,6 +53,12 @@ app.use('/api/divisas', rutasDivisas);
 app.use('/api/super', rutasSuper);
 app.use('/api/kpop', rutasKpop);
 
+app.use((err, req, res, next) => {
+    console.error("--- ERROR EN SERVIDOR ---");
+    console.error(err); // Esto imprimirá el error real en tu terminal
+    res.status(500).json({ error: "Error interno del servidor", detalle: err.message });
+});
+
 // ==========================================
 // 4. INICIO DEL SERVIDOR
 // ==========================================
