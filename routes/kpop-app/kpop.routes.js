@@ -11,5 +11,7 @@ router.get('/grupos', controller.getGrupos);
 router.get('/artistas', controller.getArtistas);
 router.get('/albumes', controller.getAlbumes);
 router.post('/colaboracion', controller.crearColaboracion); // Esta es la que faltaba
+router.get('/canciones', controller.getCanciones);
+router.get('/catalogo', controller.getCatalogo);
 
 module.exports = router;

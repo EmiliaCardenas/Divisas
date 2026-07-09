@@ -57,3 +57,8 @@ ADD CONSTRAINT fk_colab_album FOREIGN KEY (id_album) REFERENCES albumes(id_album
 
 -- Asegúrate de que id_cancion también sea NULL para permitir que sea opcional
 ALTER TABLE colaboraciones MODIFY id_cancion INT NULL;
+
+ALTER TABLE rankings 
+MODIFY COLUMN puntuacion DECIMAL(3, 1);
+-- Esto obliga a que no pueda haber dos filas con el mismo id_cancion
+ALTER TABLE rankings ADD UNIQUE (id_cancion);

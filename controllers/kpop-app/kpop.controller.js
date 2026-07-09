@@ -1,8 +1,14 @@
 const Kpop = require('../../models/kpop-app/kpop.model');
 
+// Asegúrate de tener solo una instancia de cada una:
 exports.rankearCancion = async (req, res) => {
     try {
-        await Kpop.addRanking(req.body.id_cancion, req.body.puntuacion);
+        const { id_cancion, puntuacion } = req.body;
+        // Validación básica
+        if (!id_cancion || puntuacion < 1 || puntuacion > 10) {
+            return res.status(400).json({ error: "Datos de ranking inválidos" });
+        }
+        await Kpop.addRanking(id_cancion, puntuacion);
         res.status(201).json({ message: "Puntuación registrada" });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -10,8 +16,12 @@ exports.rankearCancion = async (req, res) => {
 };
 
 exports.obtenerRanking = async (req, res) => {
-    const [rows] = await Kpop.getTopCanciones();
-    res.json(rows);
+    try {
+        const [rows] = await Kpop.getTopCanciones();
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 exports.crearArtista = async (req, res) => {
@@ -89,4 +99,16 @@ exports.crearColaboracion = async (req, res) => {
         console.error("Error en DB:", err);
         res.status(500).json({ error: err.message }); 
     }
+};
+
+exports.getCanciones = async (req, res) => {
+    try {
+        const [rows] = await Kpop.getAllCanciones();
+        res.json(rows);
+    } catch (err) { res.status(500).json({ error: err.message }); }
+};
+
+exports.getCatalogo = async (req, res) => {
+    const [rows] = await Kpop.getCatalogoCompleto();
+    res.json(rows);
 };
