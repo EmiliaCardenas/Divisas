@@ -65,10 +65,15 @@ export default function ListaSuper() {
   const handleGuardarLista = async () => {
     if (cargando) return;
 
-    const productosParaGuardar = listaActiva.filter(p => p.cantidad && p.cantidad > 0);
+    const productosParaGuardar = listaActiva
+      .map(p => ({ 
+        ...p, 
+        cantidad: parseFloat(p.cantidad) 
+      }))
+      .filter(p => !isNaN(p.cantidad) && p.cantidad > 0); 
 
     if (productosParaGuardar.length === 0) {
-      setMensaje({ texto: "Debes agregar al menos un producto. Cantidad mayor a 0.", tipo: 'error' });
+      setMensaje({ texto: "Debes agregar al menos un producto con cantidad mayor a 0.", tipo: 'error' });
       return;
     }
 
@@ -140,17 +145,28 @@ export default function ListaSuper() {
 
                 <input 
                   type="number" 
-                  value={p.cantidad === null ? '' : p.cantidad}
+                  step="0.001"
+                  value={p.cantidad} 
                   placeholder="0"
-                  style={{ width: '50px', padding: '4px', borderRadius: '4px', border: '1px solid #d1ccc0' }}
+                  style={{ 
+                    width: '70px', 
+                    padding: '4px', 
+                    borderRadius: '4px', 
+                    border: '1px solid #d1ccc0',
+                    textAlign: 'center' 
+                  }}
                   onChange={(e) => {
                     const val = e.target.value;
-                    const nuevaLista = listaActiva.map(item => 
-                      item.id_producto === p.id_producto 
-                        ? {...item, cantidad: val === '' ? '' : parseInt(val, 10)} 
-                        : item
-                    );
-                    setListaActiva(nuevaLista);
+                    const regex = /^\d{0,3}(\.\d{0,3})?$/;
+
+                    if (val === '' || regex.test(val)) {
+                      const nuevaLista = listaActiva.map(item => 
+                        item.id_producto === p.id_producto 
+                          ? { ...item, cantidad: val } 
+                          : item
+                      );
+                      setListaActiva(nuevaLista);
+                    }
                   }} 
                 />
               </li>

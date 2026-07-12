@@ -56,6 +56,7 @@ ALTER TABLE permanente ADD UNIQUE(id_producto);
 ALTER TABLE marca ADD COLUMN id_lista INT;
 ALTER TABLE marca ADD FOREIGN KEY (id_lista) REFERENCES lista(id_lista);
 ALTER TABLE marca ADD UNIQUE(id_lista, id_prodcuto_lista);
+ALTER TABLE lista MODIFY COLUMN cantidad DECIMAL(10, 3);
 
 INSERT INTO categoria (nombre) VALUES 
 ('Salchichonería'),
