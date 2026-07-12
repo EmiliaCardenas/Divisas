@@ -24,17 +24,24 @@ const iconMap = {
 };
 
 export default function ListaSuper() {
-  const [listaActiva, setListaActiva] = useState([]);
+  const [listaActiva, setListaActiva] = useState(() => {
+    const guardado = localStorage.getItem('listaSuperActiva');
+    return guardado ? JSON.parse(guardado) : [];
+  });
   const [catalogo, setCatalogo] = useState({});
-  const [mostrarCatalogo, setMostrarCatalogo] = useState(false);
   const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
-    axios.get('/api/super/lista-activa')
-      .then(res => setListaActiva(res.data.productos || []));
+    localStorage.setItem('listaSuperActiva', JSON.stringify(listaActiva));
+  }, [listaActiva]);
 
+  useEffect(() => {
     axios.get('/api/super/lista')
       .then(res => setCatalogo(res.data.productos || {}));
+    if (listaActiva.length === 0) {
+      axios.get('/api/super/lista-activa')
+        .then(res => setListaActiva(res.data.productos || []));
+    }
   }, []);
 
   const agruparPorCategoria = (lista) => {
@@ -84,18 +91,13 @@ export default function ListaSuper() {
     setMensaje({ texto: '', tipo: '' }); 
 
     try {
-      const res = await axios.get(`/api/super/lista-por-fecha/${hoy}`);
-      if (res.data.productos && res.data.productos.length > 0) {
-        setMensaje({ texto: "Ya existe una lista guardada para el día de hoy.", tipo: 'error' });
-        setCargando(false);
-        return; 
-      }
-
       await axios.post('/api/super/guardar-lista', { productos: productosParaGuardar });
       
       setMensaje({ texto: "Lista guardada con éxito", tipo: 'exito' });
+      setListaActiva([]); 
+      localStorage.removeItem('listaSuperActiva'); 
+      
       setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3000);
-
     } catch (err) {
       console.error("Error:", err);
       setMensaje({ texto: "Error al verificar o guardar la lista", tipo: 'error' });
@@ -135,10 +137,8 @@ export default function ListaSuper() {
       </h1>
 
       {Object.entries(catalogo).map(([nombreCat, data]) => {
-        // Obtenemos solo los productos de esta categoría que YA están en la lista activa
         const productosEnLista = listaActiva.filter(p => p.id_categoria === data.id_categoria);
-        
-        // Ordenamos alfabéticamente
+
         const productosOrdenados = [...productosEnLista].sort((a, b) => 
             a.nombre_producto.localeCompare(b.nombre_producto)
         );
