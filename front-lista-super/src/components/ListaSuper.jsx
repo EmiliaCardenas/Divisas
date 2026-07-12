@@ -114,95 +114,120 @@ export default function ListaSuper() {
     </div>
   );
 
+  const EstilosOcultarFlechas = () => (
+    <style>{`
+      .no-arrows::-webkit-outer-spin-button,
+      .no-arrows::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      .no-arrows {
+        -moz-appearance: textfield;
+      }
+    `}</style>
+  );
+
   return (
     <>
+      <EstilosOcultarFlechas />
       <h1 style={{ color: '#5a554a', marginBottom: '25px', fontSize: '32px', textAlign: 'center' }}>
         Lista de Super
       </h1>
 
-      {/* Mi Lista Actual */}
-      {Object.keys(listaAgrupada).map(cat => (
-        <div key={cat} style={{ marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
-            {renderIcono(cat)}
-            <h2 style={{ fontSize: '20px', color: '#5a554a', margin: 0 }}>{cat}</h2>
-          </div>
-          <ul style={{ listStyle: 'none', padding: 0, borderTop: '1px solid #d1ccc0' }}>
-            {listaAgrupada[cat].map(p => (
-              <li key={p.id_producto} style={{ 
-                padding: '8px 4px', 
-                borderBottom: '1px solid #d1ccc0', 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center' 
-              }}>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ color: '#5a554a', fontWeight: '500' }}>{p.nombre_producto}</span>
-                  {p.nombre_unidad && (
-                    <span style={{ fontSize: '0.75rem', color: '#8c8c8c' }}>{p.nombre_unidad}</span>
-                  )}
-                </div>
+      {Object.entries(catalogo).map(([nombreCat, data]) => {
+        // Obtenemos solo los productos de esta categoría que YA están en la lista activa
+        const productosEnLista = listaActiva.filter(p => p.id_categoria === data.id_categoria);
+        
+        // Ordenamos alfabéticamente
+        const productosOrdenados = [...productosEnLista].sort((a, b) => 
+            a.nombre_producto.localeCompare(b.nombre_producto)
+        );
 
-                <input 
-                  type="number" 
-                  step="0.001"
-                  value={p.cantidad} 
-                  placeholder="0"
-                  style={{ 
-                    width: '70px', 
-                    padding: '4px', 
-                    borderRadius: '4px', 
-                    border: '1px solid #d1ccc0',
-                    textAlign: 'center' 
-                  }}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    const regex = /^\d{0,3}(\.\d{0,3})?$/;
-
-                    if (val === '' || regex.test(val)) {
-                      const nuevaLista = listaActiva.map(item => 
-                        item.id_producto === p.id_producto 
-                          ? { ...item, cantidad: val } 
-                          : item
-                      );
-                      setListaActiva(nuevaLista);
-                    }
-                  }} 
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-
-      <button 
-        onClick={() => setMostrarCatalogo(!mostrarCatalogo)}
-        style={{ width: '100%', padding: '10px', backgroundColor: '#706b5e', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', marginBottom: '20px' }}
-      >
-        {mostrarCatalogo ? 'Ocultar catálogo' : 'Agregar más productos'}
-      </button>
-
-      {/* Catálogo */}
-      {mostrarCatalogo && (
-        <div style={{ marginTop: '10px', borderTop: '2px solid #706b5e', paddingTop: '10px' }}>
-          {Object.keys(catalogo).map(cat => (
-            <div key={cat} style={{ marginBottom: '15px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
-                {renderIcono(cat)}
-                <h3 style={{ fontSize: '18px', color: '#5a554a', margin: 0 }}>{cat}</h3>
-              </div>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                {catalogo[cat].productos.map(p => (
-                  <li key={p.id_producto} style={{ padding: '5px 4px', display: 'flex', justifyContent: 'space-between' }}>
-                    {p.nombre_producto}
-                    <button onClick={() => agregarProducto(p)} style={{ backgroundColor: '#706b5e', color: 'white', border: 'none', borderRadius: '50%', width: '25px', height: '25px', cursor: 'pointer' }}>+</button>
-                  </li>
-                ))}
-              </ul>
+        return (
+          <div key={nombreCat} style={{ marginBottom: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
+              {renderIcono(nombreCat)}
+              <h2 style={{ fontSize: '20px', color: '#5a554a', margin: 0 }}>{nombreCat}</h2>
             </div>
-          ))}
-        </div>
-      )}
+            
+            <ul style={{ listStyle: 'none', padding: 0, borderTop: '1px solid #d1ccc0' }}>
+              {productosOrdenados.length > 0 ? (
+                productosOrdenados.map(p => (
+                  <li key={p.id_producto} style={{ padding: '8px 4px', borderBottom: '1px solid #d1ccc0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ color: '#5a554a', fontWeight: '500' }}>{p.nombre_producto}</span>
+                      <span style={{ fontSize: '0.75rem', color: '#8c8c8c' }}>{p.nombre_unidad}</span>
+                    </div>
+
+                    <input 
+                      type="number" 
+                      step="0.001"
+                      value={p.cantidad} 
+                      placeholder="0"
+                      className="no-arrows" 
+                      style={{ 
+                        width: '70px', 
+                        padding: '4px', 
+                        textAlign: 'center',
+                        MozAppearance: 'textfield' 
+                      }}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        const regex = /^\d{0,3}(\.\d{0,3})?$/;
+                        if (val === '' || regex.test(val)) {
+                          setListaActiva(listaActiva.map(item => 
+                            item.id_producto === p.id_producto ? { ...item, cantidad: val } : item
+                          ));
+                        }
+                      }} 
+                    />
+                  </li>
+                ))
+              ) : (
+                <li style={{ padding: '8px 4px', color: '#ccc', fontStyle: 'italic' }}>Sin productos en lista</li>
+              )}
+            </ul>
+
+          <div style={{ marginTop: '10px', position: 'relative' }}>
+            <select 
+              onChange={(e) => {
+                const prod = data.productos.find(p => p.id_producto === parseInt(e.target.value));
+                if(prod) agregarProducto(prod);
+                e.target.value = ""; 
+              }}
+              style={{
+                width: '100%',
+                padding: '10px',
+                backgroundColor: '#f9f8f4', 
+                color: '#5a554a',
+                border: '1px dashed #706b5e',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                appearance: 'none', 
+                textAlign: 'center',
+                fontWeight: '500'
+              }}
+            >
+        <option value="">+ Añadir a {nombreCat}</option>
+        {data.productos
+          .filter(p => !listaActiva.find(lp => lp.id_producto === p.id_producto))
+          .sort((a,b) => a.nombre_producto.localeCompare(b.nombre_producto))
+                    .map(p => (
+                      <option key={p.id_producto} value={p.id_producto}>{p.nombre_producto}</option>
+                    ))
+                  }
+                </select>
+                <div style={{ 
+                  position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)', 
+                  pointerEvents: 'none', color: '#706b5e' 
+                }}>
+                  ▼
+                </div>
+              </div>
+              </div>
+            );
+          })}
 
       <button 
         onClick={handleGuardarLista} 
