@@ -47,6 +47,8 @@ const getConPermanencia = async () => {
     FROM producto p
     JOIN categoria c ON p.id_categoria = c.id_categoria
     LEFT JOIN permanente perm ON p.id_producto = perm.id_producto
+    LEFT JOIN producto_temporal pt ON p.id_producto = pt.id_producto
+    WHERE pt.id_producto IS NULL                                   
     ORDER BY c.nombre;
   `;
   const [rows] = await db.query(query);
@@ -72,9 +74,10 @@ const getProductosPermanentes = async () => {
     JOIN permanente perm ON p.id_producto = perm.id_producto
     JOIN categoria c ON p.id_categoria = c.id_categoria
     LEFT JOIN unidades u ON p.id_unidad = u.id_unidad
+    -- EXCLUIMOS TEMPORALES PARA QUE NO APAREZCAN AQUÍ
     LEFT JOIN producto_temporal pt ON p.id_producto = pt.id_producto
     WHERE perm.es_permanente = TRUE 
-    AND pt.id_producto IS NULL; -- Filtro para excluir temporales
+    AND pt.id_producto IS NULL; 
   `;
   const [rows] = await db.query(query);
   return rows;

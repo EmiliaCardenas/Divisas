@@ -33,13 +33,18 @@ export default function ListaPermanentes() {
   const cargar = () => {
     axios.get('/api/super/productos-permanencia')
       .then(res => {
-        const unicos = Array.from(new Map(res.data.data.map(item => [item.id_producto, item])).values());
+        const data = res.data.data || res.data; 
         
-        const agrupado = unicos.reduce((acc, curr) => {
+        const agrupado = data.reduce((acc, curr) => {
           if (!acc[curr.nombre_categoria]) acc[curr.nombre_categoria] = [];
           acc[curr.nombre_categoria].push(curr);
           return acc;
         }, {});
+
+        for (const cat in agrupado) {
+          agrupado[cat].sort((a, b) => a.nombre.localeCompare(b.nombre));
+        }
+        
         setProductosAgrupados(agrupado);
       });
   };
