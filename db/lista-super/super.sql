@@ -52,6 +52,8 @@ CREATE TABLE marca (
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
+CREATE TABLE producto_temporal (id_producto INT PRIMARY KEY);
+
 ALTER TABLE permanente ADD UNIQUE(id_producto);
 ALTER TABLE marca ADD COLUMN id_lista INT;
 ALTER TABLE marca ADD FOREIGN KEY (id_lista) REFERENCES lista(id_lista);

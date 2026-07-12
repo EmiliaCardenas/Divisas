@@ -167,14 +167,20 @@ export default function DetalleLista() {
                   {editando ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <input 
-                        type="number" 
-                        defaultValue={p.cantidad}
-                        style={{ width: '50px', padding: '4px', borderRadius: '4px', border: '1px solid #d1ccc0' }}
+                        type="text" 
+                        inputMode="decimal" 
+                        value={p.cantidad} 
+                        placeholder="0"
+                        style={{ width: '60px', padding: '4px', borderRadius: '4px', border: '1px solid #d1ccc0' }}
                         onChange={(e) => {
-                          const nuevaCantidad = parseInt(e.target.value, 10); 
-                          setProductos(productos.map(item => 
-                            item.id_lista === p.id_lista ? {...item, cantidad: nuevaCantidad} : item
-                          ));
+                          const val = e.target.value;
+                          const regex = /^\d{0,3}(\.\d{0,3})?$/;
+
+                          if (val === '' || regex.test(val)) {
+                            setProductos(productos.map(item => 
+                              item.id_lista === p.id_lista ? { ...item, cantidad: val } : item
+                            ));
+                          }
                         }}
                       />
                       <button 
@@ -185,7 +191,9 @@ export default function DetalleLista() {
                       </button>
                     </div>
                   ) : (
-                    <span style={{ fontSize: '0.9rem', color: '#8c8c8c' }}>({p.cantidad})</span>
+                    <span style={{ fontSize: '0.9rem', color: '#8c8c8c' }}>
+                      {Number(p.cantidad)} - {p.nombre_unidad || ''}
+                    </span>
                   )}
 
                   {!editando && (

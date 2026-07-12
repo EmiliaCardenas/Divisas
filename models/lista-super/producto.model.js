@@ -15,6 +15,9 @@ const getAllConCategoria = async () => {
     FROM categoria c
     LEFT JOIN producto p ON c.id_categoria = p.id_categoria
     LEFT JOIN unidades u ON p.id_unidad = u.id_unidad
+    -- EXCLUIMOS LOS TEMPORALES AQUÍ:
+    LEFT JOIN producto_temporal pt ON p.id_producto = pt.id_producto
+    WHERE pt.id_producto IS NULL
     ORDER BY c.nombre;
   `;
   const [rows] = await db.query(query);
@@ -86,13 +89,15 @@ const getListaPorFecha = async (fecha) => {
   const query = `
     SELECT l.id_lista, l.id_producto, l.cantidad, p.nombre as nombre_producto, 
            c.nombre as nombre_categoria, IFNULL(m.marcado, 0) as marcado,
-           u.color as color_usuario_que_marco,
-           u.nombre as nombre_usuario_que_marco
+           u_user.color as color_usuario_que_marco,
+           u_user.nombre as nombre_usuario_que_marco,
+           un.nombre as nombre_unidad  -- <--- AGREGA ESTA LÍNEA
     FROM lista l
     INNER JOIN producto p ON l.id_producto = p.id_producto
     INNER JOIN categoria c ON l.id_categoria = c.id_categoria
+    LEFT JOIN unidades un ON p.id_unidad = un.id_unidad -- <--- AGREGA ESTE JOIN
     LEFT JOIN marca m ON l.id_lista = m.id_lista
-    LEFT JOIN usuario u ON m.id_usuario = u.id_usuario
+    LEFT JOIN usuario u_user ON m.id_usuario = u_user.id_usuario
     WHERE l.fecha = ?
   `;
   const [rows] = await db.query(query, [fecha]);
@@ -100,15 +105,28 @@ const getListaPorFecha = async (fecha) => {
 };
 
 // Guardar una nueva lista
+const marcarComoTemporal = async (id_producto) => {
+  await db.query('INSERT IGNORE INTO producto_temporal (id_producto) VALUES (?)', [id_producto]);
+};
+
 const guardarListaCompleta = async (productos) => {
   const fecha = new Date().toISOString().slice(0, 10);
   
   for (const p of productos) {
-    if (!p.id_producto || !p.id_categoria || p.cantidad <= 0) continue;
+    let idProductoFinal = p.id_producto;
+
+    if (typeof p.id_producto === 'string' && p.id_producto.startsWith('temp_')) {
+      // Creamos el producto
+      idProductoFinal = await create(p.nombre_producto, p.id_categoria, 1);
+      // LO MARCAMOS PARA QUE NO SALGA EN EL CATÁLOGO OFICIAL
+      await marcarComoTemporal(idProductoFinal);
+    }
+
+    if (!idProductoFinal || !p.id_categoria || p.cantidad <= 0) continue;
 
     const [existente] = await db.query(
       'SELECT id_prodcuto_lista FROM lista WHERE id_producto = ? AND fecha = ?',
-      [p.id_producto, fecha]
+      [idProductoFinal, fecha]
     );
 
     if (existente && existente.length > 0) {
@@ -120,7 +138,7 @@ const guardarListaCompleta = async (productos) => {
       const randomBigIntId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
       await db.query(
         `INSERT INTO lista (id_prodcuto_lista, id_producto, id_categoria, fecha, cantidad) VALUES (?, ?, ?, ?, ?)`,
-        [randomBigIntId, p.id_producto, p.id_categoria, fecha, p.cantidad]
+        [randomBigIntId, idProductoFinal, p.id_categoria, fecha, p.cantidad]
       );
     }
   }
@@ -168,4 +186,4 @@ const eliminarProductoCatalogo = async (id_producto) => {
 module.exports = { getAll, create, getAllConCategoria, getUnidades, 
     togglePermanente, getConPermanencia, guardarListaCompleta, getProductosPermanentes,
 getListaPorFecha, toggleMarcado, getFechasHistorial, updateCantidad, removerDeLista,
-eliminarTodaLaLista, eliminarProductoCatalogo };
+eliminarTodaLaLista, eliminarProductoCatalogo, marcarComoTemporal };

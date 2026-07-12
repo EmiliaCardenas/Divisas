@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { 
   Ham, PiggyBank, Drumstick, Beef, Apple, Carrot, Fish, 
-  CupSoda, Milk, Croissant, Wheat, PersonStanding, Shapes, BrushCleaning,
+  CupSoda, Milk, Croissant, Wheat, PersonStanding, Shapes, BrushCleaning, Plus,
 } from 'lucide-react';
 
 const iconMap = {
@@ -30,6 +30,8 @@ export default function ListaSuper() {
   });
   const [catalogo, setCatalogo] = useState({});
   const [cargando, setCargando] = useState(false);
+  const [inputsTemporales, setInputsTemporales] = useState({});
+  
 
   useEffect(() => {
     localStorage.setItem('listaSuperActiva', JSON.stringify(listaActiva));
@@ -44,17 +46,6 @@ export default function ListaSuper() {
     }
   }, []);
 
-  const agruparPorCategoria = (lista) => {
-    return lista.reduce((acc, p) => {
-      const categoria = p.nombre_categoria || "Otros";
-      if (!acc[categoria]) acc[categoria] = [];
-      acc[categoria].push(p);
-      return acc;
-    }, {});
-  };
-
-  const listaAgrupada = agruparPorCategoria(listaActiva);
-
   const agregarProducto = (producto) => {
     if (!listaActiva.find(p => p.id_producto === producto.id_producto)) {
       setListaActiva([...listaActiva, { 
@@ -67,15 +58,33 @@ export default function ListaSuper() {
     }
   };
 
+  const agregarProductoTemporal = (idCategoria, nombreCat) => {
+    const nombre = inputsTemporales[idCategoria];
+    if (!nombre || nombre.trim() === '') return;
+
+    const nuevoItem = {
+      id_producto: `temp_${Date.now()}`,
+      nombre_producto: nombre,
+      id_categoria: idCategoria,
+      nombre_categoria: nombreCat,
+      nombre_unidad: 'Pieza(s)',
+      cantidad: 1 
+    };
+
+    setListaActiva([...listaActiva, nuevoItem]);
+    setInputsTemporales({ ...inputsTemporales, [idCategoria]: '' });
+  };
+
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
+
 
   const handleGuardarLista = async () => {
     if (cargando) return;
-
     const productosParaGuardar = listaActiva
       .map(p => ({ 
         ...p, 
-        cantidad: parseFloat(p.cantidad) 
+        cantidad: parseFloat(p.cantidad),
+        es_temporal: p.id_producto.toString().startsWith('temp_') 
       }))
       .filter(p => !isNaN(p.cantidad) && p.cantidad > 0); 
 
@@ -83,9 +92,6 @@ export default function ListaSuper() {
       setMensaje({ texto: "Debes agregar al menos un producto con cantidad mayor a 0.", tipo: 'error' });
       return;
     }
-
-    const ahora = new Date();
-    const hoy = `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, '0')}-${String(ahora.getDate()).padStart(2, '0')}`;
 
     setCargando(true);
     setMensaje({ texto: '', tipo: '' }); 
@@ -99,8 +105,8 @@ export default function ListaSuper() {
       
       setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3000);
     } catch (err) {
-      console.error("Error:", err);
-      setMensaje({ texto: "Error al verificar o guardar la lista", tipo: 'error' });
+      console.error("Error detallado:", err);
+      setMensaje({ texto: "Error al guardar: Asegúrate de que el backend acepte nuevos productos.", tipo: 'error' });
     } finally {
       setCargando(false);
     }
@@ -138,7 +144,6 @@ export default function ListaSuper() {
 
       {Object.entries(catalogo).map(([nombreCat, data]) => {
         const productosEnLista = listaActiva.filter(p => p.id_categoria === data.id_categoria);
-
         const productosOrdenados = [...productosEnLista].sort((a, b) => 
             a.nombre_producto.localeCompare(b.nombre_producto)
         );
@@ -149,7 +154,24 @@ export default function ListaSuper() {
               {renderIcono(nombreCat)}
               <h2 style={{ fontSize: '20px', color: '#5a554a', margin: 0 }}>{nombreCat}</h2>
             </div>
-            
+
+            <div style={{ marginTop: '5px', display: 'flex', gap: '5px' }}>
+              <input 
+                type="text"
+                placeholder="Otro..."
+                value={inputsTemporales[data.id_categoria] || ''}
+                onChange={(e) => setInputsTemporales({ ...inputsTemporales, [data.id_categoria]: e.target.value })}
+                onKeyDown={(e) => { if(e.key === 'Enter') agregarProductoTemporal(data.id_categoria, nombreCat); }}
+                style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #d1ccc0' }}
+              />
+              <button 
+                onClick={() => agregarProductoTemporal(data.id_categoria, nombreCat)}
+                style={{ padding: '0 15px', backgroundColor: '#706b5e', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+              >
+                <Plus size={20} />
+              </button>
+            </div>
+
             <ul style={{ listStyle: 'none', padding: 0, borderTop: '1px solid #d1ccc0' }}>
               {productosOrdenados.length > 0 ? (
                 productosOrdenados.map(p => (
@@ -165,12 +187,7 @@ export default function ListaSuper() {
                       value={p.cantidad} 
                       placeholder="0"
                       className="no-arrows" 
-                      style={{ 
-                        width: '70px', 
-                        padding: '4px', 
-                        textAlign: 'center',
-                        MozAppearance: 'textfield' 
-                      }}
+                      style={{ width: '70px', padding: '4px', textAlign: 'center' }}
                       onChange={(e) => {
                         const val = e.target.value;
                         const regex = /^\d{0,3}(\.\d{0,3})?$/;
@@ -188,70 +205,48 @@ export default function ListaSuper() {
               )}
             </ul>
 
-          <div style={{ marginTop: '10px', position: 'relative' }}>
-            <select 
-              onChange={(e) => {
-                const prod = data.productos.find(p => p.id_producto === parseInt(e.target.value));
-                if(prod) agregarProducto(prod);
-                e.target.value = ""; 
-              }}
-              style={{
-                width: '100%',
-                padding: '10px',
-                backgroundColor: '#f9f8f4', 
-                color: '#5a554a',
-                border: '1px dashed #706b5e',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                appearance: 'none', 
-                textAlign: 'center',
-                fontWeight: '500'
-              }}
-            >
-        <option value="">+ Añadir a {nombreCat}</option>
-        {data.productos
-          .filter(p => !listaActiva.find(lp => lp.id_producto === p.id_producto))
-          .sort((a,b) => a.nombre_producto.localeCompare(b.nombre_producto))
-                    .map(p => (
-                      <option key={p.id_producto} value={p.id_producto}>{p.nombre_producto}</option>
-                    ))
-                  }
-                </select>
-                <div style={{ 
-                  position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)', 
-                  pointerEvents: 'none', color: '#706b5e' 
-                }}>
-                  ▼
-                </div>
-              </div>
-              </div>
-            );
-          })}
+            <div style={{ marginTop: '10px', display: 'flex', gap: '5px' }}>
+              <select 
+                onChange={(e) => {
+                  const prod = data.productos.find(p => p.id_producto === parseInt(e.target.value));
+                  if(prod) agregarProducto(prod);
+                  e.target.value = ""; 
+                }}
+                style={{
+                  flex: 1, padding: '10px', backgroundColor: '#f9f8f4', 
+                  color: '#5a554a', border: '1px dashed #706b5e',
+                  borderRadius: '8px', cursor: 'pointer', fontSize: '14px',
+                  appearance: 'none', textAlign: 'center'
+                }}
+              >
+                <option value="">+ Añadir a {nombreCat}</option>
+                {data.productos
+                  .filter(p => !listaActiva.find(lp => lp.id_producto === p.id_producto))
+                  .sort((a,b) => a.nombre_producto.localeCompare(b.nombre_producto))
+                  .map(p => (
+                    <option key={p.id_producto} value={p.id_producto}>{p.nombre_producto}</option>
+                  ))
+                }
+              </select>
+            </div>
+          </div>
+        );
+      })}
 
       <button 
         onClick={handleGuardarLista} 
         disabled={cargando}
         style={{ 
-          width: '100%', 
-          padding: '15px', 
-          backgroundColor: cargando ? '#b0aca0' : '#5a554a', 
-          color: 'white', 
-          border: 'none', 
-          borderRadius: '8px', 
-          cursor: cargando ? 'not-allowed' : 'pointer', 
-          marginTop: '20px',
-          opacity: cargando ? 0.7 : 1
+          width: '100%', padding: '15px', backgroundColor: cargando ? '#b0aca0' : '#5a554a', 
+          color: 'white', border: 'none', borderRadius: '8px', cursor: cargando ? 'not-allowed' : 'pointer', 
+          marginTop: '20px', opacity: cargando ? 0.7 : 1
         }}
       >
         {cargando ? 'Guardando...' : 'Finalizar y Guardar Lista'}
       </button>
       {mensaje.texto && (
         <div style={{
-          marginTop: '15px',
-          padding: '10px',
-          textAlign: 'center',
-          borderRadius: '8px',
+          marginTop: '15px', padding: '10px', textAlign: 'center', borderRadius: '8px',
           backgroundColor: mensaje.tipo === 'exito' ? '#d4edda' : '#f8d7da',
           color: mensaje.tipo === 'exito' ? '#155724' : '#721c24',
           border: mensaje.tipo === 'exito' ? '1px solid #c3e6cb' : '1px solid #f5c6cb'
