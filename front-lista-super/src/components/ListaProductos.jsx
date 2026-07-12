@@ -119,6 +119,10 @@ export default function ListaProductos({}) {
         const productosFiltrados = data.productos.filter(p => 
           p.nombre_producto.toLowerCase().includes(busqueda.toLowerCase())
         );
+
+        const productosOrdenados = [...productosFiltrados].sort((a, b) => 
+          a.nombre_producto.localeCompare(b.nombre_producto)
+        );
         if (busqueda && productosFiltrados.length === 0) return null;
 
         return (
@@ -140,9 +144,9 @@ export default function ListaProductos({}) {
             </div>
             
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, borderTop: '1px solid #d1ccc0' }}>
-              {productosFiltrados.length > 0 ? (
-                productosFiltrados.map(p => (
-                  <li key={p.id_producto} style={{ padding: '8px 4px', borderBottom: '1px solid #d1ccc0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              {productosOrdenados.length > 0 ? (
+                productosOrdenados.map(p => (
+                <li key={p.id_producto} style={{ padding: '8px 4px', borderBottom: '1px solid #d1ccc0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
                       <span style={{ fontWeight: '500' }}>{p.nombre_producto}</span>
                       <span style={{ fontSize: '0.85em', color: '#8c8c8c', marginLeft: '5px' }}>- {p.nombre_unidad}</span>

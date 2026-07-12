@@ -1,4 +1,4 @@
-/*
+
 const mysql = require('mysql2/promise');
 require('dotenv').config(); 
 
@@ -11,8 +11,8 @@ const pool = mysql.createPool({
 });
 
 module.exports = pool;
-*/
 
+/*
 const mysql = require('mysql2/promise');
 const { URL } = require('url');
 
@@ -34,3 +34,4 @@ db.query('SELECT 1')
   .catch(err => console.error('Error al conectar a la base de datos:', err));
 
 module.exports = db;
+*/
